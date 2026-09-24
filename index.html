@@ -30,7 +30,7 @@
       --amber-deep: #c47b09;
       --lilac: #c48bff;
       --silver: #c8cdd2;
-      --ink: #000;
+      --ink: #0e0012;
       color-scheme: dark;
     }
 
@@ -63,11 +63,12 @@
     .horizon {
       left: 0;
       right: 0;
-      bottom: 18%;
-      height: 28vh;
+      bottom: 0;
+      z-index: 1;
+      height: 34vh;
       background:
-        radial-gradient(ellipse 70% 90% at 50% 100%, rgba(141, 255, 60, 0.2), rgba(141, 255, 60, 0.05) 42%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 50% 100%, rgba(240, 162, 2, 0.14), transparent 72%);
+        radial-gradient(ellipse 90% 100% at 50% 100%, rgba(141, 255, 60, 0.34), rgba(141, 255, 60, 0.1) 42%, transparent 74%),
+        radial-gradient(ellipse 46% 80% at 50% 100%, rgba(240, 162, 2, 0.16), transparent 70%);
     }
 
     .grid {
@@ -165,67 +166,69 @@
 
     .mark {
       --logo: min(14.5rem, 62vw);
-      --peak-y: 1.48;
       position: relative;
-      width: calc(var(--logo) + 4.5rem);
-      height: calc(var(--logo) * var(--peak-y) + 4.5rem);
+      width: var(--logo);
       display: grid;
       place-items: center;
-      overflow: hidden;
-    }
-
-    .streaks { position: absolute; inset: 0; }
-
-    .streaks i {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 2px;
-      height: 50%;
-      margin-left: -1px;
-      transform-origin: 50% 0;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(141, 255, 60, 0.7) 22%, transparent 72%);
-      opacity: 0;
-      animation: streak 1.25s linear infinite;
-      animation-delay: calc(var(--n) * -0.1s);
-    }
-
-    @keyframes streak {
-      0% { opacity: 0; transform: rotate(var(--a)) scaleY(0.12); }
-      18% { opacity: 0.85; }
-      100% { opacity: 0; transform: rotate(var(--a)) translate3d(0, 18%, 0) scaleY(1); }
-    }
-
-    .logo-warp {
-      position: relative;
-      z-index: 1;
-      width: var(--logo);
-      transform-origin: center;
-      animation: arrive 1.8s cubic-bezier(.22, .8, .2, 1) both;
-    }
-
-    @keyframes arrive {
-      0%, 14% { transform: scale3d(0.42, var(--peak-y), 1); opacity: 0.85; }
-      64% { transform: scale3d(1.05, 0.94, 1); opacity: 1; }
-      100% { transform: scale3d(1, 1, 1); opacity: 1; }
     }
 
     .logo {
+      position: relative;
+      z-index: 1;
       display: block;
       width: 100%;
       height: auto;
       filter: url(#knockout) drop-shadow(0 0 16px rgba(141, 255, 60, 0.45));
     }
 
+    .warp {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .burst {
+      position: absolute;
+      left: var(--cx, 50%);
+      top: var(--cy, 40%);
+      width: 0;
+      height: 0;
+    }
+
+    .warp i {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: var(--len, 18vh);
+      margin-left: -1px;
+      transform-origin: 50% 0;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(141, 255, 60, 0.75) 35%, transparent 85%);
+      opacity: 0;
+      animation: streak var(--dur, 1.15s) linear infinite;
+      animation-delay: calc(var(--n) * -0.13s);
+    }
+
+    .warp i:nth-child(3n) { --len: 12vh; --dur: 0.85s; width: 1px; }
+    .warp i:nth-child(3n+1) { --len: 22vh; --dur: 1.2s; }
+    .warp i:nth-child(3n+2) { --len: 30vh; --dur: 1.45s; background: linear-gradient(to bottom, #fff, rgba(240, 162, 2, 0.55) 40%, transparent 88%); }
+
+    @keyframes streak {
+      0% { opacity: 0; transform: rotate(var(--a)) translate3d(0, 13.6rem, 0) scaleY(0.18); }
+      14% { opacity: 1; }
+      100% { opacity: 0; transform: rotate(var(--a)) translate3d(0, 68vh, 0) scaleY(1.45); }
+    }
+
     html.paused .sheet,
-    html.paused .streaks i { animation-play-state: paused; }
+    html.paused .warp i { animation-play-state: paused; }
 
     html.still .sheet,
-    html.still .streaks i,
-    html.still .logo-warp { animation: none; }
+    html.still .warp i { animation: none; }
 
+    html.still .warp { visibility: hidden; }
     html.still .sheet { will-change: auto; }
-    html.still .streaks { visibility: hidden; }
 
     h1 {
       margin: 0.2rem 0 0;
@@ -244,7 +247,7 @@
     .rule {
       width: min(16rem, 60vw);
       height: 2px;
-      margin: 1.1rem 0 1.25rem;
+      margin: 3.1rem 0 1.25rem;
       border: 0;
       background: linear-gradient(90deg, transparent, var(--amber), var(--lime), transparent);
     }
@@ -293,8 +296,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .sheet, .streaks i, .logo-warp { animation: none; }
-      .streaks { display: none; }
+      .sheet, .warp i { animation: none; }
+      .warp { display: none; }
     }
   </style>
 </head>
@@ -317,23 +320,33 @@
   </div>
   <main>
     <div class="mark">
-      <div class="streaks" aria-hidden="true">
-        <i style="--a:0deg;--n:0"></i>
-        <i style="--a:30deg;--n:1"></i>
-        <i style="--a:60deg;--n:2"></i>
-        <i style="--a:90deg;--n:3"></i>
-        <i style="--a:120deg;--n:4"></i>
-        <i style="--a:150deg;--n:5"></i>
-        <i style="--a:180deg;--n:6"></i>
-        <i style="--a:210deg;--n:7"></i>
-        <i style="--a:240deg;--n:8"></i>
-        <i style="--a:270deg;--n:9"></i>
-        <i style="--a:300deg;--n:10"></i>
-        <i style="--a:330deg;--n:11"></i>
+      <div class="warp" aria-hidden="true">
+        <div class="burst">
+        <i style="--a:8deg;--n:0"></i>
+        <i style="--a:27deg;--n:1"></i>
+        <i style="--a:46deg;--n:2"></i>
+        <i style="--a:63deg;--n:3"></i>
+        <i style="--a:81deg;--n:4"></i>
+        <i style="--a:104deg;--n:5"></i>
+        <i style="--a:123deg;--n:6"></i>
+        <i style="--a:141deg;--n:7"></i>
+        <i style="--a:166deg;--n:8"></i>
+        <i style="--a:184deg;--n:9"></i>
+        <i style="--a:203deg;--n:10"></i>
+        <i style="--a:221deg;--n:11"></i>
+        <i style="--a:239deg;--n:12"></i>
+        <i style="--a:258deg;--n:13"></i>
+        <i style="--a:276deg;--n:14"></i>
+        <i style="--a:297deg;--n:15"></i>
+        <i style="--a:314deg;--n:16"></i>
+        <i style="--a:333deg;--n:17"></i>
+        <i style="--a:351deg;--n:18"></i>
+        <i style="--a:16deg;--n:19"></i>
+        <i style="--a:94deg;--n:20"></i>
+        <i style="--a:188deg;--n:21"></i>
+        </div>
       </div>
-      <div class="logo-warp">
-        <img class="logo" src="https://lh3.googleusercontent.com/d/1MLDXcYMe0tBUKXvYT5Tf9KvGl0l6feyG" width="512" height="512" alt="">
-      </div>
+      <img class="logo" src="https://lh3.googleusercontent.com/d/1MLDXcYMe0tBUKXvYT5Tf9KvGl0l6feyG" width="512" height="512" alt="">
     </div>
     <h1>Enterprise-R</h1>
     <hr class="rule">
@@ -345,8 +358,17 @@
     </filter>
   </svg>
   <script>
-    if (!document.documentElement.classList.contains("still")) {
-      const root = document.documentElement;
+    const root = document.documentElement;
+    const mark = document.querySelector(".mark");
+    const warp = document.querySelector(".warp");
+    const placeWarp = () => {
+      const box = mark.getBoundingClientRect();
+      warp.style.setProperty("--cx", `${box.left + box.width / 2}px`);
+      warp.style.setProperty("--cy", `${box.top + box.height / 2}px`);
+    };
+    placeWarp();
+    addEventListener("resize", placeWarp);
+    if (!root.classList.contains("still")) {
       setTimeout(() => root.classList.add("still"), 30000);
       document.addEventListener("visibilitychange", () => {
         root.classList.toggle("paused", document.hidden);
