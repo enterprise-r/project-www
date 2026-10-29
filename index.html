@@ -51,7 +51,11 @@
       pointer-events: none;
     }
 
-    .space { inset: 0; }
+    .space {
+      inset: 0;
+      /* badge-backdrop.svg glow, flipped vertically: lilac from the top */
+      background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(196, 139, 255, 0.18), rgba(196, 139, 255, 0) 100%), var(--ink);
+    }
 
     .stars {
       inset: 0 0 28%;
