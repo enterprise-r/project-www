@@ -503,10 +503,11 @@ h1 {
   font-size: clamp(1.15rem, 2.6vw, 1.45rem);
   font-weight: 600;
   letter-spacing: 0.04em;
-  border: 1px solid rgba(141, 255, 60, 0.45);
+  border: 1px solid var(--ui-border-active); /* palette 'Active border' #BA9EDA (no plain 'Border' entry) */
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.45);
-  box-shadow: 0 0 24px rgba(141, 255, 60, 0.12);
+  background: rgba(12, 4, 15, 0.72); /* same backing as the terminal panels */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 /* Home: a click anywhere lifts off (see index.astro), so the whole page shows the hand. */
@@ -516,9 +517,8 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 .at { color: var(--ui-orange); }
 
 .comms:hover {
-  border-color: var(--lime);
+  border-color: var(--ui-magenta-bright);
   color: white;
-  box-shadow: 0 0 28px rgba(141, 255, 60, 0.28);
 }
 
 .comms:focus-visible {
