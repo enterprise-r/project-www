@@ -1094,7 +1094,8 @@ html.fx-rm-in body { animation: fx-rm 0.2s linear both; }
 
 /* ------------------------------------------------------------------------------------------
    Proposals (previews only, the live look above is unchanged). Switched on per tab by the head
-   script in Base.astro: ?floor=1|2|3, ?edge=silver|amber|lime, ?logo=sage.
+   script in Base.astro: ?floor=1|2|3, ?edge=silver|amber|lime, ?logo=sage (and the gap variants),
+   ?bg=fill|tall.
    ------------------------------------------------------------------------------------------ */
 
 /* Home floor. Each keeps the grid speed at 20 px/s (drift distance = one cell). */
@@ -1167,3 +1168,41 @@ html.still:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition
 @media (prefers-reduced-motion: reduce) { html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; } }
 
 /* Sage web logo: no CSS, see ?logo=sage in Base.astro (pictures in /assets/preview/). */
+
+/* Portrait backdrop (About) on portrait screens that are not phones: vertical monitors (1080 x 1920,
+   1440 x 2560) and large tablets (1200 x 1600). Today they get the phone picture (hand and vortex,
+   no ship). Both proposals show the whole desktop composition across the width, centred; phones
+   (narrower than 900 px) keep the phone picture. Pictures: scripts/build-portrait-previews.py.
+   The lift-off pan strip is lined up with the phone picture, so it is left out here. */
+@media (max-aspect-ratio: 3/4) and (min-width: 900px) {
+  html:is(.bg-fill, .bg-tall) :is(.warpchi-pan, .fx-strip) { display: none; }
+  /* fill: the desktop picture fitted to the width, its top and bottom edges faded into a starfield
+     drawn from three star tiles in the picture's density and colours. The tiles are sized in vw, so
+     the stars scale with the picture, and at co-prime sizes (487, 613, 761 picture px), so the repeat
+     never lines up. The sky colour is the picture's own (#02060F). */
+  html.bg-fill .photo.warpchi {
+    background:
+      url(/assets/preview/stars-a.svg) 0 0 / calc(100vw * 487 / 2560) auto repeat,
+      url(/assets/preview/stars-b.svg) 31% 17% / calc(100vw * 613 / 2560) auto repeat,
+      url(/assets/preview/stars-c.svg) 67% 59% / calc(100vw * 761 / 2560) auto repeat,
+      #02060F;
+  }
+  html.bg-fill .photo.warpchi::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: calc(50% - 100vw * 9 / 32);
+    height: calc(100vw * 9 / 16);
+    background: url(/assets/about-backdrop.jpg) 0 0 / 100% 100% no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+  }
+  /* tall: the picture extended upwards and downwards into a 9:16 picture (the original untouched in
+     the middle); cover then always fits the width and only trims the extended sky. Only loaded here. */
+  html.bg-tall .photo.warpchi { background-image: url(/assets/preview/about-backdrop-tall-1600.jpg); background-position: 50% 50%; }
+}
+@media (max-aspect-ratio: 3/4) and (min-width: 900px) and (min-resolution: 1.5dppx),
+       (max-aspect-ratio: 3/4) and (min-width: 1500px) {
+  html.bg-tall .photo.warpchi { background-image: url(/assets/preview/about-backdrop-tall.jpg); }
+}
