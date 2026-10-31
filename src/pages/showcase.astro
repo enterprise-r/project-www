@@ -5,7 +5,7 @@ import Base from "../layouts/Base.astro";
 import "../styles/ui.css";
 
 const brand = [
-  { name: "Lime", token: "--lime", hex: "#8DFF3C", use: "logo, Home title, hero glow" },
+  { name: "Lime", token: "--lime", hex: "#8DFF3C", use: "logo, hero glow" },
   { name: "Deep lilac", token: "(nav corner today)", hex: "#573680", use: "logo backdrop" },
   { name: "Lilac", token: "--lilac", hex: "#C48BFF", use: "sky glow" },
   { name: "Amber", token: "--amber", hex: "#F0A202", use: "hero accents" },
@@ -31,40 +31,11 @@ const named = [
   ["Bright blue", "--ui-blue-bright", "#BDCBD9"], ["Magenta", "--ui-magenta", "#BA9EDA"],
   ["Bright magenta", "--ui-magenta-bright", "#D2BCED"], ["Brown", "--ui-brown", "#A88070"],
 ];
-const live = [
-  ["Nav corner", "--nav-elbow"], ["Rail from", "--nav-rail-from"], ["Rail to", "--nav-rail-to"],
-  ["Current page", "--nav-current"], ["Other page", "--nav-other"], ["Button label", "--nav-text"], ["Link", "--text-link"],
-  ["Body text", "--text-body"], ["Small print", "--text-small"], ["Prompt", "--text-prompt"],
-];
-// Option values, for the comparison table (kept in step with site.css by hand).
-const options = [
-  { role: "Nav corner", now: "#573680", a: "#7D6D91", b: "#41285B", c: "#573680", d: "#41285B" },
-  { role: "Rail", now: "#573680 → #8A5CC2", a: "#7D6D91 → #BA9EDA", b: "#3F2C53 → #BA9EDA", c: "#573680 → #BA9EDA", d: "#BA9EDA" },
-  { role: "Current page", now: "#8DFF3C", a: "#77AF8A", b: "#77AF8A", c: "#7FCB6F", d: "#7CC376" },
-  { role: "Other page", now: "#F0A202", a: "#F4B965", b: "#F4B965", c: "#F3B451", d: "#F4B965" },
-  { role: "Button label", now: "#0E0012", a: "#0C040F", b: "#0C040F", c: "#0C040F", d: "#09030D" },
-  { role: "About heading", now: "lime gradient", a: "#77AF8A", b: "#FFF3E6 → #D2BCED", c: "#F2FBEA → #7FCB6F", d: "#FFF3E6" },
-  { role: "Body text", now: "#C8CDD2", a: "#E0E6E2", b: "#E0E6E2", c: "#E0E6E2", d: "#E0E6E2" },
-  { role: "Small print", now: "#F2F6F3", a: "#B6C1CC", b: "#B6C1CC", c: "#B6C1CC", d: "#B6C1CC" },
-  { role: "Link", now: "—", a: "#D2BCED", b: "#D2BCED", c: "#D2BCED", d: "#D2BCED" },
-  { role: "Prompt", now: "#8DFF3C", a: "#77AF8A", b: "#F4B965", c: "#7FCB6F", d: "#7CC376" },
-];
-const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transparent");
 ---
 <Base title="UI showcase · Enterprise-R" description="Enterprise-R UI style guide." backdrop="none" noindex>
   <main class="showcase">
     <h1 class="sc-title">UI showcase</h1>
-    <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette; the core brand colours stay for the logo and hero graphics. The nav buttons and page text follow the colour option picked below.</p>
-
-    <div class="sc-switch" role="group" aria-label="Colour option">
-      <span class="sc-h4">Colour option</span>
-      <div class="lcars-group">
-        {["a", "b", "c", "d"].map((o) => (
-          <button class="lcars-btn" type="button" data-option={o}>{o === "a" ? "A · live" : o.toUpperCase()}</button>
-        ))}
-      </div>
-      <span class="sc-switch-note">Showing <span class="sc-switch-name" id="opt-name">A · live site</span>. Same as <code>?option=b</code> on any page.</span>
-    </div>
+    <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette; the core brand colours stay for the logo and hero graphics. The page shows the live colours (option A); add <code>?option=b</code>, <code>c</code> or <code>d</code> to the address to preview another option.</p>
 
     <section class="sc-section">
       <h2 class="sc-label">Navigation bar</h2>
@@ -74,13 +45,7 @@ const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transpar
           <span class="rail" aria-hidden="true"></span>
           <div class="lcars-group"><a class="lcars-btn" href="/" aria-current="page">Home</a><a class="lcars-btn" href="/about/">About</a></div>
         </div>
-        <p class="sc-cap">On Home</p>
-        <div class="sc-head">
-          <a class="elbow" href="/" aria-label="Home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
-          <span class="rail" aria-hidden="true"></span>
-          <div class="lcars-group"><a class="lcars-btn" href="/">Home</a><a class="lcars-btn" href="/about/" aria-current="page">About</a></div>
-        </div>
-        <p class="sc-cap">On About</p>
+        <p class="sc-cap">On Home; on About the two buttons swap colours</p>
       </div>
     </section>
 
@@ -122,38 +87,21 @@ const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transpar
         {named.map(([n, t, h]) => (<div class="sc-swatch"><i style={`background:var(${t})`}></i><div><b>{n}</b><code>{h}</code><small>{t}</small></div></div>))}
       </div>
       <p class="sc-note">Red and bright red from the theme are left out (no red).</p>
-      <h3 class="sc-subhead">In use now · the option shown</h3>
-      <div class="sc-swatches">
-        {live.map(([n, t]) => (<div class="sc-swatch"><i style={`background:var(${t})`}></i><div><b>{n}</b><code data-token={t}>…</code><small>{t}</small></div></div>))}
-      </div>
     </section>
 
     <section class="sc-section">
       <h2 class="sc-label">Type</h2>
       <div class="sc-type">
-        <span class="sc-cap"><b>h1</b> Home title (brand)</span><h1>Enterprise-R</h1>
+        <span class="sc-cap"><b>h1</b> Home title</span><h1>Enterprise-R</h1>
         <span class="sc-cap"><b>h1</b> About heading</span><div class="sc-h1 about-heading" style="font-family:Audiowide,Rajdhani,sans-serif;font-size:3.2rem;letter-spacing:.08em;color:transparent;line-height:1.05">About</div>
         <span class="sc-cap"><b>h2</b> Audiowide</span><h2 class="sc-h2">A quiet view from orbit</h2>
         <span class="sc-cap"><b>h3</b> Audiowide</span><h3 class="sc-h3">Engineering log</h3>
         <span class="sc-cap"><b>h4</b> label caps</span><h4 class="sc-h4">Surfaces</h4>
         <span class="sc-cap"><b>Body</b> Rajdhani 1.2rem</span><p class="sc-body">We build small, careful things and send them a long way. This is how body text reads on our dark background.</p>
-        <span class="sc-cap"><b>Small</b> 0.95rem</span><p class="sc-small">info@enterprise-r.com · small print and captions</p>
+        <span class="sc-cap"><b>Small</b> 0.95rem</span><p class="sc-small">info<span class="at">@</span>enterprise-r.com · small print and captions</p>
         <span class="sc-cap"><b>Link</b></span><p class="sc-body">Read the <a class="sc-link" href="#">mission notes</a> before you start.</p>
         <span class="sc-cap"><b>Prompt</b> Home</span><p style="margin:0"><span class="liftoff-prompt sc-prompt">Click or press Enter</span></p>
       </div>
-    </section>
-
-    <section class="sc-section">
-      <h2 class="sc-label">Table · the options side by side</h2>
-      <table class="sc-table">
-        <caption>The colours before A, and the four options. Switch above to see each one live.</caption>
-        <thead><tr><th>Role</th><th>Before</th><th>A · live</th><th>B</th><th>C</th><th>D</th></tr></thead>
-        <tbody>
-          {options.map((r) => (
-            <tr><th scope="row">{r.role}</th>{(["now", "a", "b", "c", "d"] as const).map((k) => (<td><i style={`background:${swatchBg(r[k])}`}></i><code>{r[k]}</code></td>))}</tr>
-          ))}
-        </tbody>
-      </table>
     </section>
 
     <section class="sc-section">
@@ -163,6 +111,10 @@ const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transpar
         <div class="sc-card is-active"><h3>Active</h3><p>Active border for the item in focus or selected by the user.</p><span class="sc-pill other">Standby</span></div>
         <div class="sc-card is-selected"><h3>Selection</h3><p>Selection fill, for a highlighted row or a chosen card.</p></div>
       </div>
+      <figure class="sc-term-sample">
+        <div class="sc-bd"><div class="photo warpchi sc-wide"></div><div class="sc-term-stack"><div class="term term-head"><div class="about-heading">Heading</div></div><div class="term"><p class="sc-body" style="margin:0">Terminal panel: a small dark backing (#0C040F at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
+        <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
+      </figure>
     </section>
 
     <section class="sc-section">
@@ -197,15 +149,15 @@ location.search = <span class="s">"?option=b"</span>;</code></pre>
       <h2 class="sc-label">Backdrops</h2>
       <div class="sc-grid cols-3">
         <figure style="margin:0"><div class="sc-bd"><div class="sc-bd-sky"></div><div class="sc-bd-grid"></div><div class="sc-bd-floor"></div></div><figcaption class="sc-cap">Home: space, lilac sky, lime floor (brand)</figcaption></figure>
-        <figure style="margin:0"><div class="sc-bd"><div class="photo warpchi sc-wide no-scrim"></div><div class="sc-bd-text"><div class="about-heading">About</div><p>Without the scrim</p></div></div><figcaption class="sc-cap">About picture, no scrim</figcaption></figure>
-        <figure style="margin:0"><div class="sc-bd"><div class="photo warpchi sc-wide"></div><div class="sc-bd-text"><div class="about-heading">About</div><p>With the scrim, as on the page</p></div></div><figcaption class="sc-cap">About picture with the scrim</figcaption></figure>
+        <figure style="margin:0"><div class="sc-bd"><div class="photo warpchi sc-wide"></div></div><figcaption class="sc-cap">About picture, untouched (no scrim)</figcaption></figure>
+        <figure style="margin:0"><div class="sc-bd"><div class="photo warpchi sc-wide"></div><div class="sc-bd-text"><div class="term term-head"><div class="about-heading">About</div></div><div class="term"><p>Text on a terminal panel, as on the page</p></div></div></div><figcaption class="sc-cap">About picture with terminal panels</figcaption></figure>
       </div>
     </section>
   </main>
   <script is:inline slot="scripts">
+    // Label contrast, from the colours on screen (the live ones, or the ?option= preview).
     (() => {
-      const root = document.documentElement;
-      const names = { a: "A · live site, straight from the palette", b: "B · deeper lilac corner", c: "C · nudged towards the brand", d: "D · quiet LCARS frame" };
+      const cs = getComputedStyle(document.documentElement);
       const hex = (v) => {
         const m = v.trim().match(/^#([0-9a-f]{6})$/i);
         if (m) return "#" + m[1].toUpperCase();
@@ -215,28 +167,12 @@ location.search = <span class="s">"?option=b"</span>;</code></pre>
       };
       const lum = (h) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
       const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return ((x + 0.05) / (y + 0.05)).toFixed(1); };
-      const show = (o) => {
-        ["b", "c", "d"].forEach((k) => root.classList.toggle("opt-" + k, k === o));
-        document.querySelectorAll("[data-option]").forEach((b) => { if (b.dataset.option === o) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
-        document.getElementById("opt-name").textContent = names[o];
-        const cs = getComputedStyle(root);
-        const v = (t) => hex(cs.getPropertyValue(t));
-        document.querySelectorAll("[data-token]").forEach((el) => { el.textContent = v(el.dataset.token); });
-        const ink = v("--nav-text");
-        document.getElementById("contrast").textContent =
-          `Label contrast (WCAG AA needs 4.5:1): on current ${ratio(ink, v("--nav-current"))}:1, on other ${ratio(ink, v("--nav-other"))}:1, ` +
-          `on current hover ${ratio(ink, v("--nav-current-hover"))}:1, on other hover ${ratio(ink, v("--nav-other-hover"))}:1. ` +
-          `Body text on the page background ${ratio(v("--text-body"), "#0C040F")}:1.`;
-      };
-      let o = "a";
-      try { const s = sessionStorage.getItem("colour-option"); if (s && /^[abcd]$/.test(s)) o = s; } catch (e) {}
-      document.querySelectorAll("[data-option]").forEach((b) => b.addEventListener("click", () => {
-        o = b.dataset.option;
-        try { sessionStorage.setItem("colour-option", o); } catch (e) {}
-        history.replaceState(null, "", "?option=" + o);
-        show(o);
-      }));
-      show(o);
+      const v = (t) => hex(cs.getPropertyValue(t));
+      const ink = v("--nav-text");
+      document.getElementById("contrast").textContent =
+        `Label contrast (WCAG AA needs 4.5:1): on current ${ratio(ink, v("--nav-current"))}:1, on other ${ratio(ink, v("--nav-other"))}:1, ` +
+        `on current hover ${ratio(ink, v("--nav-current-hover"))}:1, on other hover ${ratio(ink, v("--nav-other-hover"))}:1. ` +
+        `Body text on the page background ${ratio(v("--text-body"), "#0C040F")}:1.`;
     })();
   </script>
 </Base>

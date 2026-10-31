@@ -11,8 +11,8 @@ import Base from "../layouts/Base.astro";
 ---
 <Base title={page.title} description={page.description} backdrop="warpchi">
   <main class="lower-left">
-    <h1>{page.heading}</h1>
-    <p class="prose">{page.text}</p>
+    <div class="term term-head"><h1>{page.heading}</h1></div>
+    <div class="term"><p class="prose">{page.text}</p></div>
   </main>
   <script is:inline slot="scripts">
     // Warm the cache with the Home logo so the way back down is ready.
