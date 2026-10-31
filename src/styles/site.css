@@ -1090,3 +1090,49 @@ html.fx-in-down .liftoff-prompt { animation: lift-fade-in 0.4s linear calc(var(-
 @keyframes fx-rm { from { opacity: 0; } }
 html.fx-rm-out body { animation: lift-fade-out 0.2s linear both; }
 html.fx-rm-in body { animation: fx-rm 0.2s linear both; }
+
+
+/* ------------------------------------------------------------------------------------------
+   Proposals (previews only, the live look above is unchanged). Switched on per tab by the head
+   script in Base.astro: ?floor=1|2|3, ?edge=silver|amber|lime, ?logo=sage.
+   ------------------------------------------------------------------------------------------ */
+
+/* Home floor. Each keeps the grid speed at 20 px/s (drift distance = one cell). */
+@keyframes drift-cell { to { transform: translate3d(0, var(--cell), 0); } }
+html:is(.floor-1, .floor-2, .floor-3) .sheet {
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell)),
+    repeating-linear-gradient(0deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell));
+  top: calc(var(--cell) * -1);
+  height: calc(100% + var(--cell) * 2);
+  animation: drift-cell var(--drift-time) linear infinite;
+}
+/* 1: toned. UI green instead of lime, a little denser, thinner, and fading out sooner with distance. */
+html.floor-1 { --cell: 64px; --drift-time: 3.2s; --floor-w: 0.8px; --floor-line: rgba(119, 175, 138, 0.42); }
+html.floor-1 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, rgba(0, 0, 0, 0.8) 42%, #000 80%, transparent 100%); }
+html.floor-1 .horizon {
+  background:
+    radial-gradient(ellipse 90% 100% at 50% 100%, rgba(119, 175, 138, 0.28), rgba(119, 175, 138, 0.08) 42%, transparent 74%),
+    radial-gradient(ellipse 46% 80% at 50% 100%, rgba(240, 162, 2, 0.12), transparent 70%);
+}
+/* 2: dense and fine, with a softer, wider glow that blends into the purple. */
+html.floor-2 { --cell: 40px; --drift-time: 2s; --floor-w: 0.6px; --floor-line: rgba(119, 175, 138, 0.34); }
+html.floor-2 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 20%, rgba(0, 0, 0, 0.85) 40%, #000 80%, transparent 100%); }
+html.floor-2 .horizon {
+  height: 52vh;
+  background:
+    radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
+    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(244, 185, 101, 0.08), transparent 70%);
+}
+/* 3: calm. A faint grid in haze, the glow moved to lilac and teal (extended palette). */
+html.floor-3 { --cell: 64px; --drift-time: 3.2s; --floor-w: 0.8px; --floor-line: rgba(150, 197, 207, 0.22); }
+html.floor-3 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.12) 26%, rgba(0, 0, 0, 0.55) 50%, #000 84%, transparent 100%); }
+html.floor-3 .veil { background: linear-gradient(to bottom, rgba(24, 12, 34, 0.55), rgba(12, 4, 15, 0.35) 45%, rgba(0, 0, 0, 0.5) 85%); }
+html.floor-3 .horizon {
+  height: 44vh;
+  background:
+    radial-gradient(ellipse 110% 100% at 50% 100%, rgba(186, 158, 218, 0.22), rgba(150, 197, 207, 0.08) 48%, transparent 80%),
+    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(150, 197, 207, 0.12), transparent 70%);
+}
+html.still:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; }
+@media (prefers-reduced-motion: reduce) { html:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; } }
