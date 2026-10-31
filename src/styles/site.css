@@ -260,7 +260,7 @@ body {
   --nav-focus: #f2f6f3;
   --nav-disabled: var(--ui-border);
   --nav-disabled-text: var(--ui-fg-dark);
-  /* Page text. The Home title stays the brand lime gradient (hero graphic). */
+  /* Page text. The Home title uses the About heading's colour and glow (flat #77AF8A). */
   --text-body: var(--ui-fg);             /* #E0E6E2, About paragraph */
   --text-small: var(--ui-fg-light);      /* #B6C1CC, small print: the e-mail pill on Home */
   --text-link: var(--ui-magenta-bright); /* #D2BCED, links in running text */
@@ -271,7 +271,7 @@ body {
 }
 
 /* The other colour options, kept for comparison only: preview with ?option=b (c, d) on any
-   page, or the switcher on /showcase/. ?option=a or ?option=now show the live colours (A),
+   page, /showcase/ included. ?option=a or ?option=now show the live colours (A),
    so option A has no block of its own. To switch, copy an option's values into the block above. */
 :root.opt-b {                    /* B: deeper lilac corner, palette buttons */
   --nav-elbow: var(--ui-selection);
@@ -482,11 +482,11 @@ h1 {
   font-size: clamp(2rem, 7vw, 4.4rem);
   letter-spacing: 0.08em;
   line-height: 1.05;
-  background: linear-gradient(180deg, #f5fff0 0%, #d8ffb0 38%, var(--lime) 72%, #1f8a45 140%);
+  background: var(--text-about-heading); /* same green and glow as the About heading */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 16px rgba(141, 255, 60, 0.35));
+  filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
 }
 
 .rule {
