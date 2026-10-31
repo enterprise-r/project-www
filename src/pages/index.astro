@@ -103,11 +103,16 @@ import Base from "../layouts/Base.astro";
       if (touchY !== null && e.touches[0].clientY - touchY > 70) { touchY = null; liftOff(); }
     }, { passive: true });
     addEventListener("pageshow", () => { lifting = false; }); // coming back via the back button
-    // Warm the cache with the About picture so it is ready when it drops in
-    // (phones need both: the wide one for the pan, the phone one to land on).
+    // Warm the cache with the About picture so it is ready when it drops in. Wide screens: the wide
+    // picture. 7:5 and narrower: the tall picture (.warm-tall picks the same file as About through the
+    // CSS, see site.css), plus the wide one on portrait screens for the pan. Phones: the wide one for
+    // the pan and the phone one to land on.
     addEventListener("load", () => {
-      new Image().src = "/assets/about-backdrop.jpg";
-      if (matchMedia("(max-aspect-ratio: 3/4)").matches) new Image().src = "/assets/about-backdrop-phone.jpg";
+      const mq = (q) => matchMedia(q).matches;
+      const portrait = mq("(max-aspect-ratio: 3/4)");
+      if (portrait || !mq("(max-aspect-ratio: 7/5)")) new Image().src = "/assets/about-backdrop.jpg";
+      if (portrait && mq("(max-width: 899px)")) new Image().src = "/assets/about-backdrop-phone.jpg";
+      else if (mq("(max-aspect-ratio: 7/5)")) document.body.append(Object.assign(document.createElement("div"), { className: "warm-tall" }));
     });
     if (!root.classList.contains("still")) {
       setTimeout(() => root.classList.add("still"), 30000);
