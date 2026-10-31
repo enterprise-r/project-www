@@ -85,7 +85,7 @@ main.showcase {
 .sc-h4 { font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-orange); }
 .sc-body { margin: 0; font-size: 1.2rem; color: var(--text-body); max-width: 42rem; }
 .sc-small { margin: 0; font-size: 0.95rem; color: var(--text-small); }
-.showcase a.sc-link, .sc-link { color: var(--ui-magenta-bright); text-decoration: underline; text-decoration-color: var(--ui-muted); text-underline-offset: 0.2em; }
+.showcase a.sc-link, .sc-link { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--ui-muted); text-underline-offset: 0.2em; }
 .sc-link:hover { color: var(--ui-fg-bright); text-decoration-color: var(--ui-magenta-bright); }
 .sc-prompt { position: static; transform: none; display: inline-block; animation: none; opacity: 1; padding: 0; }
 

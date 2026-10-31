@@ -197,6 +197,14 @@ body {
 }
 @media (max-aspect-ratio: 3/4) {
   .warpchi { background-image: url(/assets/about-backdrop-phone.jpg); background-position: 50% 25%; } /* portrait: phone master */
+  /* Phones: the centred heading and text sit on the bright warp stream, so an extra soft band
+     darkens the middle; body text stays at 4.5:1 or more on the brightest pixel behind it. */
+  .warpchi::after {
+    background:
+      radial-gradient(ellipse 120% 22% at 50% 48%, rgba(14, 0, 18, 0.35), rgba(14, 0, 18, 0.3) 50%, rgba(14, 0, 18, 0) 100%),
+      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(14, 0, 18, 0.72), rgba(14, 0, 18, 0.25) 100%),
+      linear-gradient(to bottom, rgba(14, 0, 18, 0.55), rgba(14, 0, 18, 0) 18%);
+  }
 }
 /* Phones: the wide picture as a strip for the lift-off camera pan (see "Lift-off" below). It sits
    hidden under the phone picture, lined up with it, and is only seen during the transition. */
@@ -234,49 +242,35 @@ body {
 
 /* Top navigation, LCARS style: the elbow is the home link, the blocks are the
    page buttons, and the rail joins them. The current page's button is green,
-   the other is orange. Change the colours here. */
+   the other is orange. Colours: option A, picked by the Founder (straight from the
+   LCARS extended palette). Hover colours are the fills lightened by hand: the palette's
+   "Bright green" is darker than its green. Change the colours here. */
 :root {
-  --nav-elbow: #573680;        /* deep lilac: the two-tone logo mark reads clearly on it */
-  --nav-elbow-hover: #6a4399;
-  --nav-rail-from: #573680;
-  --nav-rail-to: #8a5cc2;
-  --nav-current: var(--lime);
-  --nav-current-hover: #b8ff85;
-  --nav-other: var(--amber);
-  --nav-other-hover: #ffbd3a;
-  --nav-text: var(--ink);
+  --nav-elbow: var(--ui-muted);          /* #7D6D91 */
+  --nav-elbow-hover: #8E7FA2;
+  --nav-rail-from: var(--ui-muted);      /* #7D6D91 */
+  --nav-rail-to: var(--ui-magenta);      /* #BA9EDA */
+  --nav-current: var(--ui-green);        /* #77AF8A */
+  --nav-current-hover: #8DC09E;
+  --nav-other: var(--ui-orange);         /* #F4B965 */
+  --nav-other-hover: #F7CA88;
+  --nav-text: var(--ui-bg);              /* #0C040F, button labels */
   --nav-focus: #f2f6f3;
   --nav-disabled: var(--ui-border);
   --nav-disabled-text: var(--ui-fg-dark);
   /* Page text. The Home title stays the brand lime gradient (hero graphic). */
-  --text-body: var(--silver);            /* About paragraph */
-  --text-small: #f2f6f3;                 /* small print: the e-mail pill on Home */
-  --text-prompt: var(--lime);            /* "lift off" prompt on Home */
-  --text-prompt-glow: rgba(141, 255, 60, 0.6);
-  --text-about-heading: linear-gradient(180deg, #f5fff0 0%, #d8ffb0 38%, var(--lime) 72%, #1f8a45 140%);
-  --text-about-heading-glow: rgba(141, 255, 60, 0.35);
-}
-
-/* Colour options A to D, still being chosen. Nothing uses them until the Founder picks
-   one: preview with ?option=a (b, c, d; ?option=now for today's colours) on any page,
-   or the switcher on /showcase/. To adopt one, copy its values into the block above. */
-:root.opt-a {                    /* A: straight from the palette */
-  --nav-elbow: var(--ui-muted);
-  --nav-elbow-hover: #8E7FA2;
-  --nav-rail-from: var(--ui-muted);
-  --nav-rail-to: var(--ui-magenta);
-  --nav-current: var(--ui-green);
-  --nav-current-hover: #8DC09E;
-  --nav-other: var(--ui-orange);
-  --nav-other-hover: #F7CA88;
-  --nav-text: var(--ui-bg);
-  --text-body: var(--ui-fg);
-  --text-small: var(--ui-fg-light);
-  --text-prompt: var(--ui-green);
+  --text-body: var(--ui-fg);             /* #E0E6E2, About paragraph */
+  --text-small: var(--ui-fg-light);      /* #B6C1CC, small print: the e-mail pill on Home */
+  --text-link: var(--ui-magenta-bright); /* #D2BCED, links in running text */
+  --text-prompt: var(--ui-green);        /* #77AF8A, "lift off" prompt on Home */
   --text-prompt-glow: rgba(119, 175, 138, 0.55);
-  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green));
+  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green)); /* flat #77AF8A */
   --text-about-heading-glow: rgba(119, 175, 138, 0.3);
 }
+
+/* The other colour options, kept for comparison only: preview with ?option=b (c, d) on any
+   page, or the switcher on /showcase/. ?option=a or ?option=now show the live colours (A),
+   so option A has no block of its own. To switch, copy an option's values into the block above. */
 :root.opt-b {                    /* B: deeper lilac corner, palette buttons */
   --nav-elbow: var(--ui-selection);
   --nav-elbow-hover: #4E3270;
@@ -395,6 +389,7 @@ body {
 /* About page text */
 main.lower-left h1, .about-heading { background: var(--text-about-heading); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 16px var(--text-about-heading-glow)); }
 .prose { max-width: 38rem; margin: 1.5rem 0 0; font-size: 1.2rem; }
+.prose a { color: var(--text-link); text-underline-offset: 0.2em; }
 /* About: heading lower-left, below the ship; portrait (3:4 and taller) keeps the centred layout */
 @media not all and (max-aspect-ratio: 3/4) {
   main.lower-left { align-items: flex-start; justify-content: flex-end; text-align: left; padding: 5.5rem 6vw 11vh; }

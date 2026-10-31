@@ -6,11 +6,11 @@ import "../styles/ui.css";
 
 const brand = [
   { name: "Lime", token: "--lime", hex: "#8DFF3C", use: "logo, Home title, hero glow" },
-  { name: "Deep lilac", token: "(nav corner today)", hex: "#573680", use: "logo backdrop, nav corner" },
+  { name: "Deep lilac", token: "(nav corner today)", hex: "#573680", use: "logo backdrop" },
   { name: "Lilac", token: "--lilac", hex: "#C48BFF", use: "sky glow" },
   { name: "Amber", token: "--amber", hex: "#F0A202", use: "hero accents" },
   { name: "Green", token: "--green", hex: "#0E6A3C", use: "logo shading" },
-  { name: "Silver", token: "--silver", hex: "#C8CDD2", use: "logo, text today" },
+  { name: "Silver", token: "--silver", hex: "#C8CDD2", use: "logo" },
   { name: "Ink", token: "--ink", hex: "#0E0012", use: "page background" },
 ];
 const surfaces = [
@@ -33,7 +33,7 @@ const named = [
 ];
 const live = [
   ["Nav corner", "--nav-elbow"], ["Rail from", "--nav-rail-from"], ["Rail to", "--nav-rail-to"],
-  ["Current page", "--nav-current"], ["Other page", "--nav-other"], ["Button label", "--nav-text"],
+  ["Current page", "--nav-current"], ["Other page", "--nav-other"], ["Button label", "--nav-text"], ["Link", "--text-link"],
   ["Body text", "--text-body"], ["Small print", "--text-small"], ["Prompt", "--text-prompt"],
 ];
 // Option values, for the comparison table (kept in step with site.css by hand).
@@ -46,6 +46,7 @@ const options = [
   { role: "About heading", now: "lime gradient", a: "#77AF8A", b: "#FFF3E6 → #D2BCED", c: "#F2FBEA → #7FCB6F", d: "#FFF3E6" },
   { role: "Body text", now: "#C8CDD2", a: "#E0E6E2", b: "#E0E6E2", c: "#E0E6E2", d: "#E0E6E2" },
   { role: "Small print", now: "#F2F6F3", a: "#B6C1CC", b: "#B6C1CC", c: "#B6C1CC", d: "#B6C1CC" },
+  { role: "Link", now: "—", a: "#D2BCED", b: "#D2BCED", c: "#D2BCED", d: "#D2BCED" },
   { role: "Prompt", now: "#8DFF3C", a: "#77AF8A", b: "#F4B965", c: "#7FCB6F", d: "#7CC376" },
 ];
 const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transparent");
@@ -58,11 +59,11 @@ const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transpar
     <div class="sc-switch" role="group" aria-label="Colour option">
       <span class="sc-h4">Colour option</span>
       <div class="lcars-group">
-        {["now", "a", "b", "c", "d"].map((o) => (
-          <button class="lcars-btn" type="button" data-option={o}>{o === "now" ? "Now" : o.toUpperCase()}</button>
+        {["a", "b", "c", "d"].map((o) => (
+          <button class="lcars-btn" type="button" data-option={o}>{o === "a" ? "A · live" : o.toUpperCase()}</button>
         ))}
       </div>
-      <span class="sc-switch-note">Showing <span class="sc-switch-name" id="opt-name">Now (live site)</span>. Same as <code>?option=a</code> on any page.</span>
+      <span class="sc-switch-note">Showing <span class="sc-switch-name" id="opt-name">A · live site</span>. Same as <code>?option=b</code> on any page.</span>
     </div>
 
     <section class="sc-section">
@@ -145,8 +146,8 @@ const swatchBg = (v: string) => (v.startsWith("#") ? v.split(" ")[0] : "transpar
     <section class="sc-section">
       <h2 class="sc-label">Table · the options side by side</h2>
       <table class="sc-table">
-        <caption>Today's colours and the four options. Switch above to see each one live.</caption>
-        <thead><tr><th>Role</th><th>Now</th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+        <caption>The colours before A, and the four options. Switch above to see each one live.</caption>
+        <thead><tr><th>Role</th><th>Before</th><th>A · live</th><th>B</th><th>C</th><th>D</th></tr></thead>
         <tbody>
           {options.map((r) => (
             <tr><th scope="row">{r.role}</th>{(["now", "a", "b", "c", "d"] as const).map((k) => (<td><i style={`background:${swatchBg(r[k])}`}></i><code>{r[k]}</code></td>))}</tr>
@@ -204,7 +205,7 @@ location.search = <span class="s">"?option=b"</span>;</code></pre>
   <script is:inline slot="scripts">
     (() => {
       const root = document.documentElement;
-      const names = { now: "Now (live site)", a: "A · straight from the palette", b: "B · deeper lilac corner", c: "C · nudged towards the brand", d: "D · quiet LCARS frame" };
+      const names = { a: "A · live site, straight from the palette", b: "B · deeper lilac corner", c: "C · nudged towards the brand", d: "D · quiet LCARS frame" };
       const hex = (v) => {
         const m = v.trim().match(/^#([0-9a-f]{6})$/i);
         if (m) return "#" + m[1].toUpperCase();
@@ -215,7 +216,7 @@ location.search = <span class="s">"?option=b"</span>;</code></pre>
       const lum = (h) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
       const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return ((x + 0.05) / (y + 0.05)).toFixed(1); };
       const show = (o) => {
-        ["a", "b", "c", "d"].forEach((k) => root.classList.toggle("opt-" + k, k === o));
+        ["b", "c", "d"].forEach((k) => root.classList.toggle("opt-" + k, k === o));
         document.querySelectorAll("[data-option]").forEach((b) => { if (b.dataset.option === o) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
         document.getElementById("opt-name").textContent = names[o];
         const cs = getComputedStyle(root);
@@ -227,8 +228,8 @@ location.search = <span class="s">"?option=b"</span>;</code></pre>
           `on current hover ${ratio(ink, v("--nav-current-hover"))}:1, on other hover ${ratio(ink, v("--nav-other-hover"))}:1. ` +
           `Body text on the page background ${ratio(v("--text-body"), "#0C040F")}:1.`;
       };
-      let o = "now";
-      try { const s = sessionStorage.getItem("colour-option"); if (s && /^(now|[abcd])$/.test(s)) o = s; } catch (e) {}
+      let o = "a";
+      try { const s = sessionStorage.getItem("colour-option"); if (s && /^[abcd]$/.test(s)) o = s; } catch (e) {}
       document.querySelectorAll("[data-option]").forEach((b) => b.addEventListener("click", () => {
         o = b.dataset.option;
         try { sessionStorage.setItem("colour-option", o); } catch (e) {}
