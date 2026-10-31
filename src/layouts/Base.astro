@@ -57,6 +57,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
     </div>
   )}
+  {backdrop === "warpchi" && <div class="warpchi-pan" aria-hidden="true"></div>}
   {backdrop === "warpchi" && <div class="photo warpchi" aria-hidden="true"></div>}
   <header class="site-head">
     <a class="elbow" href="/" aria-label="Enterprise-R home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>

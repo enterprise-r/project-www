@@ -91,10 +91,11 @@ import Base from "../layouts/Base.astro";
       if (touchY !== null && e.touches[0].clientY - touchY > 70) { touchY = null; liftOff(); }
     }, { passive: true });
     addEventListener("pageshow", () => { lifting = false; }); // coming back via the back button
-    // Warm the cache with the About picture so it is ready when it drops in.
+    // Warm the cache with the About picture so it is ready when it drops in
+    // (phones need both: the wide one for the pan, the phone one to land on).
     addEventListener("load", () => {
-      const phone = matchMedia("(max-aspect-ratio: 3/4)").matches;
-      new Image().src = phone ? "/assets/about-backdrop-phone.jpg" : "/assets/about-backdrop.jpg";
+      new Image().src = "/assets/about-backdrop.jpg";
+      if (matchMedia("(max-aspect-ratio: 3/4)").matches) new Image().src = "/assets/about-backdrop-phone.jpg";
     });
     if (!root.classList.contains("still")) {
       setTimeout(() => root.classList.add("still"), 30000);

@@ -168,6 +168,35 @@ body {
 @media (max-aspect-ratio: 3/4) {
   .warpchi { background-image: url(/assets/about-backdrop-phone.jpg); background-position: 50% 25%; } /* portrait: phone master */
 }
+/* Phones: the wide picture as a strip for the lift-off camera pan (see "Lift-off" below). It sits
+   hidden under the phone picture, lined up with it, and is only seen during the transition. */
+.warpchi-pan { display: none; }
+@media (max-aspect-ratio: 3/4) {
+  .warpchi-pan {
+    display: block;
+    position: fixed;
+    pointer-events: none;
+    width: calc(var(--pic-w) * 3.978);
+    height: calc(var(--pic-w) * 3.978 * 9 / 16);
+    left: calc((100vw - var(--pic-w)) / 2 + var(--pan-end) * var(--pic-w));
+    top: calc((100vh - var(--pic-h)) / 4 - 0.0277 * var(--pic-h));
+    background: var(--ink) url(/assets/about-backdrop.jpg) 0 0 / 100% 100% no-repeat;
+    view-transition-name: pan;
+  }
+  /* Chrome refuses to snapshot a very large element (on a 1024 px tablet the
+     strip is ~4000 px wide and only the part near the screen was captured, so
+     the ship never appeared). Where the browser can divide lengths, the strip
+     is laid out at a fixed 1280 x 720 and scaled up instead: the snapshot stays
+     small and the picture looks the same (the source is only 2560 px wide). */
+  @supports (transform: scale(calc(100vw / 1280px))) {
+    .warpchi-pan {
+      width: 1280px;
+      height: 720px;
+      transform-origin: 0 0;
+      transform: scale(calc(var(--pic-w) * 3.978 / 1280px));
+    }
+  }
+}
 
 @keyframes drift {
   to { transform: translate3d(0, 80px, 0); }
@@ -453,13 +482,14 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
    the picture leaves upwards, then the ground rises from below with the Home content
    just behind it.
 
-   Phones (portrait, max-aspect-ratio 3/4, where the phone picture takes over): a tall strip
-   doesn't pan well vertically, so there the picture flies in from the RIGHT, moving left
-   (the way the ship faces and travels in the main picture, its wake trailing to the right),
-   with the soft edge on its leading (left) side, and pushes the Home logo and title out to
-   the left in step with it. Going down it leaves to the right the way it came, and the
-   logo slides back in from the left just after the floor is back. Ground, stars and lilac
-   behave as on desktop.
+   Phones (portrait, max-aspect-ratio 3/4, where the phone picture takes over): a camera pan
+   across the WIDE picture instead, so the ship is seen. The wide picture comes in as a strip
+   the height of the screen, from the right with the ship's nose leading, pushing the Home
+   logo and title off to the left; it cruises slowly over the ship, then glides along the
+   stream and settles on the hand, framed exactly as the phone picture frames it (the index
+   finger lies where the logo was), and the phone picture crossfades in on top. Going down
+   it pans back to the ship and out to the right, the logo comes back in from the left in
+   step with it, and the floor rises. Ground, stars and lilac behave as on desktop, retimed.
 
    Timings (all here; the "lift" ones are going up, the "drop" ones going down): */
 :root {
@@ -491,11 +521,39 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
   --lift-sky-swell: 2.2;        /* during the voyage the lilac spreads down the screen (x this height) */
   --lift-sky-glow: 1.7;         /* and brightens (1 = as on Home) */
   --lift-star-streak: 2.2;      /* vertical stretch of the stars while they rush past */
-  /* Phones only (portrait): the sideways version */
-  --lift-orbit-from-x: 100%;    /* where the picture starts: 100% = fully off the right side */
-  --lift-edge-x: 0.45;          /* width of its soft leading (left) edge, as a share of the screen */
-  --lift-push-x: -100vw;        /* where the Home logo and title are pushed to (off the left side) */
-  --drop-content-in: 0.9s;      /* going down, how long the logo and title take to slide back in */
+}
+
+/* Phones (portrait): the camera pan across the wide picture. Positions are where the strip's
+   LEFT edge is, in phone-picture widths (1 = about one screen width) from the left of the
+   screen. The strip is the wide picture sized and placed so that, at --pan-end, it lines up
+   with the phone picture (measured: 3.978 x its width, 2.7312 widths to its left, 2.77% of
+   its height above it), so the crossfade between the two is nearly invisible. */
+@media (max-aspect-ratio: 3/4) {
+  :root {
+    --pic-h: max(100vh, calc(100vw * 2796 / 1290)); /* phone picture as drawn (cover) */
+    --pic-w: calc(var(--pic-h) * 1290 / 2796);
+    --pan-from: 1;              /* starts just off the right side, ship's nose leading */
+    --pan-ship: -0.1;           /* the saucer fills the screen */
+    --pan-ship-to: -0.35;       /* drifts to here while the ship is on screen (the cruise) */
+    --pan-end: -2.7312;         /* settles on the hand: the phone picture's framing (don't change) */
+    --pan-edge: 6%;             /* soft fade on the strip's leading (left) edge, share of the strip */
+    /* Going up (starts at --lift-orbit-delay; ship readable from ~0.5 s to ~1.2 s) */
+    --pan-in: 0.5s;             /* coming in and pushing the logo off (decelerating) */
+    --pan-cruise: 0.45s;        /* slow drift over the ship */
+    --pan-glide: 0.9s;          /* along the stream to the hand (settles at 2.05 s) */
+    --pan-swap: 0.35s;          /* crossfade from the strip to the phone picture (ends 2.4 s) */
+    --lift-sky-hold: 2.05s;     /* lilac on until the pan settles... */
+    --lift-sky-fade: 0.45s;     /* ...then fades (ends 2.5 s) */
+    --lift-text-delay: 2s;      /* About text in at 2.0-2.5 s */
+    /* Going down */
+    --drop-pan-swap: 0.3s;      /* the phone picture crossfades back to the strip first */
+    --drop-pan-delay: 0.35s;    /* then the pan back starts */
+    --drop-pan-glide: 0.75s;    /* from the hand back to the ship */
+    --drop-pan-cruise: 0.3s;    /* a glimpse of the ship */
+    --drop-pan-out: 0.45s;      /* out to the right, the logo coming back in step (lands ~1.85 s) */
+    --drop-ground-delay: 0.8s;  /* floor rises behind the strip and is back at 1.8 s */
+    --drop-ground: 1s;
+  }
 }
 
 @view-transition { navigation: auto; }
@@ -580,36 +638,51 @@ main.lower-left { view-transition-name: content-about; }
   ::view-transition-old(site-head),
   ::view-transition-new(site-head) { animation-duration: var(--lift-nav); }
 
-  /* -- Phones (portrait): sideways -- */
+  /* -- Phones (portrait): the camera pan --
+     The strip's three moves are on three nested layers so each has its own duration and
+     easing: the new/old image (in/out), the image pair (cruise) and the group (glide).
+     Easings are tuned so the speed carries over smoothly from one move to the next.
+     The pseudo-elements belong to the page being arrived at, so :root:has(.warpchi) means
+     going up (arriving on About) and :root:has(.space) going down (arriving on Home). */
   @media (max-aspect-ratio: 3/4) {
-    /* Soft edge on the picture's left side: a mask 1 + edge wide; at 0 0 its fading foot
-       sits on the left edge, at 100% 0 it is off the picture. */
-    ::view-transition-old(orbit),
-    ::view-transition-new(orbit) {
-      mask-image: linear-gradient(to right, transparent 0, #000 calc(100% * var(--lift-edge-x) / (1 + var(--lift-edge-x))));
-      mask-size: calc(100% * (1 + var(--lift-edge-x))) 100%;
-      mask-position: 100% 0;
+    ::view-transition-group(pan) { z-index: 4; } /* under the phone picture (same level, earlier) */
+    ::view-transition-old(pan),
+    ::view-transition-new(pan) {
+      mask-image: linear-gradient(to right, transparent 0, #000 var(--pan-edge));
     }
-    /* Going up: the picture flies in from the right, the logo and title are pushed off to the
-       left in step with it (same timing and easing, so its leading edge never overruns them). */
-    ::view-transition-new(orbit) {
-      animation:
-        lift-fly-in var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both,
-        lift-edge-x-in var(--lift-orbit) linear var(--lift-orbit-delay) both;
+    ::view-transition-old(orbit),
+    ::view-transition-new(orbit) { mask-image: none; }
+
+    /* Going up */
+    :root:has(.warpchi)::view-transition-new(pan) { animation: pan-in var(--pan-in) cubic-bezier(0.25, 0.7, 0.6, 0.9) var(--lift-orbit-delay) both; }
+    :root:has(.warpchi)::view-transition-image-pair(pan) { animation: pan-cruise var(--pan-cruise) linear calc(var(--lift-orbit-delay) + var(--pan-in)) both; }
+    :root:has(.warpchi)::view-transition-group(pan) {
+      animation: pan-glide var(--pan-glide) cubic-bezier(0.42, 0.09, 0.2, 1)
+        calc(var(--lift-orbit-delay) + var(--pan-in) + var(--pan-cruise)) both;
     }
     ::view-transition-old(content-home) {
-      animation: lift-push-out var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both;
+      animation: lift-push-out var(--pan-in) cubic-bezier(0.25, 0.7, 0.6, 0.9) var(--lift-orbit-delay) both;
     }
-    /* Going down: the picture leaves to the right the way it came, the logo and title slide
-       back in from the left and land just after the floor. */
-    ::view-transition-old(orbit) {
-      animation:
-        lift-fly-out var(--drop-orbit) var(--lift-out) var(--drop-orbit-delay) both,
-        lift-edge-x-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
+    ::view-transition-new(orbit) {
+      animation: lift-fade-in var(--pan-swap) ease-in-out
+        calc(var(--lift-orbit-delay) + var(--pan-in) + var(--pan-cruise) + var(--pan-glide)) both;
+    }
+
+    /* Going down */
+    ::view-transition-old(orbit) { animation: lift-fade-out var(--drop-pan-swap) ease-in-out both; }
+    :root:has(.space)::view-transition-group(pan) {
+      animation: pan-glide-back var(--drop-pan-glide) cubic-bezier(0.8, 0, 0.58, 0.91) var(--drop-pan-delay) both;
+    }
+    :root:has(.space)::view-transition-image-pair(pan) {
+      animation: pan-cruise-back var(--drop-pan-cruise) linear calc(var(--drop-pan-delay) + var(--drop-pan-glide)) both;
+    }
+    ::view-transition-old(pan) {
+      animation: pan-out var(--drop-pan-out) cubic-bezier(0.4, 0.1, 0.75, 0.3)
+        calc(var(--drop-pan-delay) + var(--drop-pan-glide) + var(--drop-pan-cruise)) both;
     }
     ::view-transition-new(content-home) {
-      animation: lift-push-in var(--drop-content-in) var(--lift-in)
-        calc(var(--drop-ground-delay) + var(--drop-ground) + var(--drop-content-lag) - var(--drop-content-in)) both;
+      animation: lift-push-in var(--drop-pan-out) cubic-bezier(0.4, 0.1, 0.75, 0.3)
+        calc(var(--drop-pan-delay) + var(--drop-pan-glide) + var(--drop-pan-cruise)) both;
     }
   }
 }
@@ -642,23 +715,23 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
   0% { mask-position: 0 0; }
   25%, 100% { mask-position: 0 100%; }
 }
-/* Phones: the same, sideways (edit 75% / 25% here too). */
-@keyframes lift-fly-in {
-  from { transform: translateX(var(--lift-orbit-from-x)); filter: brightness(var(--lift-orbit-dim)); }
+/* Phones: the pan. Each layer moves by its share of the trip and ends at 0, where the strip
+   sits at --pan-end. */
+@keyframes pan-in {
+  from { transform: translateX(calc((var(--pan-from) - var(--pan-ship)) / 3.978 * 100%)); filter: brightness(var(--lift-orbit-dim)); }
 }
-@keyframes lift-fly-out {
-  to { transform: translateX(var(--lift-orbit-from-x)); filter: brightness(var(--lift-orbit-dim)); }
+@keyframes pan-cruise { from { transform: translateX(calc((var(--pan-ship) - var(--pan-ship-to)) / 3.978 * 100%)); } }
+/* The strip's own layers move in % of the strip (it is 3.978 picture widths wide),
+   because the group may carry a scale; the group already uses transform for its
+   position, so the glide uses translate, in screen px. */
+@keyframes pan-glide { from { translate: calc((var(--pan-ship-to) - var(--pan-end)) * var(--pic-w)); } }
+@keyframes pan-glide-back { to { translate: calc((var(--pan-ship-to) - var(--pan-end)) * var(--pic-w)); } }
+@keyframes pan-cruise-back { to { transform: translateX(calc((var(--pan-ship) - var(--pan-ship-to)) / 3.978 * 100%)); } }
+@keyframes pan-out {
+  to { transform: translateX(calc((var(--pan-from) - var(--pan-ship)) / 3.978 * 100%)); filter: brightness(var(--lift-orbit-dim)); }
 }
-@keyframes lift-edge-x-in {
-  0%, 75% { mask-position: 0 0; }
-  100% { mask-position: 100% 0; }
-}
-@keyframes lift-edge-x-out {
-  0% { mask-position: 100% 0; }
-  25%, 100% { mask-position: 0 0; }
-}
-@keyframes lift-push-out { to { transform: translateX(var(--lift-push-x)); } }
-@keyframes lift-push-in { from { transform: translateX(var(--lift-push-x)); } }
+@keyframes lift-push-out { to { transform: translateX(calc((var(--pan-ship) - var(--pan-from)) * var(--pic-w))); } }
+@keyframes lift-push-in { from { transform: translateX(calc((var(--pan-ship) - var(--pan-from)) * var(--pic-w))); } }
 @keyframes lift-sky-swell {
   to { transform: scaleY(var(--lift-sky-swell)); filter: brightness(var(--lift-sky-glow)); }
 }
