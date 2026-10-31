@@ -556,7 +556,7 @@ h1 {
   font-size: clamp(1.15rem, 2.6vw, 1.45rem);
   font-weight: 600;
   letter-spacing: 0.04em;
-  border: 1px solid var(--ui-border-active); /* palette 'Active border' #BA9EDA (no plain 'Border' entry) */
+  border: 1px solid var(--ui-border); /* palette Inactive border #3F2C53, dark purple */
   border-radius: 999px;
   background: rgba(12, 4, 15, 0.72); /* same backing as the terminal panels */
   -webkit-backdrop-filter: blur(6px);
