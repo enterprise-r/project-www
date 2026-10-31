@@ -72,15 +72,21 @@ body {
   line-height: 1.4;
 }
 
-.space, .stars, .horizon, .grid {
+.space, .sky, .stars, .horizon, .grid {
   position: fixed;
   pointer-events: none;
 }
 
 .space {
   inset: 0;
-  /* badge-backdrop.svg glow, flipped vertically: lilac from the top */
-  background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(196, 139, 255, 0.18), rgba(196, 139, 255, 0) 100%), var(--ink);
+  background: var(--ink);
+}
+
+/* The sky: badge-backdrop.svg glow, flipped vertically: lilac from the top.
+   Its own layer so it can stay on during the lift-off while the ground leaves. */
+.sky {
+  inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(196, 139, 255, 0.18), rgba(196, 139, 255, 0) 100%);
 }
 
 .stars {
@@ -434,28 +440,53 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
 /* ===== Lift-off: the Home <-> About page transition =====
    Native cross-document View Transitions (no router, no script): each page is a real URL,
    and the browser morphs between them. Browsers without support just change page.
-   Home is the ground, About is orbit. Going up, the ground (lilac glow, horizon, grid)
-   and the Home content slide down and away, the stars streak past, the WarpChi picture
-   drops in from above and settles in its normal place, then the About text fades in.
-   Coming back down, the same thing runs the other way.
-   Timings (total about 1.6 s): */
+   Home is the ground, About is orbit.
+
+   Going up (Home -> About), about 2 s:
+     1. the ground (Tron grid and green horizon) and the Home content drop away first;
+     2. the lilac sky stays on, laid over everything, as the sky of the voyage;
+     3. the stars streak past;
+     4. WarpChi comes down from above through the lilac, dimmed, with a soft fading
+        leading edge (no hard panel edge), and settles in its normal framing;
+     5. the lilac then fades slowly and the About text fades in.
+   Going down (About -> Home) mirrors it: the lilac comes up over the picture first,
+   the picture leaves upwards, then the ground and the Home content rise from below.
+
+   Timings (all here; the "lift" ones are going up, the "drop" ones going down): */
 :root {
-  --lift-ground: 0.9s;        /* ground and Home content sliding out (down) */
-  --lift-stars: 0.75s;        /* stars streaking past, shorter = faster */
-  --lift-orbit-delay: 0.2s;   /* when the picture starts dropping in */
-  --lift-orbit: 1.15s;        /* how long it takes to settle */
-  --lift-text-delay: 1.15s;   /* when the destination text starts fading in */
-  --lift-text: 0.45s;
-  --lift-nav: 0.5s;           /* nav button colour swap */
-  --lift-out: cubic-bezier(0.55, 0, 0.85, 0.35);  /* accelerate away: lift-off */
+  /* Going up */
+  --lift-ground: 0.7s;          /* grid, horizon and Home content dropping away */
+  --lift-content-fade: 0.35s;   /* Home logo and text gone by then, so they never ghost through the picture */
+  --lift-stars: 0.75s;          /* stars streaking past, shorter = faster */
+  --lift-orbit-delay: 0.35s;    /* when the picture starts coming down */
+  --lift-orbit: 1.1s;           /* how long it takes to settle (so it settles at 1.45 s) */
+  --lift-sky-hold: 1.45s;       /* the lilac stays fully on until here (= orbit delay + orbit) */
+  --lift-sky-fade: 0.55s;       /* then fades slowly to the About look (ends at 2.0 s) */
+  --lift-text-delay: 1.5s;      /* About heading and text start fading in */
+  --lift-text: 0.5s;
+  /* Going down */
+  --drop-text: 0.3s;            /* About text fading out */
+  --drop-sky-in: 0.45s;         /* the lilac comes up over the picture first */
+  --drop-orbit-delay: 0.25s;    /* then the picture starts to leave upwards */
+  --drop-orbit: 0.9s;
+  --drop-ground-delay: 0.85s;   /* then the ground and Home content rise from below */
+  --drop-ground: 1.1s;          /* (ends at about 1.95 s) */
+  /* Shared */
+  --lift-nav: 0.5s;             /* nav button colour swap */
+  --lift-out: cubic-bezier(0.55, 0, 0.85, 0.35);  /* accelerate away */
   --lift-in: cubic-bezier(0.15, 0.6, 0.25, 1);    /* decelerate: settle into place */
-  --lift-orbit-from: -100%;   /* where the picture starts: -100% = fully above the screen */
-  --lift-star-streak: 2.2;    /* vertical stretch of the stars while they rush past */
+  --lift-orbit-from: -100%;     /* where the picture starts: -100% = fully above the screen */
+  --lift-orbit-dim: 0.45;       /* picture brightness when it starts coming down (1 = normal) */
+  --lift-edge: 0.45;            /* height of the picture's soft leading edge, as a share of the screen (0.45 = 45%) */
+  --lift-sky-swell: 2.2;        /* during the voyage the lilac spreads down the screen (x this height) */
+  --lift-sky-glow: 1.7;         /* and brightens (1 = as on Home) */
+  --lift-star-streak: 2.2;      /* vertical stretch of the stars while they rush past */
 }
 
 @view-transition { navigation: auto; }
 
 .space { view-transition-name: ground; contain: paint; } /* clip the 3D grid to the screen, or its snapshot is too big to capture */
+.sky { view-transition-name: sky; }
 .stars { view-transition-name: stars; }
 .warpchi { view-transition-name: orbit; }
 .site-head { view-transition-name: site-head; }
@@ -463,35 +494,70 @@ main { view-transition-name: content-home; }
 main.lower-left { view-transition-name: content-about; }
 .liftoff-prompt { view-transition-name: prompt; }
 
-/* Stacking during the transition: ground, stars, Home content, the picture over them all,
-   then the About text, nav on top. */
+/* Stacking during the transition, bottom to top: ground, stars, Home content, the picture,
+   the lilac sky over the picture, the About text, the nav. */
 ::view-transition-group(ground) { z-index: 1; }
 ::view-transition-group(stars) { z-index: 2; }
 ::view-transition-group(content-home),
 ::view-transition-group(prompt) { z-index: 3; }
 ::view-transition-group(orbit) { z-index: 4; }
-::view-transition-group(content-about) { z-index: 5; }
+::view-transition-group(sky) { z-index: 5; }
+::view-transition-group(content-about) { z-index: 6; }
 ::view-transition-group(site-head) { z-index: 10; }
 
 ::view-transition-old(root),
 ::view-transition-new(root) { animation: none; }
 
-@media not (prefers-reduced-motion: reduce) {
-  /* Up: Home leaves downwards. Down (back to Home): it comes back up from below. */
-  ::view-transition-old(ground) { animation: lift-sink var(--lift-ground) var(--lift-out) both; }
-  ::view-transition-new(ground) { animation: lift-rise var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; }
-  ::view-transition-old(content-home) { animation: lift-sink var(--lift-ground) var(--lift-out) both, lift-fade-out var(--lift-ground) linear both; }
-  ::view-transition-new(content-home) { animation: lift-rise var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; } /* rides up with the ground */
-  ::view-transition-old(prompt) { animation: lift-fade-out 0.25s linear both; }
-  ::view-transition-new(prompt) { animation: lift-fade-in var(--lift-text) linear var(--lift-text-delay) both; }
-  ::view-transition-old(stars) { animation: lift-stars-down var(--lift-stars) var(--lift-out) both; }
-  ::view-transition-new(stars) { animation: lift-stars-up var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; }
+/* The picture's soft leading edge: a mask 1 + edge tall, slid so its fading foot sits on the
+   picture's bottom edge while it moves, and off the picture once it has settled. */
+::view-transition-old(orbit),
+::view-transition-new(orbit) {
+  mask-image: linear-gradient(to top, transparent 0, #000 calc(100% * var(--lift-edge) / (1 + var(--lift-edge))));
+  mask-size: 100% calc(100% * (1 + var(--lift-edge)));
+  mask-repeat: no-repeat;
+  mask-position: 0 0;
+}
 
-  /* Up: the picture drops in from above. Down: it leaves upwards. */
-  ::view-transition-new(orbit) { animation: lift-descend var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; }
-  ::view-transition-old(orbit) { animation: lift-ascend var(--lift-ground) var(--lift-out) both; }
+@media not (prefers-reduced-motion: reduce) {
+  /* -- Going up -- */
+  ::view-transition-old(ground) { animation: lift-sink var(--lift-ground) var(--lift-out) both; }
+  ::view-transition-old(content-home) {
+    animation: lift-sink var(--lift-ground) var(--lift-out) both, lift-fade-out var(--lift-content-fade) linear both;
+  }
+  ::view-transition-old(prompt) { animation: lift-fade-out 0.25s linear both; }
+  ::view-transition-old(stars) { animation: lift-stars-down var(--lift-stars) var(--lift-out) both; }
+  ::view-transition-old(sky) {
+    mix-blend-mode: screen;
+    transform-origin: 50% 0;
+    animation:
+      lift-sky-swell var(--lift-sky-hold) ease-in-out both,
+      lift-fade-out var(--lift-sky-fade) ease-in-out var(--lift-sky-hold) both;
+  }
+  ::view-transition-new(orbit) {
+    animation:
+      lift-descend var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both,
+      lift-edge-in var(--lift-orbit) linear var(--lift-orbit-delay) both;
+  }
   ::view-transition-new(content-about) { animation: lift-text-up var(--lift-text) var(--lift-in) var(--lift-text-delay) both; }
-  ::view-transition-old(content-about) { animation: lift-fade-out 0.3s linear both; }
+
+  /* -- Going down -- */
+  ::view-transition-old(content-about) { animation: lift-fade-out var(--drop-text) linear both; }
+  ::view-transition-new(sky) {
+    mix-blend-mode: screen;
+    transform-origin: 50% 0;
+    animation:
+      lift-fade-in var(--drop-sky-in) ease-in-out both,
+      lift-sky-settle var(--drop-ground) ease-in-out var(--drop-ground-delay) both;
+  }
+  ::view-transition-old(orbit) {
+    animation:
+      lift-ascend var(--drop-orbit) var(--lift-out) var(--drop-orbit-delay) both,
+      lift-edge-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
+  }
+  ::view-transition-new(stars) { animation: lift-stars-up var(--drop-ground) var(--lift-in) var(--drop-orbit-delay) both; }
+  ::view-transition-new(ground),
+  ::view-transition-new(content-home) { animation: lift-rise var(--drop-ground) var(--lift-in) var(--drop-ground-delay) both; }
+  ::view-transition-new(prompt) { animation: lift-fade-in 0.4s linear calc(var(--drop-ground-delay) + var(--drop-ground) - 0.4s) both; }
 
   ::view-transition-group(site-head),
   ::view-transition-old(site-head),
@@ -511,10 +577,27 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
 @keyframes lift-sink { to { transform: translateY(100vh); } }
 @keyframes lift-rise { from { transform: translateY(100vh); } }
 @keyframes lift-descend {
-  from { transform: translateY(var(--lift-orbit-from)); opacity: 0.3; }
-  20% { opacity: 1; }
+  from { transform: translateY(var(--lift-orbit-from)); filter: brightness(var(--lift-orbit-dim)); }
 }
-@keyframes lift-ascend { to { transform: translateY(var(--lift-orbit-from)); opacity: 0.3; } }
+@keyframes lift-ascend {
+  to { transform: translateY(var(--lift-orbit-from)); filter: brightness(var(--lift-orbit-dim)); }
+}
+/* The soft edge (linear, separate from the move so it doesn't vanish early). It stays full for
+   the first 75% of the picture's move (edit 75% / 25% below; keyframe stops can't use variables). */
+@keyframes lift-edge-in {
+  0%, 75% { mask-position: 0 100%; }
+  100% { mask-position: 0 0; }
+}
+@keyframes lift-edge-out {
+  0% { mask-position: 0 0; }
+  25%, 100% { mask-position: 0 100%; }
+}
+@keyframes lift-sky-swell {
+  to { transform: scaleY(var(--lift-sky-swell)); filter: brightness(var(--lift-sky-glow)); }
+}
+@keyframes lift-sky-settle {
+  from { transform: scaleY(var(--lift-sky-swell)); filter: brightness(var(--lift-sky-glow)); }
+}
 @keyframes lift-stars-down {
   to { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
 }
