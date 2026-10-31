@@ -170,7 +170,7 @@ body {
   backface-visibility: hidden; /* keep the sheet on its own composited layer */
 }
 
-/* Picture backdrop (About). The scrim darkens the middle so the heading and text stay readable. */
+/* Picture backdrop (About). No scrim over the picture: the text sits on small terminal panels (.term). */
 .photo {
   position: fixed;
   inset: 0;
@@ -178,14 +178,6 @@ body {
   background-color: var(--ink);
   background-size: cover;
   background-repeat: no-repeat;
-}
-.photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(14, 0, 18, 0.72), rgba(14, 0, 18, 0.25) 100%),
-    linear-gradient(to bottom, rgba(14, 0, 18, 0.55), rgba(14, 0, 18, 0) 18%);
 }
 /* WarpChi masters keep the original framing; the off-centre framing per aspect ratio lives here. */
 .warpchi {
@@ -200,14 +192,6 @@ body {
 }
 @media (max-aspect-ratio: 3/4) {
   .warpchi { background-image: url(/assets/about-backdrop-phone.jpg); background-position: 50% 25%; } /* portrait: phone master */
-  /* Phones: the centred heading and text sit on the bright warp stream, so an extra soft band
-     darkens the middle; body text stays at 4.5:1 or more on the brightest pixel behind it. */
-  .warpchi::after {
-    background:
-      radial-gradient(ellipse 120% 22% at 50% 48%, rgba(14, 0, 18, 0.35), rgba(14, 0, 18, 0.3) 50%, rgba(14, 0, 18, 0) 100%),
-      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(14, 0, 18, 0.72), rgba(14, 0, 18, 0.25) 100%),
-      linear-gradient(to bottom, rgba(14, 0, 18, 0.55), rgba(14, 0, 18, 0) 18%);
-  }
 }
 /* Phones: the wide picture as a strip for the lift-off camera pan (see "Lift-off" below). It sits
    hidden under the phone picture, lined up with it, and is only seen during the transition.
@@ -389,6 +373,23 @@ body {
 
 .site-head a:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
 .elbow:focus-visible { outline-offset: -5px; }
+
+/* Terminal panels: a small dark backing that hugs each block of text sitting on a picture,
+   instead of dimming the picture. Background #0C040F at 72%, a thin Inactive border, soft blur. */
+.term {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.5rem 0.9rem;
+  background: rgba(12, 4, 15, 0.72);
+  border: 1px solid var(--ui-border);
+  border-radius: 0.6rem;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.term + .term { margin-top: 0.75rem; }
+.term > h1 { margin: 0; }
+.term > .prose { margin: 0; }
+.term-head { padding: 0.45rem 1rem 0.55rem; }
 
 /* About page text */
 main.lower-left h1, .about-heading { background: var(--text-about-heading); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 16px var(--text-about-heading-glow)); }
