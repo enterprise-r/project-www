@@ -513,6 +513,9 @@ h1 {
   box-shadow: 0 0 24px rgba(141, 255, 60, 0.12);
 }
 
+/* Home: a click anywhere lifts off (see index.astro), so the whole page shows the hand. */
+html:has(.liftoff-prompt) body { cursor: pointer; }
+
 /* The @ in the address, in the 'other page' button orange; the rest keeps the link colour. */
 .at { color: var(--ui-orange); }
 

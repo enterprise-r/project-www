@@ -78,6 +78,17 @@ import Base from "../layouts/Base.astro";
       if (f && f !== document.body && f !== root) return; // a focused link keeps its own Enter
       liftOff();
     });
+    // "Click or press Enter": a click or tap anywhere on Home lifts off, except on links, buttons
+    // and fields (the email, the nav, the logo and the prompt keep their own behaviour), modified
+    // or non-left clicks, and a click that ends a text selection. Browsers only send a click for a
+    // tap, not for a scroll or swipe, so touch gestures don't fire it.
+    document.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (e.target.closest && e.target.closest("a, button, input, select, textarea, label, summary, [role='button'], [contenteditable]")) return;
+      const sel = getSelection();
+      if (sel && !sel.isCollapsed && sel.toString().trim()) return;
+      liftOff();
+    });
     let wheelUp = 0;
     let wheelTimer;
     addEventListener("wheel", (e) => {
