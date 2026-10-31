@@ -1,0 +1,17 @@
+---
+// ✏️ EDIT THE PAGE TEXT HERE
+const page = {
+  title: "Page not found · Enterprise-R",
+  description: "This page does not exist.",
+  heading: "Page not found",
+};
+
+import Base from "../layouts/Base.astro";
+import "../styles/about.css";
+---
+<Base title={page.title} description={page.description} noindex>
+  <main>
+    <h1>{page.heading}</h1>
+    <p>This page does not exist. Go back to the <a href="/">home page</a>.</p>
+  </main>
+</Base>

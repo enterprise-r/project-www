@@ -1,0 +1,212 @@
+{
+  "name": "Enterprise-R palette",
+  "groups": [
+    {
+      "id": "surfaces",
+      "title": "Surfaces",
+      "colours": [
+        {
+          "name": "Darker background",
+          "var": "--ui-bg-darker",
+          "hex": "#09030D",
+          "use": "footer icons"
+        },
+        {
+          "name": "Dark background",
+          "var": "--ui-bg-dark",
+          "hex": "#0A030E"
+        },
+        {
+          "name": "Background",
+          "var": "--ui-bg",
+          "hex": "#0C040F"
+        },
+        {
+          "name": "Lighter background",
+          "var": "--ui-bg-lighter",
+          "hex": "#181820"
+        },
+        {
+          "name": "Selection",
+          "var": "--ui-selection",
+          "hex": "#41285B"
+        },
+        {
+          "name": "Muted",
+          "var": "--ui-muted",
+          "hex": "#7D6D91"
+        },
+        {
+          "name": "Inactive border",
+          "var": "--ui-border",
+          "hex": "#3F2C53",
+          "use": "title bar and footer stripes, email bubble border, logo grounds (square, badge, favicon, wide and compact plate) and the people badge disc"
+        },
+        {
+          "name": "Active border",
+          "var": "--ui-border-active",
+          "hex": "#BA9EDA",
+          "aliasOf": "--ui-magenta"
+        }
+      ]
+    },
+    {
+      "id": "foregrounds",
+      "title": "Foregrounds",
+      "colours": [
+        {
+          "name": "Dark foreground",
+          "var": "--ui-fg-dark",
+          "hex": "#9385A5"
+        },
+        {
+          "name": "Foreground",
+          "var": "--ui-fg",
+          "hex": "#E0E6E2"
+        },
+        {
+          "name": "Light foreground",
+          "var": "--ui-fg-light",
+          "hex": "#B6C1CC"
+        },
+        {
+          "name": "Bright foreground",
+          "var": "--ui-fg-bright",
+          "hex": "#FFF3E6",
+          "use": "keyboard focus outline, link hover"
+        }
+      ]
+    },
+    {
+      "id": "named",
+      "title": "Named colours",
+      "colours": [
+        {
+          "name": "Red",
+          "var": "--ui-red",
+          "hex": "#EC8790"
+        },
+        {
+          "name": "Bright red",
+          "var": "--ui-red-bright",
+          "hex": "#FFA5AD"
+        },
+        {
+          "name": "Yellow",
+          "var": "--ui-yellow",
+          "hex": "#E4D58B"
+        },
+        {
+          "name": "Bright yellow",
+          "var": "--ui-yellow-bright",
+          "hex": "#EFE3A6"
+        },
+        {
+          "name": "Orange",
+          "var": "--ui-orange",
+          "hex": "#F4B965",
+          "use": "logo bowl (counter), other-page buttons, email @, striped gradient start, separator centre"
+        },
+        {
+          "name": "Amber (Accent)",
+          "var": "--ui-accent",
+          "hex": "#F0A202",
+          "use": "other-page button hover, footer icon hover, accent text"
+        },
+        {
+          "name": "Green (sage)",
+          "var": "--ui-green",
+          "hex": "#77AF8A",
+          "use": "logo R, current-page button, headings, striped gradient end, separator edges"
+        },
+        {
+          "name": "Bright green",
+          "var": "--ui-green-bright",
+          "hex": "#9ADD6D",
+          "use": "Home mark (®), current-page button hover, prompt text"
+        },
+        {
+          "name": "Cyan",
+          "var": "--ui-cyan",
+          "hex": "#96C5CF"
+        },
+        {
+          "name": "Bright cyan",
+          "var": "--ui-cyan-bright",
+          "hex": "#CAD9E7"
+        },
+        {
+          "name": "Blue",
+          "var": "--ui-blue",
+          "hex": "#A5ACE1"
+        },
+        {
+          "name": "Bright blue",
+          "var": "--ui-blue-bright",
+          "hex": "#BDCBD9",
+          "use": "logo mirrored R, wordmark text"
+        },
+        {
+          "name": "Magenta",
+          "var": "--ui-magenta",
+          "hex": "#BA9EDA",
+          "use": "striped gradient, separator"
+        },
+        {
+          "name": "Bright magenta",
+          "var": "--ui-magenta-bright",
+          "hex": "#D2BCED"
+        },
+        {
+          "name": "Brown",
+          "var": "--ui-brown",
+          "hex": "#A88070"
+        }
+      ]
+    }
+  ],
+  "gradients": [
+    {
+      "id": "striped",
+      "name": "Striped gradient",
+      "var": "--ui-striped",
+      "use": "badge ring, and the words of the wide and compact logos",
+      "direction": "bottom-left to top-right",
+      "x1": "0",
+      "y1": "1",
+      "x2": "1",
+      "y2": "0",
+      "stops": [
+        {
+          "offset": "0",
+          "var": "--ui-orange"
+        },
+        {
+          "offset": "0.33",
+          "var": "--ui-magenta"
+        },
+        {
+          "offset": "0.75",
+          "var": "--ui-green"
+        },
+        {
+          "offset": "1",
+          "var": "--ui-green"
+        }
+      ]
+    },
+    {
+      "id": "separator",
+      "name": "Separator",
+      "var": "--ui-separator",
+      "use": "horizontal separator",
+      "direction": "left to right",
+      "x1": "0",
+      "y1": "0",
+      "x2": "1",
+      "y2": "0",
+      "mirrorOf": "striped",
+      "fade": "outer"
+    }
+  ]
+}
