@@ -33,7 +33,7 @@ The PNGs in `public/assets/` are rendered from logo SVGs in the private repo `en
 
 ```sh
 pip install cairosvg pillow          # cairosvg needs the system cairo library
-python3 scripts/build-assets.py      # R_ART_DIR=…, --badge/--mark SVG, --out DIR to override
+python3 scripts/build-assets.py      # R_ART_DIR=…, --badge/--mark SVG, --backdrop JPG, --out DIR to override
 ```
 
-`logo.png` is `source/logo-badge-large.svg`; the favicons and icons are `source/logo-refined.svg` fitted to a transparent square.
+`logo.png` is `source/logo-badge-large.svg`; the favicons and icons are `source/logo-refined.svg` fitted to a transparent square. `og-image.jpg` (the 1200×630 link preview) is the WarpChi wallpaper (`art/warpchi.jpg`, from Drive `Wallpapers/`) with the mark small in the top-left corner.

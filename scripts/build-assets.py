@@ -25,6 +25,7 @@ SOURCES = {
     "badge": arg("--badge", os.path.join(R_ART, "source", "logo-badge-large.svg")),  # full badge
     "mark": arg("--mark", os.path.join(R_ART, "source", "logo-refined.svg")),        # RR monogram only
 }
+BACKDROP = arg("--backdrop", os.path.join(ROOT, "art", "warpchi.jpg"))  # WarpChi wallpaper (Drive Wallpapers/)
 OUT = arg("--out", os.path.join(ROOT, "public", "assets"))
 
 # name, source, size (square px), how:
@@ -38,6 +39,8 @@ OUTPUTS = [
     ("icon-192.png",         "mark",   192, "fit"),
     ("icon-512.png",         "mark",   512, "fit"),
 ]
+# Link preview (og:image): the backdrop scaled and centre-cropped to 1200x630, the mark small in the top-left corner.
+OG = {"name": "og-image.jpg", "size": (1200, 630), "mark": 72, "margin": 32, "quality": 85}
 
 RENDER_PX = 4096  # the long side the SVG is rasterised at to find its visible bounds
 DIRECT_MAX = 48   # sizes up to this are drawn straight at the target size (crisp favicons);
@@ -100,3 +103,17 @@ for name, src, size, how in OUTPUTS:
     else:
         fitted(SOURCES[src], size).save(dest)
     print(f"{name:22s} {size:>4}px  <- {os.path.relpath(SOURCES[src], R_ART) if SOURCES[src].startswith(R_ART) else SOURCES[src]}")
+
+if not os.path.isfile(BACKDROP):
+    sys.exit(f"backdrop not found: {BACKDROP} (set --backdrop)")
+W, H = OG["size"]
+bg = Image.open(BACKDROP).convert("RGB")
+k = max(W / bg.width, H / bg.height)
+bg = bg.resize((round(bg.width * k), round(bg.height * k)), Image.LANCZOS)
+x, y = (bg.width - W) // 2, (bg.height - H) // 2
+bg = bg.crop((x, y, x + W, y + H))
+m = OG["mark"]
+mark = fitted(SOURCES["mark"], m)
+bg.paste(mark, (OG["margin"], OG["margin"]), mark)
+bg.save(os.path.join(OUT, OG["name"]), quality=OG["quality"], optimize=True, progressive=True)
+print(f'{OG["name"]:22s} {W}x{H}  <- {os.path.relpath(BACKDROP, ROOT)} + mark')
