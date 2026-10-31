@@ -207,10 +207,11 @@ body {
   }
 }
 /* Phones: the wide picture as a strip for the lift-off camera pan (see "Lift-off" below). It sits
-   hidden under the phone picture, lined up with it, and is only seen during the transition. */
-.warpchi-pan { display: none; }
+   hidden under the phone picture, lined up with it, and is only seen during the transition.
+   .fx-strip is the same strip on Home, used only by the transition fallback (see the end of the file). */
+.warpchi-pan, .fx-strip { display: none; }
 @media (max-aspect-ratio: 3/4) {
-  .warpchi-pan {
+  .warpchi-pan, .fx-strip {
     display: block;
     position: fixed;
     pointer-events: none;
@@ -219,15 +220,16 @@ body {
     left: calc((100vw - var(--pic-w)) / 2 + var(--pan-end) * var(--pic-w));
     top: calc((100vh - var(--pic-h)) / 4 - 0.0277 * var(--pic-h));
     background: var(--ink) url(/assets/about-backdrop.jpg) 0 0 / 100% 100% no-repeat;
-    view-transition-name: pan;
   }
+  .warpchi-pan { view-transition-name: pan; }
+  .fx-strip { display: none; }
   /* Chrome refuses to snapshot a very large element (on a 1024 px tablet the
      strip is ~4000 px wide and only the part near the screen was captured, so
      the ship never appeared). Where the browser can divide lengths, the strip
      is laid out at a fixed 1280 x 720 and scaled up instead: the snapshot stays
      small and the picture looks the same (the source is only 2560 px wide). */
   @supports (transform: scale(calc(100vw / 1280px))) {
-    .warpchi-pan {
+    .warpchi-pan, .fx-strip {
       width: 1280px;
       height: 720px;
       transform-origin: 0 0;
@@ -856,3 +858,137 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
 @keyframes lift-text-up { from { transform: translateY(1.5rem); opacity: 0; } }
 @keyframes lift-fade-out { to { opacity: 0; } }
 @keyframes lift-fade-in { from { opacity: 0; } }
+
+/* -- Lift-off fallback --
+   For browsers without cross-document view transitions (Firefox, older Safari). The script in
+   Base.astro plays the first half on the page being left (html.fx-out-up / fx-out-down), then
+   navigates; the page arrived at plays the second half (html.fx-in-up / fx-in-down, set by the
+   head script before the first paint). The real elements move instead of snapshots, so the same
+   timings and easings are reused; individual `translate` keeps the grid's own perspective.
+   .fx-sky is a copy of the lilac sky laid over the backdrop (under the text) so the glow can
+   hold across the page change. Reduced motion: a short fade out and in (fx-rm-out / fx-rm-in). */
+.fx-sky {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1; /* above the backdrop and the strip, under main (z-index 1, later in the page) */
+  pointer-events: none;
+  background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(196, 139, 255, 0.18), rgba(196, 139, 255, 0) 100%);
+  mix-blend-mode: screen;
+  transform-origin: 50% 0;
+}
+html.fx-out-up .fx-sky, html.fx-in-up .fx-sky,
+html.fx-out-down .fx-sky, html.fx-in-down .fx-sky { display: block; }
+html.fx-out-up .sky, html.fx-in-down .sky { opacity: 0; } /* .fx-sky stands in for it */
+html[class*="fx-"] body { pointer-events: none; }
+
+@keyframes fx-sink { to { translate: 0 100vh; } }
+@keyframes fx-rise { from { translate: 0 100vh; } }
+
+/* Going up, on Home */
+html.fx-out-up :is(.horizon, .grid) { animation: fx-sink var(--lift-ground) var(--lift-out) both; }
+html.fx-out-up main {
+  animation: fx-sink var(--lift-ground) var(--lift-out) both, lift-fade-out var(--lift-content-fade) linear both;
+}
+html.fx-out-up .liftoff-prompt { animation: lift-fade-out 0.25s linear both; }
+html.fx-out-up .stars { animation: lift-stars-down var(--lift-stars) var(--lift-out) both; }
+html.fx-out-up .fx-sky { animation: lift-sky-swell var(--lift-ground) ease-in-out both; }
+
+/* Going up, on About (the glow holds, the picture comes down, the text last) */
+html.fx-in-up .fx-sky {
+  transform: scaleY(var(--lift-sky-swell));
+  filter: brightness(var(--lift-sky-glow));
+  animation: lift-fade-out var(--lift-sky-fade) ease-in-out calc(var(--lift-sky-hold) - var(--lift-orbit-delay)) both;
+}
+html.fx-in-up .photo.warpchi {
+  mask-image: linear-gradient(to top, transparent 0, #000 calc(100% * var(--lift-edge) / (1 + var(--lift-edge))));
+  mask-size: 100% calc(100% * (1 + var(--lift-edge)));
+  mask-repeat: no-repeat;
+  mask-position: 0 0;
+  animation: lift-descend var(--lift-orbit) var(--lift-in) both, lift-edge-in var(--lift-orbit) linear both;
+}
+html.fx-in-up main {
+  animation: lift-text-up var(--lift-text) var(--lift-in) calc(var(--lift-text-delay) - var(--lift-orbit-delay)) both;
+}
+
+/* Going down, on About */
+html.fx-out-down main { animation: lift-fade-out var(--drop-text) linear both; }
+html.fx-out-down .fx-sky {
+  transform: scaleY(var(--lift-sky-swell));
+  filter: brightness(var(--lift-sky-glow));
+  animation: lift-fade-in var(--drop-sky-in) ease-in-out both;
+}
+html.fx-out-down .photo.warpchi {
+  mask-image: linear-gradient(to top, transparent 0, #000 calc(100% * var(--lift-edge) / (1 + var(--lift-edge))));
+  mask-size: 100% calc(100% * (1 + var(--lift-edge)));
+  mask-repeat: no-repeat;
+  mask-position: 0 0;
+  animation:
+    lift-ascend var(--drop-orbit) var(--lift-out) var(--drop-orbit-delay) both,
+    lift-edge-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
+}
+
+/* Going down, on Home (the glow settles, the ground comes back up) */
+html.fx-in-down .fx-sky { animation: lift-sky-settle var(--drop-ground) ease-in-out both; }
+html.fx-in-down .stars { animation: lift-stars-up var(--drop-ground) var(--lift-in) both; }
+html.fx-in-down :is(.horizon, .grid) { animation: fx-rise var(--drop-ground) var(--lift-in) both; }
+html.fx-in-down main { animation: fx-rise var(--drop-ground) var(--lift-in) var(--drop-content-lag) both; }
+html.fx-in-down .liftoff-prompt { animation: lift-fade-in 0.4s linear calc(var(--drop-ground) - 0.4s) both; }
+
+/* Phones: the camera pan. The strip is moved with `translate` (its resting place is the hand,
+   --pan-end); the second move of each half is added on top (animation-composition: add). */
+@keyframes fx-pan-in {
+  from { translate: calc((var(--pan-from) - var(--pan-end)) * var(--pic-w)) 0; filter: brightness(var(--lift-orbit-dim)); }
+  to { translate: calc((var(--pan-ship) - var(--pan-end)) * var(--pic-w)) 0; }
+}
+@keyframes fx-pan-cruise { to { translate: calc((var(--pan-ship-to) - var(--pan-ship)) * var(--pic-w)) 0; } }
+@keyframes fx-pan-glide { from { translate: calc((var(--pan-ship-to) - var(--pan-end)) * var(--pic-w)) 0; } }
+@keyframes fx-pan-glide-back { to { translate: calc((var(--pan-ship-to) - var(--pan-end)) * var(--pic-w)) 0; } }
+@keyframes fx-pan-cruise-back { to { translate: calc((var(--pan-ship) - var(--pan-ship-to)) * var(--pic-w)) 0; } }
+@keyframes fx-pan-out {
+  from { translate: calc((var(--pan-ship) - var(--pan-end)) * var(--pic-w)) 0; }
+  to { translate: calc((var(--pan-from) - var(--pan-end)) * var(--pic-w)) 0; filter: brightness(var(--lift-orbit-dim)); }
+}
+@keyframes fx-push-out { to { translate: calc((var(--pan-ship) - var(--pan-from)) * var(--pic-w)) 0; } }
+@keyframes fx-push-in { from { translate: calc((var(--pan-ship) - var(--pan-from)) * var(--pic-w)) 0; } }
+
+@media (max-aspect-ratio: 3/4) {
+  html.fx-out-up .fx-strip, html.fx-in-down .fx-strip { display: block; }
+  html[class*="fx-"] :is(.fx-strip, .warpchi-pan) { mask-image: linear-gradient(to right, transparent 0, #000 var(--pan-edge)); }
+
+  /* Going up, on Home: the strip comes in from the right with the ship and pushes Home out */
+  html.fx-out-up .fx-strip {
+    animation:
+      fx-pan-in var(--pan-in) cubic-bezier(0.25, 0.7, 0.6, 0.9) var(--lift-orbit-delay) both,
+      fx-pan-cruise var(--pan-cruise) linear calc(var(--lift-orbit-delay) + var(--pan-in)) both;
+    animation-composition: replace, add;
+  }
+  html.fx-out-up main { animation: fx-push-out var(--pan-in) cubic-bezier(0.25, 0.7, 0.6, 0.9) var(--lift-orbit-delay) both; }
+  html.fx-out-up .fx-sky {
+    animation: lift-sky-swell calc(var(--lift-orbit-delay) + var(--pan-in) + var(--pan-cruise)) ease-in-out both;
+  }
+
+  /* Going up, on About: glide to the hand, then the phone picture */
+  html.fx-in-up .warpchi-pan { animation: fx-pan-glide var(--pan-glide) cubic-bezier(0.42, 0.09, 0.2, 1) both; }
+  html.fx-in-up .photo.warpchi { mask-image: none; animation: lift-fade-in var(--pan-swap) ease-in-out var(--pan-glide) both; }
+  html.fx-in-up .fx-sky { animation: lift-fade-out var(--lift-sky-fade) ease-in-out var(--pan-glide) both; }
+  html.fx-in-up main { animation: lift-text-up var(--lift-text) var(--lift-in) var(--pan-glide) both; }
+
+  /* Going down, on About: back from the hand to the ship */
+  html.fx-out-down .photo.warpchi { mask-image: none; animation: lift-fade-out var(--drop-pan-swap) ease-in-out both; }
+  html.fx-out-down .warpchi-pan {
+    animation:
+      fx-pan-glide-back var(--drop-pan-glide) cubic-bezier(0.8, 0, 0.58, 0.91) var(--drop-pan-delay) both,
+      fx-pan-cruise-back var(--drop-pan-cruise) linear calc(var(--drop-pan-delay) + var(--drop-pan-glide)) both;
+    animation-composition: replace, add;
+  }
+
+  /* Going down, on Home: the strip leaves to the right and Home comes back in from the left */
+  html.fx-in-down .fx-strip { animation: fx-pan-out var(--drop-pan-out) cubic-bezier(0.4, 0.1, 0.75, 0.3) both; }
+  html.fx-in-down main { animation: fx-push-in var(--drop-pan-out) cubic-bezier(0.4, 0.1, 0.75, 0.3) both; }
+}
+
+/* Reduced motion: fade out, change page, fade in (0.2s each) */
+@keyframes fx-rm { from { opacity: 0; } }
+html.fx-rm-out body { animation: lift-fade-out 0.2s linear both; }
+html.fx-rm-in body { animation: fx-rm 0.2s linear both; }

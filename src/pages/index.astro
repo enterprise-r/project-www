@@ -62,13 +62,15 @@ import Base from "../layouts/Base.astro";
     placeWarp();
     addEventListener("resize", placeWarp);
     // Lift-off triggers: the logo, the ABOUT button and the prompt are plain links to /about/
-    // (the page transition itself is CSS, see "Lift-off" in site.css). Two extra triggers here:
+    // (the page transition itself is CSS, see "Lift-off" in site.css; browsers without it get
+    // the fallback in Base.astro, window.liftTo). Two extra triggers here:
     // Enter (when no link or field has focus) and an inverse scroll (wheel up / swipe down).
     let lifting = false;
     const liftOff = () => {
       if (lifting) return;
       lifting = true;
-      location.href = "/about/";
+      if (window.liftTo) liftTo("/about/");
+      else location.href = "/about/";
     };
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Enter" || e.repeat || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;

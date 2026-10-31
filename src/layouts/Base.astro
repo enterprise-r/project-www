@@ -52,6 +52,18 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       const o = sessionStorage.getItem("colour-option");
       if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
     } catch (e) {}
+    // Lift-off fallback (see the script at the end of the body and the end of site.css): browsers
+    // without cross-document view transitions get the second half of the move here, set before the
+    // first paint so the page never flashes in its final state. The flag is set by the page just
+    // left and cleared on read; it only counts for the page it was meant for, within a few seconds.
+    try {
+      const vtNative = "CSSViewTransitionRule" in window && "onpagereveal" in window;
+      const f = JSON.parse(sessionStorage.getItem("lift-fallback") || "null");
+      sessionStorage.removeItem("lift-fallback");
+      if (!vtNative && f && f.to === location.pathname && Date.now() - f.t < 5000) {
+        document.documentElement.classList.add(f.calm ? "fx-rm-in" : "fx-in-" + f.dir);
+      }
+    } catch (e) {}
   </script>
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -71,6 +83,8 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   )}
   {backdrop === "warpchi" && <div class="warpchi-pan" aria-hidden="true"></div>}
   {backdrop === "warpchi" && <div class="photo warpchi" aria-hidden="true"></div>}
+  {backdrop === "space" && <div class="fx-strip" aria-hidden="true"></div>}
+  {backdrop !== "none" && <div class="fx-sky" aria-hidden="true"></div>}
   <header class="site-head">
     <a class="elbow" href="/" aria-label="Enterprise-R home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
     <span class="rail" aria-hidden="true"></span>
@@ -86,6 +100,55 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1.2 1.2 1.2 0 0"/>
     </filter>
   </svg>
+  <script is:inline>
+    // Lift-off fallback. Where the browser has cross-document view transitions (Chrome, Edge,
+    // Safari 18.2+) the CSS in site.css does it all and this only navigates. Elsewhere (Firefox)
+    // the page being left plays the first half (an html.fx-out-* class), then navigates with a
+    // sessionStorage flag so the next page plays the second half (see the head script). Without
+    // JavaScript the links are plain links.
+    (() => {
+      const root = document.documentElement;
+      const vtNative = "CSSViewTransitionRule" in window && "onpagereveal" in window;
+      const here = location.pathname;
+      const dirTo = (path) => (here === "/" && path === "/about/" ? "up" : here === "/about/" && path === "/" ? "down" : null);
+      const clear = () => root.classList.remove("fx-out-up", "fx-out-down", "fx-in-up", "fx-in-down", "fx-rm-out", "fx-rm-in");
+      // Resolves when the class's (finite) animations are done, or after a safety timeout.
+      const settle = (ms) => new Promise((done) => {
+        const runs = document.getAnimations().filter((a) => a.effect && isFinite(a.effect.getComputedTiming().endTime));
+        Promise.all(runs.map((a) => a.finished.catch(() => {}))).then(done);
+        setTimeout(done, ms);
+      });
+      let going = false;
+      window.liftTo = (path) => {
+        const dir = dirTo(path);
+        if (vtNative || !dir) { location.href = path; return; }
+        if (going) return;
+        going = true;
+        const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        clear();
+        root.classList.add(calm ? "fx-rm-out" : "fx-out-" + dir);
+        settle(2500).then(() => {
+          try { sessionStorage.setItem("lift-fallback", JSON.stringify({ dir, to: path, calm, t: Date.now() })); } catch (e) {}
+          location.href = path;
+        });
+      };
+      if (vtNative) return;
+      // Arriving: drop the class once the second half has played.
+      if (/\bfx-(in|rm-in)/.test(root.className)) settle(4000).then(clear);
+      // Links to the other page (logo, prompt, nav buttons, elbow) go through liftTo.
+      document.addEventListener("click", (e) => {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const a = e.target.closest && e.target.closest("a[href]");
+        if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
+        const url = new URL(a.href, location.href);
+        if (url.origin !== location.origin || url.search || url.hash || !dirTo(url.pathname)) return;
+        e.preventDefault();
+        liftTo(url.pathname);
+      });
+      // Back/forward cache: a page restored mid-animation shows as it was before it was left.
+      addEventListener("pageshow", (e) => { if (e.persisted) { going = false; clear(); } });
+    })();
+  </script>
   <slot name="scripts" />
 </body>
 </html>
