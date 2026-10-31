@@ -26,3 +26,14 @@ npm ci
 npm run dev      # http://localhost:4321
 npm run build    # output in dist/
 ```
+
+## Regenerating images
+
+The PNGs in `public/assets/` are rendered from the logo sources in the private repo `enterprise-r/r-art` (`source/`). Clone r-art next to this repo, then:
+
+```sh
+pip install cairosvg pillow          # needs the system cairo library
+python3 scripts/build-assets.py      # or R_ART_DIR=/path/to/r-art …; --out DIR to write elsewhere
+```
+
+`logo.png` comes from `logo-badge-large.svg`; the favicons and icons come from r-art's `gen_final.py`.
