@@ -491,16 +491,12 @@ h1 {
   filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
 }
 
-.rule {
-  width: min(16rem, 60vw);
-  height: 2px;
-  margin: 3.1rem 0 1.25rem;
-  border: 0;
-  background: linear-gradient(90deg, transparent, var(--amber), var(--lime), transparent);
-}
+/* The orange-to-green line, now the underline of the Home prompt (it used to sit above the email). */
+:root { --rule-line: linear-gradient(90deg, transparent, var(--amber), var(--lime), transparent); }
 
 .comms {
   display: inline-block; /* not flex: the address stays one run of text, so copy/paste has no breaks */
+  margin-top: clamp(2rem, 6vh, 3.25rem);
   padding: 0.45rem 1.1rem;
   color: var(--text-small);
   text-decoration: none;
@@ -557,11 +553,24 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
   color: var(--text-prompt);
   font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  --prompt-ls: 0.18em;
+  letter-spacing: var(--prompt-ls);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
   animation: beckon 2.4s ease-in-out infinite;
+}
+/* Underline: the orange-to-green line, as wide as the words (the last letter's spacing left out);
+   it is part of the prompt, so it pulses with it. */
+.liftoff-prompt::after {
+  content: "";
+  position: absolute;
+  left: 0.9rem;
+  right: calc(0.9rem + var(--prompt-ls));
+  bottom: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--rule-line);
 }
 .liftoff-prompt:hover { color: var(--nav-current-hover); }
 .liftoff-prompt:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; border-radius: 0.25rem; }
@@ -572,7 +581,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 html.paused .liftoff-prompt { animation-play-state: paused; }
 html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts off instead of pull-to-refresh */
 @media (max-width: 640px) {
-  .liftoff-prompt { font-size: 0.8rem; letter-spacing: 0.12em; }
+  .liftoff-prompt { font-size: 0.8rem; --prompt-ls: 0.12em; }
 }
 
 /* ===== Lift-off: the Home <-> About page transition =====

@@ -82,7 +82,8 @@ main.showcase {
 .sc-small { margin: 0; font-size: 0.95rem; color: var(--text-small); }
 .showcase a.sc-link, .sc-link { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--ui-muted); text-underline-offset: 0.2em; }
 .sc-link:hover { color: var(--ui-fg-bright); text-decoration-color: var(--ui-magenta-bright); }
-.sc-prompt { position: static; transform: none; display: inline-block; animation: none; opacity: 1; padding: 0; }
+.sc-prompt { position: relative; left: auto; bottom: auto; transform: none; display: inline-block; animation: none; opacity: 1; padding: 0 0 0.35rem; view-transition-name: none; }
+.sc-prompt::after { left: 0; right: var(--prompt-ls); }
 
 /* table */
 
