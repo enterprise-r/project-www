@@ -450,7 +450,16 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
         leading edge (no hard panel edge), and settles in its normal framing;
      5. the lilac then fades slowly and the About text fades in.
    Going down (About -> Home) mirrors it: the lilac comes up over the picture first,
-   the picture leaves upwards, then the ground and the Home content rise from below.
+   the picture leaves upwards, then the ground rises from below with the Home content
+   just behind it.
+
+   Phones (portrait, max-aspect-ratio 3/4, where the phone picture takes over): a tall strip
+   doesn't pan well vertically, so there the picture flies in from the RIGHT, moving left
+   (the way the ship faces and travels in the main picture, its wake trailing to the right),
+   with the soft edge on its leading (left) side, and pushes the Home logo and title out to
+   the left in step with it. Going down it leaves to the right the way it came, and the
+   logo slides back in from the left just after the floor is back. Ground, stars and lilac
+   behave as on desktop.
 
    Timings (all here; the "lift" ones are going up, the "drop" ones going down): */
 :root {
@@ -458,9 +467,9 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
   --lift-ground: 0.7s;          /* grid, horizon and Home content dropping away */
   --lift-content-fade: 0.35s;   /* Home logo and text gone by then, so they never ghost through the picture */
   --lift-stars: 0.75s;          /* stars streaking past, shorter = faster */
-  --lift-orbit-delay: 0.35s;    /* when the picture starts coming down */
-  --lift-orbit: 1.1s;           /* how long it takes to settle (so it settles at 1.45 s) */
-  --lift-sky-hold: 1.45s;       /* the lilac stays fully on until here (= orbit delay + orbit) */
+  --lift-orbit-delay: 0.2s;     /* when the picture starts coming in */
+  --lift-orbit: 1.1s;           /* how long it takes to settle (so it settles at 1.3 s) */
+  --lift-sky-hold: 1.45s;       /* the lilac stays fully on until here (a beat after the picture settles) */
   --lift-sky-fade: 0.55s;       /* then fades slowly to the About look (ends at 2.0 s) */
   --lift-text-delay: 1.5s;      /* About heading and text start fading in */
   --lift-text: 0.5s;
@@ -469,8 +478,9 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
   --drop-sky-in: 0.45s;         /* the lilac comes up over the picture first */
   --drop-orbit-delay: 0.25s;    /* then the picture starts to leave upwards */
   --drop-orbit: 0.9s;
-  --drop-ground-delay: 0.85s;   /* then the ground and Home content rise from below */
+  --drop-ground-delay: 0.85s;   /* then the ground rises from below */
   --drop-ground: 1.1s;          /* (ends at about 1.95 s) */
+  --drop-content-lag: 0.12s;    /* the Home logo and title follow their floor by this much */
   /* Shared */
   --lift-nav: 0.5s;             /* nav button colour swap */
   --lift-out: cubic-bezier(0.55, 0, 0.85, 0.35);  /* accelerate away */
@@ -481,6 +491,11 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
   --lift-sky-swell: 2.2;        /* during the voyage the lilac spreads down the screen (x this height) */
   --lift-sky-glow: 1.7;         /* and brightens (1 = as on Home) */
   --lift-star-streak: 2.2;      /* vertical stretch of the stars while they rush past */
+  /* Phones only (portrait): the sideways version */
+  --lift-orbit-from-x: 100%;    /* where the picture starts: 100% = fully off the right side */
+  --lift-edge-x: 0.45;          /* width of its soft leading (left) edge, as a share of the screen */
+  --lift-push-x: -100vw;        /* where the Home logo and title are pushed to (off the left side) */
+  --drop-content-in: 0.9s;      /* going down, how long the logo and title take to slide back in */
 }
 
 @view-transition { navigation: auto; }
@@ -555,13 +570,48 @@ main.lower-left { view-transition-name: content-about; }
       lift-edge-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
   }
   ::view-transition-new(stars) { animation: lift-stars-up var(--drop-ground) var(--lift-in) var(--drop-orbit-delay) both; }
-  ::view-transition-new(ground),
-  ::view-transition-new(content-home) { animation: lift-rise var(--drop-ground) var(--lift-in) var(--drop-ground-delay) both; }
+  ::view-transition-new(ground) { animation: lift-rise var(--drop-ground) var(--lift-in) var(--drop-ground-delay) both; }
+  ::view-transition-new(content-home) {
+    animation: lift-rise var(--drop-ground) var(--lift-in) calc(var(--drop-ground-delay) + var(--drop-content-lag)) both;
+  }
   ::view-transition-new(prompt) { animation: lift-fade-in 0.4s linear calc(var(--drop-ground-delay) + var(--drop-ground) - 0.4s) both; }
 
   ::view-transition-group(site-head),
   ::view-transition-old(site-head),
   ::view-transition-new(site-head) { animation-duration: var(--lift-nav); }
+
+  /* -- Phones (portrait): sideways -- */
+  @media (max-aspect-ratio: 3/4) {
+    /* Soft edge on the picture's left side: a mask 1 + edge wide; at 0 0 its fading foot
+       sits on the left edge, at 100% 0 it is off the picture. */
+    ::view-transition-old(orbit),
+    ::view-transition-new(orbit) {
+      mask-image: linear-gradient(to right, transparent 0, #000 calc(100% * var(--lift-edge-x) / (1 + var(--lift-edge-x))));
+      mask-size: calc(100% * (1 + var(--lift-edge-x))) 100%;
+      mask-position: 100% 0;
+    }
+    /* Going up: the picture flies in from the right, the logo and title are pushed off to the
+       left in step with it (same timing and easing, so its leading edge never overruns them). */
+    ::view-transition-new(orbit) {
+      animation:
+        lift-fly-in var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both,
+        lift-edge-x-in var(--lift-orbit) linear var(--lift-orbit-delay) both;
+    }
+    ::view-transition-old(content-home) {
+      animation: lift-push-out var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both;
+    }
+    /* Going down: the picture leaves to the right the way it came, the logo and title slide
+       back in from the left and land just after the floor. */
+    ::view-transition-old(orbit) {
+      animation:
+        lift-fly-out var(--drop-orbit) var(--lift-out) var(--drop-orbit-delay) both,
+        lift-edge-x-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
+    }
+    ::view-transition-new(content-home) {
+      animation: lift-push-in var(--drop-content-in) var(--lift-in)
+        calc(var(--drop-ground-delay) + var(--drop-ground) + var(--drop-content-lag) - var(--drop-content-in)) both;
+    }
+  }
 }
 
 /* Reduced motion: a plain crossfade, nothing moves. */
@@ -592,6 +642,23 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
   0% { mask-position: 0 0; }
   25%, 100% { mask-position: 0 100%; }
 }
+/* Phones: the same, sideways (edit 75% / 25% here too). */
+@keyframes lift-fly-in {
+  from { transform: translateX(var(--lift-orbit-from-x)); filter: brightness(var(--lift-orbit-dim)); }
+}
+@keyframes lift-fly-out {
+  to { transform: translateX(var(--lift-orbit-from-x)); filter: brightness(var(--lift-orbit-dim)); }
+}
+@keyframes lift-edge-x-in {
+  0%, 75% { mask-position: 0 0; }
+  100% { mask-position: 100% 0; }
+}
+@keyframes lift-edge-x-out {
+  0% { mask-position: 100% 0; }
+  25%, 100% { mask-position: 0 0; }
+}
+@keyframes lift-push-out { to { transform: translateX(var(--lift-push-x)); } }
+@keyframes lift-push-in { from { transform: translateX(var(--lift-push-x)); } }
 @keyframes lift-sky-swell {
   to { transform: scaleY(var(--lift-sky-swell)); filter: brightness(var(--lift-sky-glow)); }
 }
