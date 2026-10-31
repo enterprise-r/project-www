@@ -1,0 +1,68 @@
+---
+// ✏️ EDIT THE PAGE TEXT HERE
+const page = {
+  title: "Enterprise-R",
+  description: "Enterprise-R. Contact info@enterprise-r.com.",
+  heading: "Enterprise-R",
+  email: "info@enterprise-r.com",
+};
+
+// 🖼️ Images: swap the file in public/assets/ (keep the same name).
+const logo = "/assets/logo.png";
+
+import Base from "../layouts/Base.astro";
+---
+<Base title={page.title} description={page.description}>
+  <main>
+    <div class="mark">
+      <div class="warp" aria-hidden="true">
+        <div class="burst">
+        <i style="--a:8deg;--n:0"></i>
+        <i style="--a:27deg;--n:1"></i>
+        <i style="--a:46deg;--n:2"></i>
+        <i style="--a:63deg;--n:3"></i>
+        <i style="--a:81deg;--n:4"></i>
+        <i style="--a:104deg;--n:5"></i>
+        <i style="--a:123deg;--n:6"></i>
+        <i style="--a:141deg;--n:7"></i>
+        <i style="--a:166deg;--n:8"></i>
+        <i style="--a:184deg;--n:9"></i>
+        <i style="--a:203deg;--n:10"></i>
+        <i style="--a:221deg;--n:11"></i>
+        <i style="--a:239deg;--n:12"></i>
+        <i style="--a:258deg;--n:13"></i>
+        <i style="--a:276deg;--n:14"></i>
+        <i style="--a:297deg;--n:15"></i>
+        <i style="--a:314deg;--n:16"></i>
+        <i style="--a:333deg;--n:17"></i>
+        <i style="--a:351deg;--n:18"></i>
+        <i style="--a:16deg;--n:19"></i>
+        <i style="--a:94deg;--n:20"></i>
+        <i style="--a:188deg;--n:21"></i>
+        </div>
+      </div>
+      <img class="logo" src={logo} width="1024" height="1024" alt="">
+    </div>
+    <h1>{page.heading}</h1>
+    <hr class="rule">
+    <a class="comms" href={`mailto:${page.email}`}><span aria-hidden="true"></span>{page.email}</a>
+  </main>
+  <script is:inline slot="scripts">
+    const root = document.documentElement;
+    const mark = document.querySelector(".mark");
+    const warp = document.querySelector(".warp");
+    const placeWarp = () => {
+      const box = mark.getBoundingClientRect();
+      warp.style.setProperty("--cx", `${box.left + box.width / 2}px`);
+      warp.style.setProperty("--cy", `${box.top + box.height / 2}px`);
+    };
+    placeWarp();
+    addEventListener("resize", placeWarp);
+    if (!root.classList.contains("still")) {
+      setTimeout(() => root.classList.add("still"), 30000);
+      document.addEventListener("visibilitychange", () => {
+        root.classList.toggle("paused", document.hidden);
+      });
+    }
+  </script>
+</Base>
