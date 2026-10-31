@@ -799,7 +799,9 @@ main.lower-left { view-transition-name: content-about; }
       lift-ascend var(--drop-orbit) var(--lift-out) var(--drop-orbit-delay) both,
       lift-edge-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
   }
-  ::view-transition-new(stars) { animation: lift-stars-up var(--drop-ground) var(--lift-in) var(--drop-orbit-delay) both; }
+  /* Stars come back already spread across the sky (a soft fade and settle in place), not
+     streaming up from the bottom. */
+  ::view-transition-new(stars) { transform-origin: 50% 0; animation: lift-stars-settle var(--drop-ground) ease-out var(--drop-orbit-delay) both; }
   ::view-transition-new(ground) { animation: lift-rise var(--drop-ground) var(--lift-in) var(--drop-ground-delay) both; }
   ::view-transition-new(content-home) {
     animation: lift-rise var(--drop-ground) var(--lift-in) calc(var(--drop-ground-delay) + var(--drop-content-lag)) both;
@@ -933,8 +935,8 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
 @keyframes lift-stars-down {
   to { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
 }
-@keyframes lift-stars-up {
-  from { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
+@keyframes lift-stars-settle {
+  from { transform: scale(1.04); opacity: 0; }
 }
 @keyframes lift-text-up { from { transform: translateY(1.5rem); opacity: 0; } }
 @keyframes lift-fade-out { to { opacity: 0; } }
@@ -1011,7 +1013,7 @@ html.fx-out-down .photo.warpchi {
 
 /* Going down, on Home (the glow settles, the ground comes back up) */
 html.fx-in-down .fx-sky { animation: lift-sky-settle var(--drop-ground) ease-in-out both; }
-html.fx-in-down .stars { animation: lift-stars-up var(--drop-ground) var(--lift-in) both; }
+html.fx-in-down .stars { transform-origin: 50% 0; animation: lift-stars-settle var(--drop-ground) ease-out both; }
 html.fx-in-down :is(.horizon, .grid) { animation: fx-rise var(--drop-ground) var(--lift-in) both; }
 html.fx-in-down main { animation: fx-rise var(--drop-ground) var(--lift-in) var(--drop-content-lag) both; }
 html.fx-in-down .liftoff-prompt { animation: lift-fade-in 0.4s linear calc(var(--drop-ground) - 0.4s) both; }
