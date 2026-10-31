@@ -1,13 +1,25 @@
 ---
-// Shared page shell: <head>, favicons, fonts/CSS, backdrop and top frame.
+// Shared page shell: <head>, favicons, fonts/CSS, backdrop and top navigation.
 // Images live in public/assets/ — replace a file with the same name to update it.
 import "../styles/site.css";
 
 interface Props {
   title: string;
   description: string;
+  // Page background: "space" (animated stars, horizon and grid), "warpchi" (the WarpChi picture)
+  // or "none" (plain ink, for the /showcase/ style guide).
+  backdrop?: "space" | "warpchi" | "none";
+  // Keep the page out of search engines (the style guide).
+  noindex?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, backdrop = "space", noindex = false } = Astro.props;
+
+// Top navigation: add a page here to get a new button.
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/about/", label: "About" },
+];
+const here = Astro.url.pathname.replace(/\/?$/, "/");
 const url = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
 ---
@@ -19,6 +31,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#000000">
   <meta name="description" content={description}>
+  {noindex && <meta name="robots" content="noindex, nofollow">}
   <title>{title}</title>
   <meta property="og:type" content="website">
   <meta property="og:title" content={title}>
@@ -31,6 +44,14 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.classList.add("still");
     }
+    // Colour option preview (see the nav colours in site.css): ?option=b|c|d, kept for this
+    // tab so Home and About can be compared; ?option=a or ?option=now go back to the live colours (A).
+    try {
+      const q = new URLSearchParams(location.search).get("option");
+      if (q) sessionStorage.setItem("colour-option", q.toLowerCase());
+      const o = sessionStorage.getItem("colour-option");
+      if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
+    } catch (e) {}
   </script>
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -40,22 +61,25 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
 </head>
 <body>
-  <div class="space" aria-hidden="true">
-    <div class="stars"></div>
-    <div class="horizon"></div>
-    <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
-  </div>
-  <div class="frame" aria-hidden="true">
-    <div class="elbow"></div>
-    <div class="blocks">
-      <i class="amber"></i>
-      <i class="lilac"></i>
-      <i class="green"></i>
-      <i class="silver"></i>
+  {backdrop === "space" && (
+    <div class="space" aria-hidden="true">
+      <div class="sky"></div>
+      <div class="stars"></div>
+      <div class="horizon"></div>
+      <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
     </div>
-    <div class="rail"></div>
-    <div class="endcap"></div>
-  </div>
+  )}
+  {backdrop === "warpchi" && <div class="warpchi-pan" aria-hidden="true"></div>}
+  {backdrop === "warpchi" && <div class="photo warpchi" aria-hidden="true"></div>}
+  <header class="site-head">
+    <a class="elbow" href="/" aria-label="Enterprise-R home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+    <span class="rail" aria-hidden="true"></span>
+    <nav aria-label="Main">
+      {links.map((l) => (
+        <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
+      ))}
+    </nav>
+  </header>
   <slot />
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <filter id="knockout" color-interpolation-filters="sRGB">

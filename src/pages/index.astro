@@ -5,6 +5,8 @@ const page = {
   description: "Enterprise-R. Contact info@enterprise-r.com.",
   heading: "Enterprise-R",
   email: "info@enterprise-r.com",
+  // Prompt at the bottom centre (Founder's wording).
+  prompt: "Click or press Enter",
 };
 
 // 🖼️ Images: swap the file in public/assets/ (keep the same name).
@@ -41,12 +43,13 @@ import Base from "../layouts/Base.astro";
         <i style="--a:188deg;--n:21"></i>
         </div>
       </div>
-      <img class="logo" src={logo} width="1024" height="1024" alt="">
+      <a class="liftoff-logo" href="/about/" aria-label="About Enterprise-R"><img class="logo" src={logo} width="1024" height="1024" alt=""></a>
     </div>
     <h1>{page.heading}</h1>
     <hr class="rule">
     <a class="comms" href={`mailto:${page.email}`}><span aria-hidden="true"></span>{page.email}</a>
   </main>
+  <a class="liftoff-prompt" href="/about/">{page.prompt}</a>
   <script is:inline slot="scripts">
     const root = document.documentElement;
     const mark = document.querySelector(".mark");
@@ -58,6 +61,42 @@ import Base from "../layouts/Base.astro";
     };
     placeWarp();
     addEventListener("resize", placeWarp);
+    // Lift-off triggers: the logo, the ABOUT button and the prompt are plain links to /about/
+    // (the page transition itself is CSS, see "Lift-off" in site.css). Two extra triggers here:
+    // Enter (when no link or field has focus) and an inverse scroll (wheel up / swipe down).
+    let lifting = false;
+    const liftOff = () => {
+      if (lifting) return;
+      lifting = true;
+      location.href = "/about/";
+    };
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" || e.repeat || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const f = document.activeElement;
+      if (f && f !== document.body && f !== root) return; // a focused link keeps its own Enter
+      liftOff();
+    });
+    let wheelUp = 0;
+    let wheelTimer;
+    addEventListener("wheel", (e) => {
+      if (scrollY > 0 || e.deltaY >= 0) { wheelUp = 0; return; }
+      wheelUp -= e.deltaY; // add up a short burst so a trackpad graze doesn't fire it
+      clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(() => (wheelUp = 0), 250);
+      if (wheelUp > 40) liftOff();
+    }, { passive: true });
+    let touchY = null;
+    addEventListener("touchstart", (e) => { touchY = scrollY <= 0 && e.touches.length === 1 ? e.touches[0].clientY : null; }, { passive: true });
+    addEventListener("touchmove", (e) => {
+      if (touchY !== null && e.touches[0].clientY - touchY > 70) { touchY = null; liftOff(); }
+    }, { passive: true });
+    addEventListener("pageshow", () => { lifting = false; }); // coming back via the back button
+    // Warm the cache with the About picture so it is ready when it drops in
+    // (phones need both: the wide one for the pan, the phone one to land on).
+    addEventListener("load", () => {
+      new Image().src = "/assets/about-backdrop.jpg";
+      if (matchMedia("(max-aspect-ratio: 3/4)").matches) new Image().src = "/assets/about-backdrop-phone.jpg";
+    });
     if (!root.classList.contains("still")) {
       setTimeout(() => root.classList.add("still"), 30000);
       document.addEventListener("visibilitychange", () => {
