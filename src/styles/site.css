@@ -544,8 +544,15 @@ h1 {
   filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
 }
 
-/* The orange-to-green line, now the underline of the Home prompt (it used to sit above the email). */
-:root { --rule-line: linear-gradient(90deg, transparent, var(--amber), var(--lime), transparent); }
+/* Underline of the Home prompt: the colour run of the agent-badge ring, read clockwise from its
+   green (sampled from badges/hotbit.jpg): green, lilac, copper orange, lilac, ice. */
+:root {
+  --ring-green: #93B87F;
+  --ring-lilac: #AE7ED6;
+  --ring-orange: #C38263;
+  --ring-ice: #9EA2A6;
+  --rule-line: linear-gradient(90deg, transparent, var(--ring-green) 12%, var(--ring-lilac) 31%, var(--ring-orange) 50%, var(--ring-lilac) 69%, var(--ring-ice) 88%, transparent);
+}
 
 .comms {
   display: inline-block; /* not flex: the address stays one run of text, so copy/paste has no breaks */
@@ -613,7 +620,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
   white-space: nowrap;
   animation: beckon 2.4s ease-in-out infinite;
 }
-/* Underline: the orange-to-green line, as wide as the words (the last letter's spacing left out);
+/* Underline: the badge-ring line, as wide as the words (the last letter's spacing left out);
    it is part of the prompt, so it pulses with it. */
 .liftoff-prompt::after {
   content: "";
