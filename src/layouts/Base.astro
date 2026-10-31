@@ -1,0 +1,58 @@
+---
+// Shared page shell: <head>, favicons, fonts/CSS, backdrop and top frame.
+// Images live in public/assets/ — replace a file with the same name to update it.
+import "../styles/site.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content={description}>
+  <title>{title}</title>
+  <script is:inline>
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("still");
+    }
+  </script>
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+</head>
+<body>
+  <div class="space" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="horizon"></div>
+    <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
+  </div>
+  <div class="frame" aria-hidden="true">
+    <div class="elbow"></div>
+    <div class="blocks">
+      <i class="amber"></i>
+      <i class="lilac"></i>
+      <i class="green"></i>
+      <i class="silver"></i>
+    </div>
+    <div class="rail"></div>
+    <div class="endcap"></div>
+  </div>
+  <slot />
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <filter id="knockout" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1.2 1.2 1.2 0 0"/>
+    </filter>
+  </svg>
+  <slot name="scripts" />
+</body>
+</html>
