@@ -11,7 +11,7 @@ Public repo (needed for GitHub Pages on the Free tier). Built with [Astro](https
 | Styles | `src/styles/site.css` |
 | Shared head, backdrop, top frame | `src/layouts/Base.astro` |
 | Fonts (self-hosted) | `public/fonts/` |
-| Custom domain | `public/CNAME` |
+| Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
 
 A new page = a new file in `src/pages/` using the `Base` layout.
 
