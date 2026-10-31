@@ -1,0 +1,351 @@
+/* Theme. Colours are palette.css (Drive assets/palette/palette.css), used as-is.
+   Self-hosted fonts. Enterprsr is the Home button. Audiowide for headings, Rajdhani for text. */
+@font-face {
+  font-family: "Enterprsr";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/Enterprsr-Regular.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Audiowide";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/audiowide-400-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Audiowide";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/audiowide-400-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/rajdhani-500-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/rajdhani-500-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/rajdhani-600-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/rajdhani-600-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Roles on top of the palette. Flat colours only. */
+:root {
+  color-scheme: dark;
+  --ink: #0e0012;
+  /* Nav buttons. Home is sage. Every other page is lighter orange. */
+  --nav-current: var(--ui-green);
+  --nav-current-hover: var(--ui-green-bright);
+  --nav-other: var(--ui-orange);
+  --nav-other-hover: var(--ui-accent);
+  --nav-text: var(--ui-bg);
+  --nav-focus: #f2f6f3;
+  --nav-disabled: var(--ui-border);
+  --nav-disabled-text: var(--ui-fg-dark);
+  --nav-elbow: var(--ui-border);
+  --nav-elbow-hover: #4e3270;
+  --nav-h: 2rem;
+  --elbow-h: var(--nav-h);
+  --elbow-r: calc(var(--elbow-h) / 2);
+  --elbow-w: calc(var(--elbow-h) + 0.85rem);
+  --hl-line: var(--ui-border-active);
+  --hl-line-w: 1px;
+  --hl-ring-w: 3px;
+  --hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-link: var(--ui-magenta-bright);
+  --text-prompt: var(--ui-green-bright);
+  --text-prompt-glow: rgb(from var(--ui-green-bright) r g b / 0.55);
+  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green));
+  --text-about-heading-glow: rgb(from var(--ui-green) r g b / 0.3);
+}
+
+/* Colour options for /showcase/. ?option=b|c|d on any page. ?option=a returns to these colours. */
+:root.opt-b {
+  --nav-elbow: var(--ui-selection);
+  --nav-elbow-hover: #4e3270;
+  --nav-current: var(--ui-green);
+  --nav-other: var(--ui-orange);
+  --nav-text: var(--ui-bg);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: var(--ui-orange);
+  --text-prompt-glow: rgb(from var(--ui-orange) r g b / 0.5);
+  --text-about-heading: linear-gradient(180deg, var(--ui-fg-bright), var(--ui-magenta-bright));
+  --text-about-heading-glow: rgb(from var(--ui-magenta) r g b / 0.35);
+}
+:root.opt-c {
+  --nav-elbow: #573680;
+  --nav-elbow-hover: #6a4399;
+  --nav-current: #7fcb6f;
+  --nav-other: #f3b451;
+  --nav-text: var(--ui-bg);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: #7fcb6f;
+  --text-prompt-glow: rgba(127, 203, 111, 0.55);
+  --text-about-heading: linear-gradient(180deg, #f2fbea 0%, #c6ebb9 38%, #7fcb6f 75%, #3f7f4f 140%);
+  --text-about-heading-glow: rgba(127, 203, 111, 0.3);
+}
+:root.opt-d {
+  --nav-elbow: var(--ui-selection);
+  --nav-elbow-hover: #4e3270;
+  --nav-current: #7cc376;
+  --nav-other: var(--ui-orange);
+  --nav-text: var(--ui-bg-darker);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: #7cc376;
+  --text-prompt-glow: rgba(124, 195, 118, 0.5);
+  --text-about-heading: linear-gradient(var(--ui-fg-bright), var(--ui-fg-bright));
+  --text-about-heading-glow: rgba(124, 195, 118, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background-color: var(--ui-bg);
+  color: var(--ui-fg);
+  font-family: Rajdhani, "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+header {
+  background-color: var(--ui-bg);
+}
+
+/* Home on the left. The other pages are a group on the right.
+   The left inset is only enough for the Home focus ring. */
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: var(--nav-h);
+  padding: 0.65rem clamp(0.75rem, 2vw, 1.5rem) 0.65rem 0.35rem;
+}
+
+.nav-rest,
+.lcars-group { display: flex; gap: 0.3rem; }
+
+.nav-rest { margin-left: auto; }
+
+header nav a,
+.lcars-btn,
+.elbow { font-size: 0.95rem; }
+
+header nav a,
+.lcars-btn {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-width: 6.5rem;
+  height: var(--nav-h);
+  padding: 0 0.75rem 0.2rem;
+  color: var(--nav-text);
+  background-color: var(--nav-other);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+  border-radius: 0.25rem;
+}
+
+button.lcars-btn {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Home is the only button set in Enterprsr.
+   Short half pill: flat on the left, round on the right, mark centered.
+   Fill matches the title pill. The mark is bright green. Home does not change on hover. */
+header nav a.nav-home,
+.lcars-btn.nav-home {
+  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
+  font-weight: 400;
+  font-feature-settings: "ss01";
+  letter-spacing: 0;
+  text-transform: none;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.95rem 0 0.65rem;
+  color: var(--ui-green-bright);
+  background-color: var(--ui-border);
+  border-radius: 0 var(--elbow-r) var(--elbow-r) 0;
+}
+
+.nav-rest > a:first-child,
+.lcars-group > .lcars-btn:first-child { border-top-left-radius: var(--elbow-r); border-bottom-left-radius: var(--elbow-r); }
+
+.nav-rest > a:last-child,
+.lcars-group > .lcars-btn:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
+
+header nav a:not(.nav-home):hover,
+.lcars-btn:not(.nav-home):hover,
+.lcars-btn:not(.nav-home).is-hover { background-color: var(--nav-other-hover); }
+
+.lcars-btn[aria-current="page"] { background-color: var(--nav-current); }
+
+.lcars-btn[aria-current="page"]:hover,
+.lcars-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
+
+.lcars-btn[aria-disabled="true"] {
+  background-color: var(--nav-disabled);
+  color: var(--nav-disabled-text);
+  cursor: not-allowed;
+}
+
+header nav a:focus-visible,
+.lcars-btn:focus-visible,
+.lcars-btn.is-focus {
+  outline: 2px solid var(--nav-focus);
+  outline-offset: 3px;
+}
+
+/* Corner mark, used by the style guide's sample bar. */
+.elbow {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex: none;
+  width: var(--elbow-w);
+  height: var(--elbow-h);
+  padding: 0 0.75rem 0.2rem;
+  text-decoration: none;
+  clip-path: inset(0 round 0 var(--elbow-r) var(--elbow-r) 0);
+}
+
+.elbow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--nav-elbow);
+  border-radius: 0 var(--elbow-r) var(--elbow-r) 0;
+  pointer-events: none;
+}
+
+.elbow:hover::before { background-color: var(--nav-elbow-hover); }
+
+.lk { position: relative; z-index: 1; pointer-events: none; }
+
+.lk-word {
+  margin: 0;
+  font-family: Audiowide, sans-serif;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: var(--ui-green-bright);
+}
+
+.elbow:focus-visible { outline: none; }
+
+.elbow:focus-visible::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  left: 4px;
+  width: calc(var(--elbow-w) - 8px);
+  height: calc(var(--elbow-h) - 8px);
+  border: 2px solid var(--nav-focus);
+  border-radius: 0 calc(var(--elbow-r) - 4px) calc(var(--elbow-r) - 4px) 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  :root { --nav-h: 2.75rem; }
+  header nav a,
+  .lcars-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
+  header nav a.nav-home,
+  .lcars-btn.nav-home { min-width: 0; padding: 0 1rem 0 0.7rem; }
+  .elbow { padding-bottom: 0.3rem; }
+}
+
+main a { color: var(--text-link); }
+
+main a:hover { color: var(--ui-fg-bright); }
+
+main a:focus-visible {
+  outline: 2px solid var(--nav-focus);
+  outline-offset: 3px;
+}
+
+/* Style-guide specimens. The live pages do not use these. */
+.at { color: var(--ui-accent); }
+
+.home-title {
+  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
+  font-feature-settings: "ss01";
+  font-kerning: normal;
+  letter-spacing: 0.02em;
+  background: var(--ui-striped);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.home-enter { position: relative; }
+
+.about-heading {
+  background: var(--text-about-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
+}
+
+.liftoff-prompt {
+  color: var(--text-prompt);
+  font-family: Audiowide, Rajdhani, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.term {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.5rem 0.9rem;
+  background-color: rgba(12, 4, 15, 0.72);
+  border: 1px solid var(--ui-border);
+  border-radius: 0.6rem;
+}
+
+.term-head { padding: 0.45rem 1rem 0.55rem; }

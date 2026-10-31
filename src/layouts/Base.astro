@@ -1,13 +1,27 @@
 ---
-// Shared page shell: <head>, favicons, fonts/CSS, backdrop and top frame.
-// Images live in public/assets/ — replace a file with the same name to update it.
-import "../styles/site.css";
+// Shared page shell: head, favicons and the top navigation.
+import "../styles/palette.css";
+import "../styles/base.css";
 
 interface Props {
   title: string;
   description: string;
+  // The style guide is not indexed and draws its own sample bar.
+  noindex?: boolean;
+  header?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, noindex = false, header = true } = Astro.props;
+
+// First link sits on the left. Every other page sits on the right.
+const links = [
+  { href: "/", label: "®", name: "Home" },
+  { href: "/about/", label: "About" },
+];
+const homeLink = links[0];
+const restLinks = links.slice(1);
+const here = Astro.url.pathname.replace(/\/?$/, "/");
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -15,44 +29,50 @@ const { title, description } = Astro.props;
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#0C040F">
   <meta name="description" content={description}>
+  {noindex && <meta name="robots" content="noindex, nofollow">}
   <title>{title}</title>
+  <link rel="preload" href="/fonts/Enterprsr-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <script is:inline>
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.documentElement.classList.add("still");
-    }
+    // Colour option preview for the style guide: ?option=b|c|d, kept for this tab.
+    try {
+      const q = new URLSearchParams(location.search).get("option");
+      if (q) sessionStorage.setItem("colour-option", q.toLowerCase());
+      const o = sessionStorage.getItem("colour-option");
+      if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
+    } catch (e) {}
   </script>
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content={title}>
+  <meta property="og:url" content={url}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x32 48x48">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
 </head>
 <body>
-  <div class="space" aria-hidden="true">
-    <div class="stars"></div>
-    <div class="horizon"></div>
-    <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
-  </div>
-  <div class="frame" aria-hidden="true">
-    <div class="elbow"></div>
-    <div class="blocks">
-      <i class="amber"></i>
-      <i class="lilac"></i>
-      <i class="green"></i>
-      <i class="silver"></i>
-    </div>
-    <div class="rail"></div>
-    <div class="endcap"></div>
-  </div>
+  {header && (
+    <header>
+      <nav aria-label="Main">
+        <a class="nav-home" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
+        {restLinks.length > 0 && (
+          <span class="nav-rest">
+            {restLinks.map((l) => (
+              <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
+            ))}
+          </span>
+        )}
+      </nav>
+    </header>
+  )}
   <slot />
-  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-    <filter id="knockout" color-interpolation-filters="sRGB">
-      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1.2 1.2 1.2 0 0"/>
-    </filter>
-  </svg>
   <slot name="scripts" />
 </body>
 </html>
