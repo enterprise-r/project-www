@@ -1,0 +1,268 @@
+/* Theme. Colours are palette.css (project-branding palette/palette.css). Only --ui-* variables, no raw colours.
+   Self-hosted fonts. Enterprsr is the Home button. Audiowide for headings, Rajdhani for text. */
+@font-face {
+  font-family: "Enterprsr";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/Enterprsr-Regular.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Audiowide";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/audiowide-400-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Audiowide";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/audiowide-400-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/rajdhani-500-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/rajdhani-500-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/rajdhani-600-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Rajdhani";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/rajdhani-600-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Roles on top of the palette. Flat colours only. */
+:root {
+  color-scheme: dark;
+  /* Nav buttons. The current page is Green (sage). Every other page is Orange. */
+  --nav-current: var(--ui-green);
+  --nav-current-hover: var(--ui-green-bright);
+  --nav-other: var(--ui-orange);
+  --nav-other-hover: var(--ui-accent);
+  --nav-text: var(--ui-bg);
+  --nav-focus: var(--ui-fg-bright);
+  --nav-disabled: var(--ui-border);
+  --nav-disabled-text: var(--ui-fg-dark);
+  --nav-h: 2rem;
+  --nav-pad: 0.65rem;
+  --bar-h: 7rem;
+  /* Semicircle end of a bar button. */
+  --pill-r: calc(var(--nav-h) / 2);
+  --hl-line: var(--ui-border-active);
+  --hl-ring-w: 3px;
+  --hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
+  --text-body: var(--ui-fg);
+  --text-heading: var(--ui-green);
+  --text-small: var(--ui-fg-light);
+  --text-link: var(--ui-magenta-bright);
+  --text-prompt: var(--ui-green-bright);
+  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green));
+  --text-about-heading-glow: rgb(from var(--ui-green) r g b / 0.3);
+}
+
+* { box-sizing: border-box; }
+
+html { height: 100%; }
+
+body { min-height: 100%; }
+
+/* Header, page, footer. The page fills the gap, so the footer stays at the bottom. */
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background-color: var(--ui-bg);
+  color: var(--ui-fg);
+  font-family: Rajdhani, "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+/* Title bar: one full-width stripe. The title sits in the middle,
+   the other pages at the bottom right. Home floats on its own (.home-btn)
+   at the bottom left. Narrow screens put the title on its own row. */
+header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  min-height: var(--bar-h);
+  background-color: var(--ui-border);
+}
+
+/* Footer: the same stripe, slim, with the social links in the middle. */
+footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--nav-pad) clamp(0.75rem, 2vw, 1.5rem);
+  background-color: var(--ui-border);
+}
+
+/* Social links are bare Darker background icons. Amber (Accent) on hover, like the nav. */
+.social { display: flex; gap: 1rem; }
+
+footer a { display: flex; color: var(--ui-bg-darker); }
+
+footer a:hover { color: var(--nav-other-hover); }
+
+footer svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
+
+.brand {
+  grid-column: 2;
+  align-self: center;
+  margin: 0;
+  line-height: 0;
+}
+
+.brand picture { display: block; }
+
+/* Wide logo on large screens, compact logo on narrow ones.
+   The aspect ratio comes from the image's width/height attributes.
+   The widths, 24.68rem (wide) and 20rem (compact), are in the ratio of
+   their viewBox widths, so the letters render at the same size in both. */
+.brand-logo {
+  display: block;
+  width: min(24.68rem, calc(100vw - 5rem));
+  height: auto;
+}
+
+header nav {
+  grid-column: 3;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  padding: var(--nav-pad) clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.nav-rest,
+.bar-group { display: flex; gap: 0.3rem; }
+
+/* .bar-btn is the same button for the style guide's samples. */
+header nav a,
+.home-btn,
+.bar-btn {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-width: 6.5rem;
+  height: var(--nav-h);
+  padding: 0 0.75rem 0.2rem;
+  color: var(--nav-text);
+  background-color: var(--nav-other);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+  border-radius: 0.25rem;
+}
+
+button.bar-btn {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Home is the only button set in Enterprsr, fixed at the bottom left of the title bar.
+   Short half pill: flat on the left, round on the right, mark centered.
+   Fill matches the title bar. The mark is Bright green. Home does not change on hover.
+   The ® is the lone R: the right-hand R of the mark, without the mirrored R. */
+.home-btn {
+  position: fixed;
+  top: calc(var(--bar-h) - var(--nav-pad) - var(--nav-h));
+  left: 0.35rem;
+  z-index: 10;
+  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.95rem 0 0.65rem;
+  color: var(--ui-green-bright);
+  background-color: var(--ui-border);
+  border-radius: 0 var(--pill-r) var(--pill-r) 0;
+}
+
+.nav-rest > a:first-child,
+.bar-group > .bar-btn:first-child { border-top-left-radius: var(--pill-r); border-bottom-left-radius: var(--pill-r); }
+
+.nav-rest > a:last-child,
+.bar-group > .bar-btn:last-child { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
+
+header nav a:hover,
+.bar-btn:hover,
+.bar-btn.is-hover { background-color: var(--nav-other-hover); }
+
+header nav a[aria-current="page"],
+.bar-btn[aria-current="page"] { background-color: var(--nav-current); }
+
+header nav a[aria-current="page"]:hover,
+.bar-btn[aria-current="page"]:hover,
+.bar-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
+
+.bar-btn[aria-disabled="true"] {
+  background-color: var(--nav-disabled);
+  color: var(--nav-disabled-text);
+  cursor: not-allowed;
+}
+
+header nav a:focus-visible,
+footer a:focus-visible,
+.home-btn:focus-visible,
+.bar-btn:focus-visible,
+.bar-btn.is-focus {
+  outline: 2px solid var(--nav-focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  /* Title row (compact logo, 8rem tall, plus padding), then the nav row. */
+  :root { --nav-h: 2.75rem; --bar-h: calc(9.5rem + var(--nav-h) + 2 * var(--nav-pad)); }
+  header { grid-template-columns: 1fr; }
+  .brand { grid-column: 1; justify-self: center; padding-top: 0.75rem; height: 9.5rem; }
+  .brand-logo { width: min(20rem, calc(100vw - 5rem)); }
+  header nav { grid-column: 1; }
+  header nav a,
+  .bar-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
+  .home-btn { min-width: 0; padding: 0 1rem 0 0.7rem; }
+}
+
+h1, h2, h3 { color: var(--text-heading); }
+
+main { flex: 1 0 auto; width: 100%; }
+
+main a { color: var(--text-link); }
+
+main a:hover { color: var(--ui-fg-bright); }
+
+main a:focus-visible {
+  outline: 2px solid var(--nav-focus);
+  outline-offset: 3px;
+}
