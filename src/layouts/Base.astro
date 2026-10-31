@@ -1,13 +1,22 @@
 ---
-// Shared page shell: <head>, favicons, fonts/CSS, backdrop and top frame.
+// Shared page shell: <head>, favicons, fonts/CSS, backdrop and top navigation.
 // Images live in public/assets/ — replace a file with the same name to update it.
 import "../styles/site.css";
 
 interface Props {
   title: string;
   description: string;
+  // Page background: "space" (animated stars, horizon and grid) or "warpchi" (the WarpChi picture).
+  backdrop?: "space" | "warpchi";
 }
-const { title, description } = Astro.props;
+const { title, description, backdrop = "space" } = Astro.props;
+
+// Top navigation: add a page here to get a new button.
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/about/", label: "About" },
+];
+const here = Astro.url.pathname.replace(/\/?$/, "/");
 const url = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
 ---
@@ -40,22 +49,23 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
 </head>
 <body>
-  <div class="space" aria-hidden="true">
-    <div class="stars"></div>
-    <div class="horizon"></div>
-    <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
-  </div>
-  <div class="frame" aria-hidden="true">
-    <div class="elbow"></div>
-    <div class="blocks">
-      <i class="amber"></i>
-      <i class="lilac"></i>
-      <i class="green"></i>
-      <i class="silver"></i>
+  {backdrop === "space" && (
+    <div class="space" aria-hidden="true">
+      <div class="stars"></div>
+      <div class="horizon"></div>
+      <div class="grid"><div class="sheet"></div><div class="veil"></div></div>
     </div>
-    <div class="rail"></div>
-    <div class="endcap"></div>
-  </div>
+  )}
+  {backdrop === "warpchi" && <div class="photo warpchi" aria-hidden="true"></div>}
+  <header class="site-head">
+    <a class="elbow" href="/" aria-label="Enterprise-R home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+    <span class="rail" aria-hidden="true"></span>
+    <nav aria-label="Main">
+      {links.map((l) => (
+        <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
+      ))}
+    </nav>
+  </header>
   <slot />
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <filter id="knockout" color-interpolation-filters="sRGB">

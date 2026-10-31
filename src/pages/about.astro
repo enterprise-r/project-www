@@ -1,0 +1,17 @@
+---
+// ✏️ EDIT THE PAGE TEXT HERE
+const page = {
+  title: "About · Enterprise-R",
+  description: "About Enterprise-R.",
+  heading: "About",
+  text: "Placeholder text, to be written.",
+};
+
+import Base from "../layouts/Base.astro";
+---
+<Base title={page.title} description={page.description} backdrop="warpchi">
+  <main class="lower-left">
+    <h1>{page.heading}</h1>
+    <p class="prose">{page.text}</p>
+  </main>
+</Base>
