@@ -135,7 +135,12 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
   background-image: repeating-linear-gradient(90deg, var(--lime-dim) 0 1px, transparent 1px 40px), repeating-linear-gradient(0deg, var(--lime-dim) 0 1px, transparent 1px 40px);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 40%); }
 .sc-bd .photo { position: absolute; inset: 0; view-transition-name: none; }
-.sc-bd .photo.no-scrim::after { display: none; }
+.sc-bd .sc-bd-text .term p { margin: 0; }
+.sc-term-sample { margin: 1.25rem 0 0; }
+.sc-term-sample .sc-bd { height: 13rem; }
+.sc-term-stack { position: absolute; left: 1.4rem; right: 1.4rem; top: 50%; transform: translateY(-50%); z-index: 2; }
+.sc-term-stack .term { max-width: 34rem; }
+.sc-term-stack .about-heading { margin: 0; font-family: Audiowide, Rajdhani, sans-serif; font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
 .sc-bd .photo.sc-wide { background-image: url(/assets/about-backdrop.jpg); background-position: 70% 50%; }
 
 @media (max-width: 900px) {
