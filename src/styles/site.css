@@ -60,13 +60,43 @@
   color-scheme: dark;
 }
 
+/* LCARS extended UI palette (the Founder's theme index, r-art/palettes/lcars-extended):
+   toned-down colours for interface parts. The core brand colours above stay for the
+   logo and hero graphics. Red and bright red are left out (no-red rule). */
+:root {
+  --ui-bg-darker: #09030D;
+  --ui-bg-dark: #0A030E;
+  --ui-bg: #0C040F;
+  --ui-bg-lighter: #181820;
+  --ui-selection: #41285B;
+  --ui-muted: #7D6D91;
+  --ui-border: #3F2C53;          /* Inactive border */
+  --ui-border-active: #BA9EDA;   /* Active border */
+  --ui-fg-dark: #9385A5;
+  --ui-fg: #E0E6E2;
+  --ui-fg-light: #B6C1CC;
+  --ui-fg-bright: #FFF3E6;
+  --ui-yellow: #E4D58B;
+  --ui-yellow-bright: #EFE3A6;
+  --ui-orange: #F4B965;          /* also Accent */
+  --ui-green: #77AF8A;
+  --ui-green-bright: #659474;
+  --ui-cyan: #96C5CF;
+  --ui-cyan-bright: #CAD9E7;
+  --ui-blue: #A5ACE1;
+  --ui-blue-bright: #BDCBD9;
+  --ui-magenta: #BA9EDA;
+  --ui-magenta-bright: #D2BCED;
+  --ui-brown: #A88070;
+}
+
 * { box-sizing: border-box; }
 
 html, body { height: 100%; }
 
 body {
   margin: 0;
-  color: var(--silver);
+  color: var(--text-body);
   background: var(--ink);
   font-family: Rajdhani, "Segoe UI", sans-serif;
   line-height: 1.4;
@@ -216,6 +246,87 @@ body {
   --nav-other-hover: #ffbd3a;
   --nav-text: var(--ink);
   --nav-focus: #f2f6f3;
+  --nav-disabled: var(--ui-border);
+  --nav-disabled-text: var(--ui-fg-dark);
+  /* Page text. The Home title stays the brand lime gradient (hero graphic). */
+  --text-body: var(--silver);            /* About paragraph */
+  --text-small: #f2f6f3;                 /* small print: the e-mail pill on Home */
+  --text-prompt: var(--lime);            /* "lift off" prompt on Home */
+  --text-prompt-glow: rgba(141, 255, 60, 0.6);
+  --text-about-heading: linear-gradient(180deg, #f5fff0 0%, #d8ffb0 38%, var(--lime) 72%, #1f8a45 140%);
+  --text-about-heading-glow: rgba(141, 255, 60, 0.35);
+}
+
+/* Colour options A to D, still being chosen. Nothing uses them until the Founder picks
+   one: preview with ?option=a (b, c, d; ?option=now for today's colours) on any page,
+   or the switcher on /showcase/. To adopt one, copy its values into the block above. */
+:root.opt-a {                    /* A: straight from the palette */
+  --nav-elbow: var(--ui-muted);
+  --nav-elbow-hover: #8E7FA2;
+  --nav-rail-from: var(--ui-muted);
+  --nav-rail-to: var(--ui-magenta);
+  --nav-current: var(--ui-green);
+  --nav-current-hover: #8DC09E;
+  --nav-other: var(--ui-orange);
+  --nav-other-hover: #F7CA88;
+  --nav-text: var(--ui-bg);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: var(--ui-green);
+  --text-prompt-glow: rgba(119, 175, 138, 0.55);
+  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green));
+  --text-about-heading-glow: rgba(119, 175, 138, 0.3);
+}
+:root.opt-b {                    /* B: deeper lilac corner, palette buttons */
+  --nav-elbow: var(--ui-selection);
+  --nav-elbow-hover: #4E3270;
+  --nav-rail-from: var(--ui-border);
+  --nav-rail-to: var(--ui-border-active);
+  --nav-current: var(--ui-green);
+  --nav-current-hover: #8DC09E;
+  --nav-other: var(--ui-orange);
+  --nav-other-hover: #F7CA88;
+  --nav-text: var(--ui-bg);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: var(--ui-orange);
+  --text-prompt-glow: rgba(244, 185, 101, 0.5);
+  --text-about-heading: linear-gradient(180deg, var(--ui-fg-bright), var(--ui-magenta-bright));
+  --text-about-heading-glow: rgba(186, 158, 218, 0.35);
+}
+:root.opt-c {                    /* C: the palette nudged towards the brand */
+  --nav-elbow: #573680;          /* today's deep lilac corner */
+  --nav-elbow-hover: #6A4399;
+  --nav-rail-from: #573680;
+  --nav-rail-to: var(--ui-magenta);
+  --nav-current: #7FCB6F;        /* palette green 65% + brand lime 35% */
+  --nav-current-hover: #9AD88D;
+  --nav-other: #F3B451;          /* palette orange 80% + brand amber 20% */
+  --nav-other-hover: #F6C574;
+  --nav-text: var(--ui-bg);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: #7FCB6F;
+  --text-prompt-glow: rgba(127, 203, 111, 0.55);
+  --text-about-heading: linear-gradient(180deg, #F2FBEA 0%, #C6EBB9 38%, #7FCB6F 75%, #3F7F4F 140%);
+  --text-about-heading-glow: rgba(127, 203, 111, 0.3);
+}
+:root.opt-d {                    /* D: quiet LCARS frame, flat rail, warm-white heading */
+  --nav-elbow: var(--ui-selection);
+  --nav-elbow-hover: #4E3270;
+  --nav-rail-from: var(--ui-magenta); /* flat: LCARS rails are one colour */
+  --nav-rail-to: var(--ui-magenta);
+  --nav-current: #7CC376;        /* palette green 75% + brand lime 25% */
+  --nav-current-hover: #96CF91;
+  --nav-other: var(--ui-orange);
+  --nav-other-hover: #F7CA88;
+  --nav-text: var(--ui-bg-darker);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
+  --text-prompt: #7CC376;
+  --text-prompt-glow: rgba(124, 195, 118, 0.5);
+  --text-about-heading: linear-gradient(var(--ui-fg-bright), var(--ui-fg-bright));
+  --text-about-heading-glow: rgba(124, 195, 118, 0.35);
 }
 
 .site-head {
@@ -253,7 +364,7 @@ body {
 
 .site-head nav { display: flex; gap: 0.3rem; }
 
-.site-head nav a {
+.site-head nav a, .lcars-btn {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -270,16 +381,19 @@ body {
   line-height: 1;
   border-radius: 0.25rem;
 }
-.site-head nav a:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
-.site-head nav a:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
-.site-head nav a:hover { background: var(--nav-other-hover); }
-.site-head nav a[aria-current="page"] { background: var(--nav-current); }
-.site-head nav a[aria-current="page"]:hover { background: var(--nav-current-hover); }
+.site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
+.site-head nav a:last-child, .lcars-group > .lcars-btn:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
+.site-head nav a:hover, .lcars-btn:hover, .lcars-btn.is-hover { background: var(--nav-other-hover); }
+.site-head nav a[aria-current="page"], .lcars-btn[aria-current="page"] { background: var(--nav-current); }
+.site-head nav a[aria-current="page"]:hover, .lcars-btn[aria-current="page"]:hover, .lcars-btn[aria-current="page"].is-hover { background: var(--nav-current-hover); }
+.lcars-btn[aria-disabled="true"] { background: var(--nav-disabled); color: var(--nav-disabled-text); cursor: not-allowed; }
+.lcars-btn:focus-visible, .lcars-btn.is-focus { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
 
 .site-head a:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
 .elbow:focus-visible { outline-offset: -5px; }
 
 /* About page text */
+main.lower-left h1, .about-heading { background: var(--text-about-heading); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 16px var(--text-about-heading-glow)); }
 .prose { max-width: 38rem; margin: 1.5rem 0 0; font-size: 1.2rem; }
 /* About: heading lower-left, below the ship; portrait (3:4 and taller) keeps the centred layout */
 @media not all and (max-aspect-ratio: 3/4) {
@@ -391,7 +505,7 @@ h1 {
   align-items: center;
   gap: 0.7rem;
   padding: 0.35rem 1rem 0.35rem 0.35rem;
-  color: #f2f6f3;
+  color: var(--text-small);
   text-decoration: none;
   font-size: clamp(1.15rem, 2.6vw, 1.45rem);
   font-weight: 600;
@@ -425,9 +539,9 @@ h1 {
   main { padding-top: 4.5rem; }
   .elbow { width: 3.6rem; height: 3.4rem; padding-right: 0.6rem; border-bottom-right-radius: 1.1rem; }
   .elbow img { width: 1.6rem; }
-  .site-head nav a { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
-  .site-head nav a:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
-  .site-head nav a:last-child { border-top-right-radius: 1.375rem; border-bottom-right-radius: 1.375rem; }
+  .site-head nav a, .lcars-btn { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
+  .site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
+  .site-head nav a:last-child, .lcars-group > .lcars-btn:last-child { border-top-right-radius: 1.375rem; border-bottom-right-radius: 1.375rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -445,7 +559,7 @@ h1 {
   z-index: 2;
   transform: translateX(-50%);
   padding: 0.35rem 0.9rem;
-  color: var(--lime);
+  color: var(--text-prompt);
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -458,7 +572,7 @@ h1 {
 .liftoff-prompt:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; border-radius: 0.25rem; }
 @keyframes beckon {
   0%, 100% { opacity: 0.45; text-shadow: none; }
-  50% { opacity: 1; text-shadow: 0 0 12px rgba(141, 255, 60, 0.6); }
+  50% { opacity: 1; text-shadow: 0 0 12px var(--text-prompt-glow); }
 }
 html.paused .liftoff-prompt { animation-play-state: paused; }
 html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts off instead of pull-to-refresh */

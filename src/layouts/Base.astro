@@ -6,10 +6,13 @@ import "../styles/site.css";
 interface Props {
   title: string;
   description: string;
-  // Page background: "space" (animated stars, horizon and grid) or "warpchi" (the WarpChi picture).
-  backdrop?: "space" | "warpchi";
+  // Page background: "space" (animated stars, horizon and grid), "warpchi" (the WarpChi picture)
+  // or "none" (plain ink, for the /showcase/ style guide).
+  backdrop?: "space" | "warpchi" | "none";
+  // Keep the page out of search engines (the style guide).
+  noindex?: boolean;
 }
-const { title, description, backdrop = "space" } = Astro.props;
+const { title, description, backdrop = "space", noindex = false } = Astro.props;
 
 // Top navigation: add a page here to get a new button.
 const links = [
@@ -28,6 +31,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#000000">
   <meta name="description" content={description}>
+  {noindex && <meta name="robots" content="noindex, nofollow">}
   <title>{title}</title>
   <meta property="og:type" content="website">
   <meta property="og:title" content={title}>
@@ -40,6 +44,14 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.classList.add("still");
     }
+    // Colour option preview (see "Colour options" in site.css): ?option=a|b|c|d, kept for
+    // this tab so Home and About can be compared; ?option=now goes back to today's colours.
+    try {
+      const q = new URLSearchParams(location.search).get("option");
+      if (q) sessionStorage.setItem("colour-option", q.toLowerCase());
+      const o = sessionStorage.getItem("colour-option");
+      if (o && /^[abcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
+    } catch (e) {}
   </script>
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
