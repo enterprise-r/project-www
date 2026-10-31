@@ -1136,3 +1136,32 @@ html.floor-3 .horizon {
 }
 html.still:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; }
 @media (prefers-reduced-motion: reduce) { html:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; } }
+
+/* Elbow border. A thin 2 px line along the corner's two open edges (right and bottom, the others are
+   the screen edges), following its rounded corner; it shrinks and grows with the corner. The logo
+   is untouched. */
+html.edge-silver { --elbow-edge: #C8CDD2; } /* the logo's silver, sampled from the logo */
+html.edge-amber { --elbow-edge: #F0A202; }
+html.edge-lime { --elbow-edge: #8DFF3C; }
+html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--elbow-w);
+  height: var(--elbow-h);
+  border-right: 2px solid var(--elbow-edge);
+  border-bottom: 2px solid var(--elbow-edge);
+  border-bottom-right-radius: var(--elbow-r);
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: width var(--elbow-ease), height var(--elbow-ease), border-bottom-right-radius var(--elbow-ease);
+}
+html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.is-compact::before {
+  width: var(--elbow-c);
+  height: var(--elbow-c);
+  border-bottom-right-radius: var(--elbow-cr);
+}
+html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.instant::before,
+html.still:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; }
+@media (prefers-reduced-motion: reduce) { html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; } }
