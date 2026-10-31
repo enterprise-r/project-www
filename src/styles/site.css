@@ -72,7 +72,7 @@ body {
   line-height: 1.4;
 }
 
-.space, .stars, .horizon, .grid, .frame {
+.space, .stars, .horizon, .grid {
   position: fixed;
   pointer-events: none;
 }
@@ -127,58 +127,128 @@ body {
   background-image:
     repeating-linear-gradient(90deg, var(--lime-dim) 0 1px, transparent 1px 80px),
     repeating-linear-gradient(0deg, var(--lime-dim) 0 1px, transparent 1px 80px);
-  animation: drift 16s linear infinite;
+  animation: drift 12.3s linear infinite; /* grid speed: lower is faster (16s was the original pace) */
   will-change: transform;
+}
+
+/* Picture backdrop (About). The scrim darkens the middle so the heading and text stay readable. */
+.photo {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--ink);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(14, 0, 18, 0.72), rgba(14, 0, 18, 0.25) 100%),
+    linear-gradient(to bottom, rgba(14, 0, 18, 0.55), rgba(14, 0, 18, 0) 18%);
+}
+/* WarpChi masters keep the original framing; the off-centre framing per aspect ratio lives here. */
+.warpchi {
+  background-image: url(/assets/about-backdrop.jpg);
+  background-position: 12% 40%; /* 16:10 to 21:9: the saucer and the fingertips both in frame */
+}
+@media (max-aspect-ratio: 3/2) {
+  .warpchi { background-position: 4.5% 40%; } /* 3:2 to 7:5: still the saucer and the fingertips */
+}
+@media (max-aspect-ratio: 7/5) {
+  .warpchi { background-position: 80% 50%; } /* 4:3, 5:4: the ship can't stay in, so the hand and the stream */
+}
+@media (max-aspect-ratio: 3/4) {
+  .warpchi { background-image: url(/assets/about-backdrop-phone.jpg); background-position: 50% 25%; } /* portrait: phone master */
 }
 
 @keyframes drift {
   to { transform: translate3d(0, 80px, 0); }
 }
 
-.frame {
+/* Top navigation, LCARS style: the elbow is the home link, the blocks are the
+   page buttons, and the rail joins them. The current page's button is green,
+   the other is orange. Change the colours here. */
+:root {
+  --nav-elbow: #573680;        /* deep lilac: the two-tone logo mark reads clearly on it */
+  --nav-elbow-hover: #6a4399;
+  --nav-rail-from: #573680;
+  --nav-rail-to: #8a5cc2;
+  --nav-current: var(--lime);
+  --nav-current-hover: #b8ff85;
+  --nav-other: var(--amber);
+  --nav-other-hover: #ffbd3a;
+  --nav-text: var(--ink);
+  --nav-focus: #f2f6f3;
+}
+
+.site-head {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 3;
   display: flex;
-  align-items: flex-end;
-  gap: 0.45rem;
-  padding: 0;
+  align-items: center;
+  gap: 0.35rem;
+  padding-right: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .elbow {
-  width: min(28vw, 9rem);
-  height: 2.4rem;
-  background: var(--amber);
-  border-radius: 0 0 1.3rem 0;
-  box-shadow: inset 0 -0.45rem 0 var(--amber-deep);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  align-self: flex-start;
+  width: 7.5rem;
+  height: 2.75rem;
+  padding-right: 0.85rem;
+  background: var(--nav-elbow);
+  border-radius: 0 0 1.4rem 0;
 }
-
-.blocks { display: flex; gap: 0.4rem; height: 1.15rem; }
-.blocks i {
-  display: block;
-  width: 2.4rem;
-  border-radius: 0.55rem;
-}
-.blocks .amber { background: var(--amber); }
-.blocks .lilac { background: var(--lilac); width: 1.3rem; }
-.blocks .green { background: var(--lime); width: 3.2rem; }
-.blocks .silver { background: var(--silver); width: 1.1rem; }
+.elbow img { width: 1.85rem; height: auto; }
+.elbow:hover { background: var(--nav-elbow-hover); }
 
 .rail {
   flex: 1;
-  height: 0.7rem;
-  margin-bottom: 0.15rem;
-  background: linear-gradient(90deg, var(--green), var(--lime) 18%, transparent 70%);
-  border-radius: 0.4rem;
-  opacity: 0.9;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--nav-rail-from), var(--nav-rail-to));
 }
 
-.endcap {
-  width: 4.5rem;
-  height: 2.4rem;
-  background: var(--amber);
-  border-radius: 0 0 0 1.3rem;
-  box-shadow: inset 0 -0.45rem 0 var(--amber-deep);
+.site-head nav { display: flex; gap: 0.3rem; }
+
+.site-head nav a {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-width: 6.5rem;
+  height: 2rem;
+  padding: 0 0.75rem 0.2rem;
+  color: var(--nav-text);
+  background: var(--nav-other);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+  border-radius: 0.25rem;
+}
+.site-head nav a:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
+.site-head nav a:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
+.site-head nav a:hover { background: var(--nav-other-hover); }
+.site-head nav a[aria-current="page"] { background: var(--nav-current); }
+.site-head nav a[aria-current="page"]:hover { background: var(--nav-current-hover); }
+
+.site-head a:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
+.elbow:focus-visible { outline-offset: -5px; }
+
+/* About page text */
+.prose { max-width: 38rem; margin: 1.5rem 0 0; font-size: 1.2rem; }
+/* About: heading lower-left, below the ship; portrait (3:4 and taller) keeps the centred layout */
+@media not all and (max-aspect-ratio: 3/4) {
+  main.lower-left { align-items: flex-start; justify-content: flex-end; text-align: left; padding: 5.5rem 6vw 11vh; }
 }
 
 main {
@@ -317,11 +387,12 @@ h1 {
 }
 
 @media (max-width: 640px) {
-  .elbow, .endcap { width: 3.2rem; height: 1.7rem; }
-  .blocks i { width: 1.2rem; }
-  .blocks .green { width: 1.8rem; }
-  .frame { gap: 0.3rem; }
   main { padding-top: 4.5rem; }
+  .elbow { width: 3.6rem; height: 3.4rem; padding-right: 0.6rem; border-bottom-right-radius: 1.1rem; }
+  .elbow img { width: 1.6rem; }
+  .site-head nav a { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
+  .site-head nav a:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
+  .site-head nav a:last-child { border-top-right-radius: 1.375rem; border-bottom-right-radius: 1.375rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

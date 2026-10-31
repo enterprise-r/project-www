@@ -5,7 +5,7 @@ The SVGs stay in r-art. Which files the site needs, and at what size, is a web c
 so that list lives here (OUTPUTS below).
 
 Needs: pip install cairosvg   (plus the system cairo library)
-Usage: python3 scripts/build-assets.py [--badge SVG] [--mark SVG] [--out DIR]
+Usage: python3 scripts/build-assets.py [--badge SVG] [--mark SVG] [--backdrop JPG] [--backdrop-phone JPG] [--out DIR]
   Defaults: --badge $R_ART_DIR/source/logo-badge-large.svg
             --mark  $R_ART_DIR/source/logo-refined.svg
             --out   public/assets       (R_ART_DIR defaults to ../r-art next to this repo)
@@ -25,7 +25,8 @@ SOURCES = {
     "badge": arg("--badge", os.path.join(R_ART, "source", "logo-badge-large.svg")),  # full badge
     "mark": arg("--mark", os.path.join(R_ART, "source", "logo-refined.svg")),        # RR monogram only
 }
-BACKDROP = arg("--backdrop", os.path.join(ROOT, "art", "warpchi.jpg"))  # WarpChi wallpaper (Drive Wallpapers/)
+BACKDROP = arg("--backdrop", os.path.join(ROOT, "art", "warpchi.jpg"))  # WarpChi wallpaper, desktop master 3840x2160 (Drive Wallpapers/)
+BACKDROP_PHONE = arg("--backdrop-phone", os.path.join(ROOT, "art", "warpchi-phone.jpg"))  # WarpChi phone master 1290x2796
 OUT = arg("--out", os.path.join(ROOT, "public", "assets"))
 
 # name, source, size (square px), how:
@@ -41,6 +42,12 @@ OUTPUTS = [
 ]
 # Link preview (og:image): the backdrop scaled and centre-cropped to 1200x630, the mark small in the top-left corner.
 OG = {"name": "og-image.jpg", "size": (1200, 630), "mark": 72, "margin": 32, "quality": 85}
+# About page backgrounds: each master as a web JPEG, at most `width` px wide (never scaled up).
+# The desktop one is used down to 3:4 aspect, the phone one below that (see .warpchi in site.css).
+ABOUT = [
+    {"name": "about-backdrop.jpg",       "src": BACKDROP,       "width": 2560, "quality": 84},
+    {"name": "about-backdrop-phone.jpg", "src": BACKDROP_PHONE, "width": 1290, "quality": 80},
+]
 
 RENDER_PX = 4096  # the long side the SVG is rasterised at to find its visible bounds
 DIRECT_MAX = 48   # sizes up to this are drawn straight at the target size (crisp favicons);
@@ -117,3 +124,12 @@ mark = fitted(SOURCES["mark"], m)
 bg.paste(mark, (OG["margin"], OG["margin"]), mark)
 bg.save(os.path.join(OUT, OG["name"]), quality=OG["quality"], optimize=True, progressive=True)
 print(f'{OG["name"]:22s} {W}x{H}  <- {os.path.relpath(BACKDROP, ROOT)} + mark')
+
+for a in ABOUT:
+    if not os.path.isfile(a["src"]):
+        sys.exit(f'backdrop not found: {a["src"]}')
+    about = Image.open(a["src"]).convert("RGB")
+    if about.width > a["width"]:
+        about = about.resize((a["width"], round(about.height * a["width"] / about.width)), Image.LANCZOS)
+    about.save(os.path.join(OUT, a["name"]), quality=a["quality"], optimize=True, progressive=True)
+    print(f'{a["name"]:22s} {about.width}x{about.height}  <- {os.path.relpath(a["src"], ROOT)}')
