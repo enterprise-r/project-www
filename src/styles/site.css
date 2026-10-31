@@ -248,10 +248,10 @@ body {
    LCARS extended palette). Hover colours are the fills lightened by hand: the palette's
    "Bright green" is darker than its green. Change the colours here. */
 :root {
-  --nav-elbow: var(--ui-muted);          /* #7D6D91 */
-  --nav-elbow-hover: #8E7FA2;
-  --nav-rail-from: var(--ui-muted);      /* #7D6D91 */
-  --nav-rail-to: var(--ui-magenta);      /* #BA9EDA */
+  --nav-elbow: var(--ui-border);         /* #3F2C53, Inactive border: the frame is not a control, so it stays quiet */
+  --nav-elbow-hover: #4A3561;            /* the corner is still the Home link: a touch lighter on hover */
+  --nav-rail-from: var(--ui-border);     /* #3F2C53, flat */
+  --nav-rail-to: var(--ui-border);
   --nav-current: var(--ui-green);        /* #77AF8A */
   --nav-current-hover: #8DC09E;
   --nav-other: var(--ui-orange);         /* #F4B965 */
