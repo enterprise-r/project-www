@@ -52,6 +52,30 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       const o = sessionStorage.getItem("colour-option");
       if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
     } catch (e) {}
+    // Proposal previews (see "Proposals" at the end of site.css), kept for this tab like ?option:
+    // ?floor=1|2|3 (Home grid and horizon glow), ?edge=silver|amber|lime (elbow border),
+    // ?logo=sage (sage web logo). ?floor=0, ?edge=none, ?logo=now go back to the live look.
+    try {
+      const qs = new URLSearchParams(location.search);
+      const allowed = { floor: /^[123]$/, edge: /^(silver|amber|lime)$/, logo: /^sage$/ };
+      for (const k in allowed) {
+        const v = qs.get(k);
+        if (v) sessionStorage.setItem("preview-" + k, v.toLowerCase());
+        const kept = sessionStorage.getItem("preview-" + k);
+        if (kept && allowed[k].test(kept)) document.documentElement.classList.add(k + "-" + kept);
+      }
+    } catch (e) {}
+    // ?logo=sage: swap the logo pictures for the sage copies in /assets/preview/ (the masters and the
+    // live files are untouched).
+    if (document.documentElement.classList.contains("logo-sage")) {
+      document.addEventListener("DOMContentLoaded", () => {
+        const sage = { "/assets/icon-192.png": "/assets/preview/icon-192-sage.png", "/assets/logo.png": "/assets/preview/logo-sage.png" };
+        for (const img of document.querySelectorAll("img")) {
+          const to = sage[img.getAttribute("src")];
+          if (to) img.setAttribute("src", to);
+        }
+      });
+    }
     // Lift-off fallback (see the script at the end of the body and the end of site.css): browsers
     // without cross-document view transitions get the second half of the move here, set before the
     // first paint so the page never flashes in its final state. The flag is set by the page just
@@ -86,7 +110,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   {backdrop === "space" && <div class="fx-strip" aria-hidden="true"></div>}
   {backdrop !== "none" && <div class="fx-sky" aria-hidden="true"></div>}
   <header class="site-head">
-    <a class="elbow" href="/" aria-label="Enterprise-R home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+    <a class="elbow" href="/" aria-label="Home" title="Home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
     <span class="rail" aria-hidden="true"></span>
     <nav aria-label="Main">
       {links.map((l) => (
@@ -94,6 +118,40 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       ))}
     </nav>
   </header>
+  <script is:inline>
+    // The corner (elbow) stays on screen. Scrolled down past a few pixels it shrinks to the logo
+    // alone and becomes "Back to top": a click scrolls up (no page change), and at the top it is
+    // the Home link again. A passive scroll listener, read once per frame; the look is all CSS.
+    (() => {
+      const el = document.querySelector(".site-head .elbow");
+      if (!el) return;
+      const THRESHOLD = 24; // px of scroll before it tucks in
+      let compact = null, queued = false;
+      const set = (c) => {
+        if (c === compact) return;
+        compact = c;
+        el.classList.toggle("is-compact", c);
+        const label = c ? "Back to top" : "Home";
+        el.setAttribute("aria-label", label);
+        el.title = label;
+      };
+      const read = () => { queued = false; set(scrollY > THRESHOLD); };
+      // First state without the animation (a reload or back/forward lands part-way down the page).
+      el.classList.add("instant");
+      read();
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("instant")));
+      addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(read); } }, { passive: true });
+      addEventListener("pageshow", read);
+      // On the element itself, so it runs before the page-change and Home click-anywhere handlers.
+      el.addEventListener("click", (e) => {
+        if (!compact || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+      });
+    })();
+  </script>
   <slot />
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <filter id="knockout" color-interpolation-filters="sRGB">

@@ -312,8 +312,21 @@ body {
   --text-about-heading-glow: rgba(124, 195, 118, 0.35);
 }
 
+/* The rail and the buttons sit at the top of the page and scroll away with it. Only the corner
+   (elbow) stays on screen: past a few pixels of scroll it tucks into a logo-only bubble in the
+   top-left corner, and a click on it then scrolls back up (where it grows back into the Home link).
+   The shrink is a clip-path plus a transform on the logo, so nothing around it moves. */
+:root {
+  --elbow-w: 7.5rem;     /* full corner */
+  --elbow-h: 2.75rem;
+  --elbow-r: 1.4rem;
+  --elbow-c: 2.75rem;    /* compact: a square bubble around the logo */
+  --elbow-cr: 1.1rem;
+  --elbow-ease: 0.34s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+
 .site-head {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -321,21 +334,42 @@ body {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  min-height: var(--elbow-h);
+  padding-left: calc(var(--elbow-w) + 0.35rem); /* the corner's place in the row; it is fixed on top */
   padding-right: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .elbow {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center; /* logo centred in the corner, both ways */
   align-self: flex-start;
-  width: 7.5rem;
-  height: 2.75rem;
+  flex: none;
+  width: var(--elbow-w);
+  height: var(--elbow-h);
   background: var(--nav-elbow);
-  border-radius: 0 0 1.4rem 0;
+  border-radius: 0 0 var(--elbow-r) 0;
+  clip-path: inset(0 0 0 0 round 0 0 var(--elbow-r) 0);
+  transition: clip-path var(--elbow-ease), background-color 0.15s;
 }
-.elbow img { display: block; width: 1.85rem; height: auto; }
+.site-head .elbow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  view-transition-name: nav-elbow;
+}
+.elbow img { display: block; width: 1.85rem; height: auto; transition: transform var(--elbow-ease); }
 .elbow:hover { background: var(--nav-elbow-hover); }
+.elbow.is-compact {
+  clip-path: inset(0 calc(var(--elbow-w) - var(--elbow-c)) calc(var(--elbow-h) - var(--elbow-c)) 0 round 0 0 var(--elbow-cr) 0);
+}
+.elbow.is-compact img {
+  transform: translate(calc((var(--elbow-c) - var(--elbow-w)) / 2), calc((var(--elbow-c) - var(--elbow-h)) / 2));
+}
+.elbow.instant, .elbow.instant img, html.still .elbow, html.still .elbow img { transition: none; }
+@media (prefers-reduced-motion: reduce) { .elbow, .elbow img { transition: none; } }
 
 .rail {
   flex: 1;
@@ -372,7 +406,25 @@ body {
 .lcars-btn:focus-visible, .lcars-btn.is-focus { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
 
 .site-head a:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
-.elbow:focus-visible { outline-offset: -5px; }
+/* The corner's focus ring is drawn inside it, so the clip never cuts it off. */
+.site-head a.elbow:focus-visible, a.elbow:focus-visible { outline: none; }
+.elbow:focus-visible::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(var(--elbow-w) - 8px);
+  height: calc(var(--elbow-h) - 8px);
+  border: 2px solid var(--nav-focus);
+  border-radius: 0 0 calc(var(--elbow-r) - 4px) 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.elbow.is-compact:focus-visible::after {
+  width: calc(var(--elbow-c) - 8px);
+  height: calc(var(--elbow-c) - 8px);
+  border-radius: 0 0 calc(var(--elbow-cr) - 4px) 0;
+}
 
 /* Terminal panels: a small dark backing that hugs each block of text sitting on a picture,
    instead of dimming the picture. Background #0C040F at 72%, a thin Inactive border, soft blur. */
@@ -492,8 +544,15 @@ h1 {
   filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
 }
 
-/* The orange-to-green line, now the underline of the Home prompt (it used to sit above the email). */
-:root { --rule-line: linear-gradient(90deg, transparent, var(--amber), var(--lime), transparent); }
+/* Underline of the Home prompt: the colour run of the agent-badge ring, read clockwise from its
+   green (sampled from badges/hotbit.jpg): green, lilac, copper orange, lilac, ice. */
+:root {
+  --ring-green: #93B87F;
+  --ring-lilac: #AE7ED6;
+  --ring-orange: #C38263;
+  --ring-ice: #9EA2A6;
+  --rule-line: linear-gradient(90deg, transparent, var(--ring-green) 12%, var(--ring-lilac) 31%, var(--ring-orange) 50%, var(--ring-lilac) 69%, var(--ring-ice) 88%, transparent);
+}
 
 .comms {
   display: inline-block; /* not flex: the address stays one run of text, so copy/paste has no breaks */
@@ -504,7 +563,7 @@ h1 {
   font-size: clamp(1.15rem, 2.6vw, 1.45rem);
   font-weight: 600;
   letter-spacing: 0.04em;
-  border: 1px solid var(--ui-border-active); /* palette 'Active border' #BA9EDA (no plain 'Border' entry) */
+  border: 1px solid var(--ui-border); /* palette Inactive border #3F2C53, dark purple */
   border-radius: 999px;
   background: rgba(12, 4, 15, 0.72); /* same backing as the terminal panels */
   -webkit-backdrop-filter: blur(6px);
@@ -529,7 +588,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 
 @media (max-width: 640px) {
   main { padding-top: 4.5rem; }
-  .elbow { width: 3.6rem; height: 3.4rem; border-bottom-right-radius: 1.1rem; }
+  :root { --elbow-w: 3.6rem; --elbow-h: 3.4rem; --elbow-r: 1.1rem; --elbow-c: 2.9rem; --elbow-cr: 0.95rem; }
   .elbow img { width: 1.6rem; }
   .site-head nav a, .lcars-btn { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
   .site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
@@ -561,7 +620,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
   white-space: nowrap;
   animation: beckon 2.4s ease-in-out infinite;
 }
-/* Underline: the orange-to-green line, as wide as the words (the last letter's spacing left out);
+/* Underline: the badge-ring line, as wide as the words (the last letter's spacing left out);
    it is part of the prompt, so it pulses with it. */
 .liftoff-prompt::after {
   content: "";
@@ -696,6 +755,7 @@ main.lower-left { view-transition-name: content-about; }
 ::view-transition-group(sky) { z-index: 5; }
 ::view-transition-group(content-about) { z-index: 6; }
 ::view-transition-group(site-head) { z-index: 10; }
+::view-transition-group(nav-elbow) { z-index: 11; }
 
 ::view-transition-old(root),
 ::view-transition-new(root) { animation: none; }
@@ -746,7 +806,9 @@ main.lower-left { view-transition-name: content-about; }
       lift-ascend var(--drop-orbit) var(--lift-out) var(--drop-orbit-delay) both,
       lift-edge-out var(--drop-orbit) linear var(--drop-orbit-delay) both;
   }
-  ::view-transition-new(stars) { animation: lift-stars-up var(--drop-ground) var(--lift-in) var(--drop-orbit-delay) both; }
+  /* Stars come back already spread across the sky (a soft fade and settle in place), not
+     streaming up from the bottom. */
+  ::view-transition-new(stars) { transform-origin: 50% 0; animation: lift-stars-settle var(--drop-ground) ease-out var(--drop-orbit-delay) both; }
   ::view-transition-new(ground) { animation: lift-rise var(--drop-ground) var(--lift-in) var(--drop-ground-delay) both; }
   ::view-transition-new(content-home) {
     animation: lift-rise var(--drop-ground) var(--lift-in) calc(var(--drop-ground-delay) + var(--drop-content-lag)) both;
@@ -755,7 +817,10 @@ main.lower-left { view-transition-name: content-about; }
 
   ::view-transition-group(site-head),
   ::view-transition-old(site-head),
-  ::view-transition-new(site-head) { animation-duration: var(--lift-nav); }
+  ::view-transition-new(site-head),
+  ::view-transition-group(nav-elbow),
+  ::view-transition-old(nav-elbow),
+  ::view-transition-new(nav-elbow) { animation-duration: var(--lift-nav); }
 
   /* -- Phones (portrait): the camera pan --
      The strip's three moves are on three nested layers so each has its own duration and
@@ -877,8 +942,8 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
 @keyframes lift-stars-down {
   to { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
 }
-@keyframes lift-stars-up {
-  from { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
+@keyframes lift-stars-settle {
+  from { transform: scale(1.04); opacity: 0; }
 }
 @keyframes lift-text-up { from { transform: translateY(1.5rem); opacity: 0; } }
 @keyframes lift-fade-out { to { opacity: 0; } }
@@ -955,7 +1020,7 @@ html.fx-out-down .photo.warpchi {
 
 /* Going down, on Home (the glow settles, the ground comes back up) */
 html.fx-in-down .fx-sky { animation: lift-sky-settle var(--drop-ground) ease-in-out both; }
-html.fx-in-down .stars { animation: lift-stars-up var(--drop-ground) var(--lift-in) both; }
+html.fx-in-down .stars { transform-origin: 50% 0; animation: lift-stars-settle var(--drop-ground) ease-out both; }
 html.fx-in-down :is(.horizon, .grid) { animation: fx-rise var(--drop-ground) var(--lift-in) both; }
 html.fx-in-down main { animation: fx-rise var(--drop-ground) var(--lift-in) var(--drop-content-lag) both; }
 html.fx-in-down .liftoff-prompt { animation: lift-fade-in 0.4s linear calc(var(--drop-ground) - 0.4s) both; }
@@ -1025,3 +1090,80 @@ html.fx-in-down .liftoff-prompt { animation: lift-fade-in 0.4s linear calc(var(-
 @keyframes fx-rm { from { opacity: 0; } }
 html.fx-rm-out body { animation: lift-fade-out 0.2s linear both; }
 html.fx-rm-in body { animation: fx-rm 0.2s linear both; }
+
+
+/* ------------------------------------------------------------------------------------------
+   Proposals (previews only, the live look above is unchanged). Switched on per tab by the head
+   script in Base.astro: ?floor=1|2|3, ?edge=silver|amber|lime, ?logo=sage.
+   ------------------------------------------------------------------------------------------ */
+
+/* Home floor. Each keeps the grid speed at 20 px/s (drift distance = one cell). */
+@keyframes drift-cell { to { transform: translate3d(0, var(--cell), 0); } }
+html:is(.floor-1, .floor-2, .floor-3) .sheet {
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell)),
+    repeating-linear-gradient(0deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell));
+  top: calc(var(--cell) * -1);
+  height: calc(100% + var(--cell) * 2);
+  animation: drift-cell var(--drift-time) linear infinite;
+}
+/* 1: toned. UI green instead of lime, a little denser, thinner, and fading out sooner with distance. */
+html.floor-1 { --cell: 64px; --drift-time: 3.2s; --floor-w: 0.8px; --floor-line: rgba(119, 175, 138, 0.42); }
+html.floor-1 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, rgba(0, 0, 0, 0.8) 42%, #000 80%, transparent 100%); }
+html.floor-1 .horizon {
+  background:
+    radial-gradient(ellipse 90% 100% at 50% 100%, rgba(119, 175, 138, 0.28), rgba(119, 175, 138, 0.08) 42%, transparent 74%),
+    radial-gradient(ellipse 46% 80% at 50% 100%, rgba(240, 162, 2, 0.12), transparent 70%);
+}
+/* 2: dense and fine, with a softer, wider glow that blends into the purple. */
+html.floor-2 { --cell: 40px; --drift-time: 2s; --floor-w: 0.6px; --floor-line: rgba(119, 175, 138, 0.34); }
+html.floor-2 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 20%, rgba(0, 0, 0, 0.85) 40%, #000 80%, transparent 100%); }
+html.floor-2 .horizon {
+  height: 52vh;
+  background:
+    radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
+    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(244, 185, 101, 0.08), transparent 70%);
+}
+/* 3: calm. A faint grid in haze, the glow moved to lilac and teal (extended palette). */
+html.floor-3 { --cell: 64px; --drift-time: 3.2s; --floor-w: 0.8px; --floor-line: rgba(150, 197, 207, 0.22); }
+html.floor-3 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.12) 26%, rgba(0, 0, 0, 0.55) 50%, #000 84%, transparent 100%); }
+html.floor-3 .veil { background: linear-gradient(to bottom, rgba(24, 12, 34, 0.55), rgba(12, 4, 15, 0.35) 45%, rgba(0, 0, 0, 0.5) 85%); }
+html.floor-3 .horizon {
+  height: 44vh;
+  background:
+    radial-gradient(ellipse 110% 100% at 50% 100%, rgba(186, 158, 218, 0.22), rgba(150, 197, 207, 0.08) 48%, transparent 80%),
+    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(150, 197, 207, 0.12), transparent 70%);
+}
+html.still:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; }
+@media (prefers-reduced-motion: reduce) { html:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; } }
+
+/* Elbow border. A thin 2 px line along the corner's two open edges (right and bottom, the others are
+   the screen edges), following its rounded corner; it shrinks and grows with the corner. The logo
+   is untouched. */
+html.edge-silver { --elbow-edge: #C8CDD2; } /* the logo's silver, sampled from the logo */
+html.edge-amber { --elbow-edge: #F0A202; }
+html.edge-lime { --elbow-edge: #8DFF3C; }
+html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--elbow-w);
+  height: var(--elbow-h);
+  border-right: 2px solid var(--elbow-edge);
+  border-bottom: 2px solid var(--elbow-edge);
+  border-bottom-right-radius: var(--elbow-r);
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: width var(--elbow-ease), height var(--elbow-ease), border-bottom-right-radius var(--elbow-ease);
+}
+html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.is-compact::before {
+  width: var(--elbow-c);
+  height: var(--elbow-c);
+  border-bottom-right-radius: var(--elbow-cr);
+}
+html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.instant::before,
+html.still:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; }
+@media (prefers-reduced-motion: reduce) { html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; } }
+
+/* Sage web logo: no CSS, see ?logo=sage in Base.astro (pictures in /assets/preview/). */
