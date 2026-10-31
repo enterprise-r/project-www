@@ -312,8 +312,21 @@ body {
   --text-about-heading-glow: rgba(124, 195, 118, 0.35);
 }
 
+/* The rail and the buttons sit at the top of the page and scroll away with it. Only the corner
+   (elbow) stays on screen: past a few pixels of scroll it tucks into a logo-only bubble in the
+   top-left corner, and a click on it then scrolls back up (where it grows back into the Home link).
+   The shrink is a clip-path plus a transform on the logo, so nothing around it moves. */
+:root {
+  --elbow-w: 7.5rem;     /* full corner */
+  --elbow-h: 2.75rem;
+  --elbow-r: 1.4rem;
+  --elbow-c: 2.75rem;    /* compact: a square bubble around the logo */
+  --elbow-cr: 1.1rem;
+  --elbow-ease: 0.34s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+
 .site-head {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -321,21 +334,42 @@ body {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  min-height: var(--elbow-h);
+  padding-left: calc(var(--elbow-w) + 0.35rem); /* the corner's place in the row; it is fixed on top */
   padding-right: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .elbow {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center; /* logo centred in the corner, both ways */
   align-self: flex-start;
-  width: 7.5rem;
-  height: 2.75rem;
+  flex: none;
+  width: var(--elbow-w);
+  height: var(--elbow-h);
   background: var(--nav-elbow);
-  border-radius: 0 0 1.4rem 0;
+  border-radius: 0 0 var(--elbow-r) 0;
+  clip-path: inset(0 0 0 0 round 0 0 var(--elbow-r) 0);
+  transition: clip-path var(--elbow-ease), background-color 0.15s;
 }
-.elbow img { display: block; width: 1.85rem; height: auto; }
+.site-head .elbow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  view-transition-name: nav-elbow;
+}
+.elbow img { display: block; width: 1.85rem; height: auto; transition: transform var(--elbow-ease); }
 .elbow:hover { background: var(--nav-elbow-hover); }
+.elbow.is-compact {
+  clip-path: inset(0 calc(var(--elbow-w) - var(--elbow-c)) calc(var(--elbow-h) - var(--elbow-c)) 0 round 0 0 var(--elbow-cr) 0);
+}
+.elbow.is-compact img {
+  transform: translate(calc((var(--elbow-c) - var(--elbow-w)) / 2), calc((var(--elbow-c) - var(--elbow-h)) / 2));
+}
+.elbow.instant, .elbow.instant img, html.still .elbow, html.still .elbow img { transition: none; }
+@media (prefers-reduced-motion: reduce) { .elbow, .elbow img { transition: none; } }
 
 .rail {
   flex: 1;
@@ -372,7 +406,25 @@ body {
 .lcars-btn:focus-visible, .lcars-btn.is-focus { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
 
 .site-head a:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
-.elbow:focus-visible { outline-offset: -5px; }
+/* The corner's focus ring is drawn inside it, so the clip never cuts it off. */
+.site-head a.elbow:focus-visible, a.elbow:focus-visible { outline: none; }
+.elbow:focus-visible::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(var(--elbow-w) - 8px);
+  height: calc(var(--elbow-h) - 8px);
+  border: 2px solid var(--nav-focus);
+  border-radius: 0 0 calc(var(--elbow-r) - 4px) 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.elbow.is-compact:focus-visible::after {
+  width: calc(var(--elbow-c) - 8px);
+  height: calc(var(--elbow-c) - 8px);
+  border-radius: 0 0 calc(var(--elbow-cr) - 4px) 0;
+}
 
 /* Terminal panels: a small dark backing that hugs each block of text sitting on a picture,
    instead of dimming the picture. Background #0C040F at 72%, a thin Inactive border, soft blur. */
@@ -529,7 +581,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 
 @media (max-width: 640px) {
   main { padding-top: 4.5rem; }
-  .elbow { width: 3.6rem; height: 3.4rem; border-bottom-right-radius: 1.1rem; }
+  :root { --elbow-w: 3.6rem; --elbow-h: 3.4rem; --elbow-r: 1.1rem; --elbow-c: 2.9rem; --elbow-cr: 0.95rem; }
   .elbow img { width: 1.6rem; }
   .site-head nav a, .lcars-btn { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
   .site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
@@ -696,6 +748,7 @@ main.lower-left { view-transition-name: content-about; }
 ::view-transition-group(sky) { z-index: 5; }
 ::view-transition-group(content-about) { z-index: 6; }
 ::view-transition-group(site-head) { z-index: 10; }
+::view-transition-group(nav-elbow) { z-index: 11; }
 
 ::view-transition-old(root),
 ::view-transition-new(root) { animation: none; }
@@ -755,7 +808,10 @@ main.lower-left { view-transition-name: content-about; }
 
   ::view-transition-group(site-head),
   ::view-transition-old(site-head),
-  ::view-transition-new(site-head) { animation-duration: var(--lift-nav); }
+  ::view-transition-new(site-head),
+  ::view-transition-group(nav-elbow),
+  ::view-transition-old(nav-elbow),
+  ::view-transition-new(nav-elbow) { animation-duration: var(--lift-nav); }
 
   /* -- Phones (portrait): the camera pan --
      The strip's three moves are on three nested layers so each has its own duration and

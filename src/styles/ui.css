@@ -50,6 +50,7 @@ main.showcase {
 .sc-head { display: flex; align-items: center; gap: 0.35rem; padding-right: 1.2rem; background: var(--ink); border-radius: 0 0 0.6rem 0.6rem; overflow: hidden; }
 .sc-head .lcars-group { display: flex; gap: 0.3rem; }
 .sc-head-wrap { display: grid; gap: 0.6rem; }
+.sc-head-compact { background: transparent; min-height: var(--elbow-h); }
 .sc-head-wrap .sc-cap { margin: 0.4rem 0 0; }
 .sc-phone { width: 390px; }
 
