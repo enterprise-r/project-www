@@ -14,4 +14,8 @@ import Base from "../layouts/Base.astro";
     <h1>{page.heading}</h1>
     <p class="prose">{page.text}</p>
   </main>
+  <script is:inline slot="scripts">
+    // Warm the cache with the Home logo so the way back down is ready.
+    addEventListener("load", () => { new Image().src = "/assets/logo.png"; });
+  </script>
 </Base>

@@ -399,3 +399,128 @@ h1 {
   .sheet, .warp i { animation: none; }
   .warp { display: none; }
 }
+
+/* Lift-off prompt on Home, bottom centre. The wording lives in src/pages/index.astro (page.prompt). */
+.liftoff-logo { display: block; border-radius: 50%; }
+.liftoff-logo:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 6px; }
+.liftoff-prompt {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: 0.35rem 0.9rem;
+  color: var(--lime);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  animation: beckon 2.4s ease-in-out infinite;
+}
+.liftoff-prompt:hover { color: var(--nav-current-hover); }
+.liftoff-prompt:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; border-radius: 0.25rem; }
+@keyframes beckon {
+  0%, 100% { opacity: 0.45; text-shadow: none; }
+  50% { opacity: 1; text-shadow: 0 0 12px rgba(141, 255, 60, 0.6); }
+}
+html.paused .liftoff-prompt { animation-play-state: paused; }
+html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts off instead of pull-to-refresh */
+@media (max-width: 640px) {
+  .liftoff-prompt { font-size: 0.8rem; letter-spacing: 0.12em; }
+}
+
+/* ===== Lift-off: the Home <-> About page transition =====
+   Native cross-document View Transitions (no router, no script): each page is a real URL,
+   and the browser morphs between them. Browsers without support just change page.
+   Home is the ground, About is orbit. Going up, the ground (lilac glow, horizon, grid)
+   and the Home content slide down and away, the stars streak past, the WarpChi picture
+   drops in from above and settles in its normal place, then the About text fades in.
+   Coming back down, the same thing runs the other way.
+   Timings (total about 1.6 s): */
+:root {
+  --lift-ground: 0.9s;        /* ground and Home content sliding out (down) */
+  --lift-stars: 0.75s;        /* stars streaking past, shorter = faster */
+  --lift-orbit-delay: 0.2s;   /* when the picture starts dropping in */
+  --lift-orbit: 1.15s;        /* how long it takes to settle */
+  --lift-text-delay: 1.15s;   /* when the destination text starts fading in */
+  --lift-text: 0.45s;
+  --lift-nav: 0.5s;           /* nav button colour swap */
+  --lift-out: cubic-bezier(0.55, 0, 0.85, 0.35);  /* accelerate away: lift-off */
+  --lift-in: cubic-bezier(0.15, 0.6, 0.25, 1);    /* decelerate: settle into place */
+  --lift-orbit-from: -100%;   /* where the picture starts: -100% = fully above the screen */
+  --lift-star-streak: 2.2;    /* vertical stretch of the stars while they rush past */
+}
+
+@view-transition { navigation: auto; }
+
+.space { view-transition-name: ground; contain: paint; } /* clip the 3D grid to the screen, or its snapshot is too big to capture */
+.stars { view-transition-name: stars; }
+.warpchi { view-transition-name: orbit; }
+.site-head { view-transition-name: site-head; }
+main { view-transition-name: content-home; }
+main.lower-left { view-transition-name: content-about; }
+.liftoff-prompt { view-transition-name: prompt; }
+
+/* Stacking during the transition: ground, stars, Home content, the picture over them all,
+   then the About text, nav on top. */
+::view-transition-group(ground) { z-index: 1; }
+::view-transition-group(stars) { z-index: 2; }
+::view-transition-group(content-home),
+::view-transition-group(prompt) { z-index: 3; }
+::view-transition-group(orbit) { z-index: 4; }
+::view-transition-group(content-about) { z-index: 5; }
+::view-transition-group(site-head) { z-index: 10; }
+
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; }
+
+@media not (prefers-reduced-motion: reduce) {
+  /* Up: Home leaves downwards. Down (back to Home): it comes back up from below. */
+  ::view-transition-old(ground) { animation: lift-sink var(--lift-ground) var(--lift-out) both; }
+  ::view-transition-new(ground) { animation: lift-rise var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; }
+  ::view-transition-old(content-home) { animation: lift-sink var(--lift-ground) var(--lift-out) both, lift-fade-out var(--lift-ground) linear both; }
+  ::view-transition-new(content-home) { animation: lift-rise var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; } /* rides up with the ground */
+  ::view-transition-old(prompt) { animation: lift-fade-out 0.25s linear both; }
+  ::view-transition-new(prompt) { animation: lift-fade-in var(--lift-text) linear var(--lift-text-delay) both; }
+  ::view-transition-old(stars) { animation: lift-stars-down var(--lift-stars) var(--lift-out) both; }
+  ::view-transition-new(stars) { animation: lift-stars-up var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; }
+
+  /* Up: the picture drops in from above. Down: it leaves upwards. */
+  ::view-transition-new(orbit) { animation: lift-descend var(--lift-orbit) var(--lift-in) var(--lift-orbit-delay) both; }
+  ::view-transition-old(orbit) { animation: lift-ascend var(--lift-ground) var(--lift-out) both; }
+  ::view-transition-new(content-about) { animation: lift-text-up var(--lift-text) var(--lift-in) var(--lift-text-delay) both; }
+  ::view-transition-old(content-about) { animation: lift-fade-out 0.3s linear both; }
+
+  ::view-transition-group(site-head),
+  ::view-transition-old(site-head),
+  ::view-transition-new(site-head) { animation-duration: var(--lift-nav); }
+}
+
+/* Reduced motion: a plain crossfade, nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation-duration: 0.4s; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+  .liftoff-prompt { animation: none; opacity: 0.85; }
+}
+html.still .liftoff-prompt { animation: none; opacity: 0.85; }
+
+@keyframes lift-sink { to { transform: translateY(100vh); } }
+@keyframes lift-rise { from { transform: translateY(100vh); } }
+@keyframes lift-descend {
+  from { transform: translateY(var(--lift-orbit-from)); opacity: 0.3; }
+  20% { opacity: 1; }
+}
+@keyframes lift-ascend { to { transform: translateY(var(--lift-orbit-from)); opacity: 0.3; } }
+@keyframes lift-stars-down {
+  to { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
+}
+@keyframes lift-stars-up {
+  from { transform: translateY(70vh) scaleY(var(--lift-star-streak)); opacity: 0; }
+}
+@keyframes lift-text-up { from { transform: translateY(1.5rem); opacity: 0; } }
+@keyframes lift-fade-out { to { opacity: 0; } }
+@keyframes lift-fade-in { from { opacity: 0; } }
