@@ -161,10 +161,13 @@ body {
   top: -80px;
   height: calc(100% + 160px);
   background-image:
-    repeating-linear-gradient(90deg, var(--lime-dim) 0 1px, transparent 1px 80px),
-    repeating-linear-gradient(0deg, var(--lime-dim) 0 1px, transparent 1px 80px);
-  animation: drift 12.3s linear infinite; /* grid speed: lower is faster (16s was the original pace) */
+    repeating-linear-gradient(90deg, transparent 0, var(--lime-dim) 1px, transparent 2px 80px),
+    repeating-linear-gradient(0deg, transparent 0, var(--lime-dim) 1px, transparent 2px 80px);
+  /* Lines are a 2 px soft ramp (same brightness overall as the old hard 1 px line), so a line
+     between two screen pixels shares out its light instead of snapping on and off: less shimmer. */
+  animation: drift 4s linear infinite; /* 80 px per cycle: 4 s = 20 px/s (12.3 s was 6.5 px/s) */
   will-change: transform;
+  backface-visibility: hidden; /* keep the sheet on its own composited layer */
 }
 
 /* Picture backdrop (About). The scrim darkens the middle so the heading and text stay readable. */
