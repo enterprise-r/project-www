@@ -47,7 +47,7 @@ import Base from "../layouts/Base.astro";
     </div>
     <h1>{page.heading}</h1>
     <hr class="rule">
-    <a class="comms" href={`mailto:${page.email}`}><span aria-hidden="true"></span>{page.email}</a>
+    <a class="comms" href={`mailto:${page.email}`}>{page.email.split("@")[0]}<span class="at">@</span>{page.email.split("@")[1]}</a>
   </main>
   <a class="liftoff-prompt" href="/about/">{page.prompt}</a>
   <script is:inline slot="scripts">

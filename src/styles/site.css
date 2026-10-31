@@ -501,10 +501,8 @@ h1 {
 }
 
 .comms {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.35rem 1rem 0.35rem 0.35rem;
+  display: inline-block; /* not flex: the address stays one run of text, so copy/paste has no breaks */
+  padding: 0.45rem 1.1rem;
   color: var(--text-small);
   text-decoration: none;
   font-size: clamp(1.15rem, 2.6vw, 1.45rem);
@@ -516,13 +514,8 @@ h1 {
   box-shadow: 0 0 24px rgba(141, 255, 60, 0.12);
 }
 
-.comms span {
-  width: 1.35rem;
-  height: 1.35rem;
-  border-radius: 50%;
-  background: linear-gradient(#ffd36a, var(--amber-deep));
-  box-shadow: 0 0 10px rgba(240, 162, 2, 0.8);
-}
+/* The @ in the address, in the 'other page' button orange; the rest keeps the link colour. */
+.at { color: var(--ui-orange); }
 
 .comms:hover {
   border-color: var(--lime);
