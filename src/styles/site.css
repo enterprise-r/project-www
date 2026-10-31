@@ -1165,3 +1165,5 @@ html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.is-compact::before {
 html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.instant::before,
 html.still:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; }
 @media (prefers-reduced-motion: reduce) { html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; } }
+
+/* Sage web logo: no CSS, see ?logo=sage in Base.astro (pictures in /assets/preview/). */
