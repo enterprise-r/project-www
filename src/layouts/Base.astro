@@ -54,10 +54,12 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
     } catch (e) {}
     // Proposal previews (see "Proposals" at the end of site.css), kept for this tab like ?option:
     // ?floor=1|2|3 (Home grid and horizon glow), ?edge=silver|amber|lime (elbow border),
-    // ?logo=sage (sage web logo). ?floor=0, ?edge=none, ?logo=now go back to the live look.
+    // ?logo=sage (sage web logo), ?logo=sage-lime|sage-purple|sage-cut|deep-lime|deep-purple|deep-cut
+    // (sage or deeper sage, with a lime, purple or cut-out gap around the R's counter).
+    // ?floor=0, ?edge=none, ?logo=now go back to the live look.
     try {
       const qs = new URLSearchParams(location.search);
-      const allowed = { floor: /^[123]$/, edge: /^(silver|amber|lime)$/, logo: /^sage$/ };
+      const allowed = { floor: /^[123]$/, edge: /^(silver|amber|lime)$/, logo: /^(sage|sage-lime|sage-purple|sage-cut|deep-lime|deep-purple|deep-cut)$/ };
       for (const k in allowed) {
         const v = qs.get(k);
         if (v) sessionStorage.setItem("preview-" + k, v.toLowerCase());
@@ -65,13 +67,15 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
         if (kept && allowed[k].test(kept)) document.documentElement.classList.add(k + "-" + kept);
       }
     } catch (e) {}
-    // ?logo=sage: swap the logo pictures for the sage copies in /assets/preview/ (the masters and the
-    // live files are untouched).
-    if (document.documentElement.classList.contains("logo-sage")) {
+    // ?logo=...: swap the logo pictures for the preview copies in /assets/preview/ (the masters and
+    // the live files are untouched).
+    for (const c of document.documentElement.classList) {
+      if (!c.startsWith("logo-")) continue;
+      const v = c.slice(5);
       document.addEventListener("DOMContentLoaded", () => {
-        const sage = { "/assets/icon-192.png": "/assets/preview/icon-192-sage.png", "/assets/logo.png": "/assets/preview/logo-sage.png" };
+        const swap = { "/assets/icon-192.png": `/assets/preview/icon-192-${v}.png`, "/assets/logo.png": `/assets/preview/logo-${v}.png` };
         for (const img of document.querySelectorAll("img")) {
-          const to = sage[img.getAttribute("src")];
+          const to = swap[img.getAttribute("src")];
           if (to) img.setAttribute("src", to);
         }
       });
