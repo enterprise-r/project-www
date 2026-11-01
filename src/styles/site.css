@@ -1,8 +1,9 @@
 /* Self-hosted fonts (were Google Fonts): Audiowide 400, Rajdhani 500/600. */
-/* Enterprsr 1.002 (r-art fonts/enterprsr, OFL: public/fonts/Enterprsr-OFL.txt): only the letters of
+/* Enterprsr 1.001 (r-art fonts/enterprsr, OFL: public/fonts/Enterprsr-OFL.txt): only the letters of
    "Enterprise-R" (E n t e r p i s, hyphen, R, space). Used for the Home title, the showcase title and
-   the word in the corner lockup, always with ss03: the plain typographic R, not the logo R (the
-   font's default R). Preloaded in Base.astro (3 KB); until it arrives Audiowide stands in. */
+   "Enterprise-R" in the corner, always with ss01: the lone wide R (the sage R of the logo, U+E000),
+   not the logo R that is the font's default. Preloaded in Base.astro (3 KB); until it arrives
+   Audiowide stands in. */
 @font-face {
   font-family: 'Enterprsr';
   font-style: normal;
@@ -153,16 +154,19 @@ body {
   right: 0;
   bottom: 0;
   z-index: 1;
-  height: 52vh; /* a soft, wide glow that blends into the purple */
+  height: 61vh; /* a soft, wide glow that blends into the purple; follows the ground (was 52vh) */
   background:
     radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
     radial-gradient(ellipse 60% 70% at 50% 100%, rgba(240, 162, 2, 0.08), transparent 70%); /* accent amber */
 }
 
 .grid {
+  /* The ground: the floor's far edge (the horizon) is at 100vh - height - bottom = 41vh from the top
+     (Founder, 1 Nov: "raise the ground of the grid"; it was at 50vh, bottom -28%). Same size and
+     perspective, only moved up. */
   left: -60%;
   right: -60%;
-  bottom: -28%;
+  bottom: -19%;
   height: 78vh;
   overflow: hidden;
   transform: perspective(520px) rotateX(68deg);
@@ -376,20 +380,22 @@ body {
 }
 
 /* The rail and the buttons sit at the top of the page and scroll away with it. Only the corner
-   (elbow) stays on screen. At the top it shows the Enterprise-R lockup (the word in Enterprsr and
-   the colour logo R, same spacing as the Google logo); past a few pixels of scroll it morphs into
-   a logo-only bubble in the top-left corner, and a click on it then scrolls back up (where it
-   grows back into the Home link). The shrink is a clip-path; the lockup moves with transforms and
-   clip-paths only, so nothing around it moves and the motion stays on the compositor.
-   The morph (a slide): the word slides left off the screen edge while the logo glides left over
-   it; the word is clipped at the logo's moving left edge, so it tucks in behind the logo. */
+   (elbow) stays on screen. At the top it reads "Enterprise-R" in Enterprsr with the lone wide R
+   (ss01; silver word, sage R), no logo; past a few pixels of scroll it morphs into a small bubble in the top-left corner, and a
+   click on it then scrolls back up (where it grows back into the Home link). The shrink is a
+   clip-path; the lockup moves with transforms, clip-paths and opacity only, so nothing around it
+   moves and the motion stays on the compositor.
+   The morph (a slide): "Enterprise-" slides left off the screen edge while the R glides left and
+   grows into the bubble; the word is clipped at the R's moving left edge, so it tucks in behind it.
+   In the bubble the R becomes the colour logo (data-compact="logo") or stays the lone R ("r"). */
 :root {
   --lk-h: 1.7rem;        /* lockup band (font units -338..1649): the logo R is 83% of it */
   --lk-pl: 1rem;         /* padding left / right of the lockup in the big corner */
   --lk-pr: 1.15rem;
   --lk-k: 1.15;          /* logo size in the bubble, relative to the big corner */
   --logo-silver: #C8CDD2;
-  --elbow-w: calc(var(--lk-pl) + var(--lk-h) * 6.6301 + var(--lk-pr)); /* full corner: fits the lockup */
+  --lk-kr: 1.15;         /* lone R size in the bubble (as tall as the logo there) */
+  --elbow-w: calc(var(--lk-pl) + var(--lk-h) * 6.4786 + var(--lk-pr)); /* full corner: fits "Enterprise-R" */
   --elbow-h: 2.75rem;
   --elbow-r: 1.4rem;
   --elbow-c: 2.75rem;    /* compact: a square bubble around the logo */
@@ -397,9 +403,17 @@ body {
   --elbow-t: 0.34s;
   --elbow-curve: cubic-bezier(0.3, 0.7, 0.3, 1);
   --elbow-ease: var(--elbow-t) var(--elbow-curve);
-  /* Lockup geometry (font units / 1987 band units): word 68..11631, logo 11492..13242. */
+  /* Lockup geometry (font units / 1987 band units, ink): "Enterprise-" 68..11631, the lone R (R.alt,
+     ss01) pen at 11693 (hyphen kern included), its ink 11761..12941 x 0..1649 (as tall as the logo
+     R); the logo (1750 wide, shown only in the bubble) sits with its sage R on it (right edges). */
   --lk-ww: calc(var(--lk-h) * 5.8193);           /* word width */
-  --lk-mx: calc(var(--lk-pl) + var(--lk-h) * 5.7494); /* logo left in the big corner */
+  --lk-rx: calc(var(--lk-pl) + var(--lk-h) * 5.8848); /* lone R ink left in the big corner */
+  --lk-rw: calc(var(--lk-h) * 0.59386);          /* lone R ink width */
+  --lk-rh: calc(var(--lk-h) * 0.82989);          /* lone R ink height */
+  --lk-rt: var(--lk-top);                        /* lone R ink top (the band's top) */
+  --lk-rdx: calc((var(--elbow-c) - var(--lk-rw) * var(--lk-kr)) / 2 - var(--lk-rx));
+  --lk-rdy: calc((var(--elbow-c) - var(--lk-rh) * var(--lk-kr)) / 2 - var(--lk-rt));
+  --lk-mx: calc(var(--lk-pl) + var(--lk-h) * 5.5979); /* logo left (it is only shown in the bubble) */
   --lk-mw: calc(var(--lk-h) * 0.88072);          /* logo width */
   --lk-top: calc((var(--elbow-h) - var(--lk-h)) / 2);
   /* Logo move into the bubble (origin top-left): centred on its ink (top 83% of the band). */
@@ -470,22 +484,20 @@ body {
   border-radius: 0 0 var(--elbow-cr) 0;
 }
 
-/* The lockup: two inline SVGs on one band, placed absolutely over the fill. */
+/* The lockup: the word, the R and the (hidden) logo on one band, placed absolutely over the fill. */
 .lk { position: absolute; inset: 0; pointer-events: none; }
 .lk svg { position: absolute; top: var(--lk-top); height: var(--lk-h); display: block; overflow: visible; }
-/* The word is live text in Enterprsr (ss03, though "Enterprise-" has no R). Its em box is set so the
-   glyphs land where the old outlines did: font-size = band height x 2048/1987, the box starts 68
-   units (the E's side bearing) left of the ink, and the line box is shifted up 66 units so the
-   baseline sits at 1649/1987 of the band (the font's line box puts it at 1715). */
-.lk-word {
+/* The word and the R are live text in Enterprsr with ss01. Their em boxes are set so the glyphs sit
+   on the band: font-size = band height x 2048/1987, each box starts 68 units (the side bearing)
+   left of its ink, and the line box is shifted up 66 units so the baseline sits at 1649/1987 of the
+   band (the font's line box puts it at 1715). */
+.lk-word, .lk-r {
   position: absolute;
   top: calc(var(--lk-top) - var(--lk-h) * 66 / 1987);
   height: var(--lk-h);
-  left: calc(var(--lk-pl) - var(--lk-h) * 68 / 1987);
-  width: calc(var(--lk-ww) + var(--lk-h) * 68 / 1987);
   margin: 0;
   font-family: Enterprsr, Audiowide, sans-serif;
-  font-feature-settings: "ss03";
+  font-feature-settings: "ss01";
   font-kerning: normal;
   font-size: calc(var(--lk-h) * 2048 / 1987);
   line-height: var(--lk-h);
@@ -493,19 +505,37 @@ body {
   white-space: nowrap;
   display: block;
   color: var(--logo-silver);
+}
+.lk-word {
+  left: calc(var(--lk-pl) - var(--lk-h) * 68 / 1987);
+  width: calc(var(--lk-ww) + var(--lk-h) * 68 / 1987);
   transform-origin: 50% 50%;
   clip-path: inset(0 -1px 0 -1px);
 }
+/* The lone R, in the sage of the logo's R. Origin at its ink's top-left, so the bubble move is a
+   translate + scale. */
+.lk-r {
+  left: calc(var(--lk-rx) - var(--lk-h) * 68 / 1987);
+  color: var(--ui-green);
+  transform-origin: calc(var(--lk-h) * 68 / 1987) calc(var(--lk-h) * 66 / 1987);
+}
+.elbow.is-compact .lk-r { transform: translate(var(--lk-rdx), var(--lk-rdy)) scale(var(--lk-kr)); }
 .lk-mark {
   left: var(--lk-mx);
   width: var(--lk-mw);
   transform-origin: 0 0;
+  opacity: 0;
 }
 .elbow.is-compact .lk-mark { transform: translate(var(--lk-dx), var(--lk-dy)) scale(var(--lk-k)); }
+/* data-compact="logo": in the bubble the R hands over to the colour logo (a cross-fade on the way). */
+.elbow.is-compact .lk[data-compact="logo"] .lk-mark { opacity: 1; }
+.elbow.is-compact .lk[data-compact="logo"] .lk-r { opacity: 0; }
+/* data-compact="r": the lone sage R stays; the logo is never shown. */
+.lk[data-compact="r"] .lk-mark { display: none; }
 
 /* The slide: one clock for everything, so the word's clip edge rides the logo's left edge. The
    clip's right inset grows by (logo travel - word travel) and ends past the word's width. */
-.lk-word, .lk-mark {
+.lk-word, .lk-r, .lk-mark {
   transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity var(--elbow-ease);
 }
 .elbow.is-compact .lk-word {
@@ -514,11 +544,12 @@ body {
   opacity: 0;
   transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity calc(var(--elbow-t) * 0.5) linear calc(var(--elbow-t) * 0.4);
 }
+.elbow.is-compact .lk[data-compact="r"] .lk-word { clip-path: inset(0 calc(var(--lk-rdx) * -1 - var(--lk-slide)) 0 -1px); }
 
 /* Reduced motion, first paint and the frozen style guide: an instant swap. */
-.elbow.instant, .elbow.instant::before, .elbow.instant :is(.lk-word, .lk-mark),
-html.still .elbow, html.still .elbow::before, html.still .elbow :is(.lk-word, .lk-mark) { transition: none !important; }
-@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow :is(.lk-word, .lk-mark) { transition: none !important; } }
+.elbow.instant, .elbow.instant::before, .elbow.instant :is(.lk-word, .lk-r, .lk-mark),
+html.still .elbow, html.still .elbow::before, html.still .elbow :is(.lk-word, .lk-r, .lk-mark) { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow :is(.lk-word, .lk-r, .lk-mark) { transition: none !important; } }
 
 .rail {
   flex: 1;
@@ -603,6 +634,7 @@ html.still form .btn-primary { transition: none; }
 .term + .term { margin-top: 0.75rem; }
 .term > h1 { margin: 0; }
 .term > .prose { margin: 0; }
+.term > .prose + .prose { margin-top: 0.8em; }
 .term-head { padding: 0.45rem 1rem 0.55rem; }
 
 /* About page text */
@@ -712,10 +744,10 @@ h1 {
   color: transparent;
   filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
 }
-/* The Home title in Enterprsr with the plain R (ss03); the font's own spacing (as in the lockup). */
+/* The Home title in Enterprsr with the lone wide R (ss01); the font's own spacing (as in the lockup). */
 .home-title {
   font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
-  font-feature-settings: "ss03";
+  font-feature-settings: "ss01";
   font-kerning: normal;
   letter-spacing: 0.02em;
 }

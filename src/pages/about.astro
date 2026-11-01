@@ -3,8 +3,12 @@
 const page = {
   title: "About · Enterprise-R",
   description: "About Enterprise-R.",
-  heading: "About",
-  text: "Placeholder text, to be written.",
+  heading: "One Readable Source",
+  // One string per paragraph.
+  text: [
+    "Enterprise-R is opening the way for companies to run on AI and people, working from the same book and, as never before, by the book.",
+    "Orchestration and alignment. Agents and people hand work to each other. Work speed breaks all the limits.",
+  ],
 };
 
 import Base from "../layouts/Base.astro";
@@ -12,7 +16,7 @@ import Base from "../layouts/Base.astro";
 <Base title={page.title} description={page.description} backdrop="warpchi">
   <main class="lower-left">
     <div class="term term-head"><h1>{page.heading}</h1></div>
-    <div class="term"><p class="prose">{page.text}</p></div>
+    <div class="term">{page.text.map((t) => <p class="prose">{t}</p>)}</div>
   </main>
   <script is:inline slot="scripts">
     // Warm the cache with the Home logo so the way back down is ready.
