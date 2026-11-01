@@ -3,6 +3,7 @@
 // The colour options (A to D) live in src/styles/site.css ("Colour options").
 import Base from "../layouts/Base.astro";
 import "../styles/ui.css";
+import ElbowLockup from "../components/ElbowLockup.astro";
 
 const brand = [
   { name: "Lime", token: "--lime", hex: "#8DFF3C", use: "logo, hero glow" },
@@ -41,14 +42,14 @@ const named = [
       <h2 class="sc-label">Navigation bar</h2>
       <div class="sc-head-wrap">
         <div class="sc-head">
-          <a class="elbow" href="/" aria-label="Home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+          <a class="elbow" href="/" aria-label="Home"><ElbowLockup /></a>
           <span class="rail" aria-hidden="true"></span>
           <div class="lcars-group"><a class="lcars-btn" href="/" aria-current="page">Home</a><a class="lcars-btn" href="/about/">About</a></div>
         </div>
         <div class="sc-head sc-head-compact">
-          <a class="elbow is-compact" href="#top" aria-label="Back to top"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+          <a class="elbow is-compact" href="#top" aria-label="Back to top"><ElbowLockup /></a>
         </div>
-        <p class="sc-cap">On Home; on About the two buttons swap colours. The rail and buttons scroll away with the page; the corner stays and, once scrolled, tucks into the logo-only bubble (second row), which scrolls back to the top. At the top it is the Home link again. The corner carries the focused-field highlight (the E-mail field's focus look: Active border line plus soft lilac ring, tokens --hl-*) as its resting look.</p>
+        <p class="sc-cap">On Home; on About the two buttons swap colours. The rail and buttons scroll away with the page; the corner stays and, once scrolled, morphs into the logo-only bubble (second row: the word slides left and tucks in behind the logo), which scrolls back to the top. At the top it is the Home link again. The corner carries the focused-field highlight (the E-mail field's focus look: Active border line plus soft lilac ring, tokens --hl-*) as its resting look.</p>
       </div>
     </section>
 
@@ -56,14 +57,14 @@ const named = [
       <h2 class="sc-label">Buttons</h2>
       <div class="sc-states">
         <figure><span class="lcars-group"><a class="lcars-btn" href="#">Other</a></span><figcaption class="sc-cap">Other page</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#">Other</a></span><figcaption class="sc-cap">Other, hover (lime ring)</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#">Other</a></span><figcaption class="sc-cap">Other, focus (lime ring)</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#">Other</a></span><figcaption class="sc-cap">Other, hover</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#">Other</a></span><figcaption class="sc-cap">Other, focus</figcaption></figure>
         <figure><span class="lcars-group"><a class="lcars-btn" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current page</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, hover (lime ring)</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, focus (lime ring)</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, hover</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, focus</figcaption></figure>
         <figure><span class="lcars-group"><a class="lcars-btn" aria-disabled="true">Off</a></span><figcaption class="sc-cap">Disabled</figcaption></figure>
       </div>
-      <p class="sc-note">Action ring: action buttons (nav buttons, LCARS buttons, the primary Send) get the same thin lime (#8DFF3C) ring, a small gap off the button and following its shape, on hover and on keyboard focus. Tokens: --act-ring, --act-ring-w, --act-ring-off (site.css).</p>
+      <p class="sc-note">Normal highlight: navigation and other buttons, links and the Home corner get a lighter fill on hover and a 2 px near-white outline (--nav-focus, 3 px off) on keyboard focus. The lime ring is only for the primary action button of a form (see Forms).</p>
       <p class="sc-note" id="contrast">Label contrast: …</p>
     </section>
 
@@ -132,8 +133,16 @@ const named = [
           <div class="sc-field" style="grid-column: span 2"><label for="f-msg">Message</label><textarea class="sc-input" id="f-msg" placeholder="Your message"></textarea></div>
           <div class="sc-field"><span class="sc-cap">Options</span><div class="sc-checks"><label><input type="checkbox" checked> Updates</label><label><input type="checkbox"> Newsletter</label></div></div>
           <div class="sc-field"><span class="sc-cap">Channel</span><div class="sc-checks"><label><input type="radio" name="ch" checked> E-mail</label><label><input type="radio" name="ch"> Subspace</label></div></div>
-          <div class="sc-field" style="align-self:end"><span class="lcars-group" style="display:flex;gap:.3rem"><button class="lcars-btn" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button><button class="lcars-btn" type="button" style="border:0;font-family:inherit">Clear</button></span><span class="sc-help">Primary action uses the current-page green.</span></div>
+          <div class="sc-field" style="align-self:end"><span class="lcars-group" style="display:flex;gap:.3rem"><button class="lcars-btn btn-primary" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button><button class="lcars-btn" type="button" style="border:0;font-family:inherit">Clear</button></span><span class="sc-help">Primary action uses the current-page green.</span></div>
         </div>
+        <div class="sc-states sc-form-states">
+          <figure><span class="lcars-group"><button class="lcars-btn btn-primary" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary</figcaption></figure>
+          <figure><span class="lcars-group"><button class="lcars-btn btn-primary is-hover" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, hover (lime ring)</figcaption></figure>
+          <figure><span class="lcars-group"><button class="lcars-btn btn-primary is-focus" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, focus (lime ring)</figcaption></figure>
+          <figure><span class="lcars-group"><button class="lcars-btn is-hover" type="button" style="border:0;font-family:inherit">Clear</button></span><figcaption class="sc-cap">Other, hover</figcaption></figure>
+          <figure><span class="lcars-group"><button class="lcars-btn is-focus" type="button" style="border:0;font-family:inherit">Clear</button></span><figcaption class="sc-cap">Other, focus</figcaption></figure>
+        </div>
+        <p class="sc-note">Lime ring (#8DFF3C, 2 px, 3 px off, following the shape): only the form's primary action button (class <code>btn-primary</code> inside a form), on hover and on keyboard focus. Tokens: --act-ring, --act-ring-w, --act-ring-off (site.css).</p>
       </form>
     </section>
 

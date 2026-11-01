@@ -2,6 +2,7 @@
 // Shared page shell: <head>, favicons, fonts/CSS, backdrop and top navigation.
 // Images live in public/assets/ — replace a file with the same name to update it.
 import "../styles/site.css";
+import ElbowLockup from "../components/ElbowLockup.astro";
 
 interface Props {
   title: string;
@@ -86,7 +87,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   {backdrop === "space" && <div class="fx-strip" aria-hidden="true"></div>}
   {backdrop !== "none" && <div class="fx-sky" aria-hidden="true"></div>}
   <header class="site-head">
-    <a class="elbow" href="/" aria-label="Home" title="Home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+    <a class="elbow" href="/" aria-label="Home" title="Home"><ElbowLockup /></a>
     <span class="rail" aria-hidden="true"></span>
     <nav aria-label="Main">
       {links.map((l) => (
@@ -95,7 +96,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
     </nav>
   </header>
   <script is:inline>
-    // The corner (elbow) stays on screen. Scrolled down past a few pixels it shrinks to the logo
+    // The corner (elbow) stays on screen. Scrolled down past a few pixels it morphs into the logo
     // alone and becomes "Back to top": a click scrolls up (no page change), and at the top it is
     // the Home link again. A passive scroll listener, read once per frame; the look is all CSS.
     (() => {
