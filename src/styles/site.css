@@ -563,7 +563,7 @@ html.still .elbow, html.still .elbow::before, html.still .elbow :is(.lk-word, .l
   flex: 1;
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--nav-rail-from), var(--nav-rail-to));
+  background: var(--rail-line); /* badge-ring colours, all themes (Founder, 1 Nov); --nav-rail-* unused */
 }
 
 .site-head nav { display: flex; gap: 0.3rem; }
@@ -768,6 +768,8 @@ h1 {
   --ring-orange: #C38263;
   --ring-ice: #9EA2A6;
   --rule-line: linear-gradient(90deg, transparent, var(--ring-green) 12%, var(--ring-lilac) 31%, var(--ring-orange) 50%, var(--ring-lilac) 69%, var(--ring-ice) 88%, transparent);
+  /* The nav rail: the same run, solid green from the elbow, fading out only at the right end. */
+  --rail-line: linear-gradient(90deg, var(--ring-green), var(--ring-lilac) 25%, var(--ring-orange) 50%, var(--ring-lilac) 72%, var(--ring-ice) 88%, transparent);
 }
 
 .comms {
