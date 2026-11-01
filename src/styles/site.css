@@ -285,10 +285,11 @@ body {
   --nav-text: var(--ui-bg);              /* #0C040F, button labels */
   --nav-focus: #f2f6f3;                  /* the normal highlight: keyboard focus on links and buttons */
   /* Primary action ring (style-guide rule): ONLY the primary action button of a form (class
-     .btn-primary inside a <form>, e.g. Send / Submit) gets it, on hover and on keyboard focus: a
-     thin line in the brand core lime, a small gap off the button, following its shape. Navigation,
-     the Home corner and every other control keep the normal highlight (hover: a lighter fill;
-     keyboard focus: a 2 px --nav-focus outline, 3 px off). Change it here. */
+     .btn-primary inside a <form>, e.g. Send / Submit) gets it, and ONLY on hover: a thin line in
+     the brand core lime, a small gap off the button, following its shape. Keyboard focus on it is
+     the normal near-white outline, like every other control. Navigation, the Home corner and every
+     other control keep the normal highlight (hover: a lighter fill; keyboard focus: a 2 px
+     --nav-focus outline, 3 px off). Change it here. */
   --act-ring: var(--lime);               /* #8DFF3C */
   --act-ring-w: 2px;
   --act-ring-off: 3px;
@@ -523,14 +524,14 @@ html.still .elbow, html.still .elbow::before, html.still .elbow .lk svg { transi
 /* The normal highlight (nav buttons, LCARS buttons and other controls): hover lightens the fill
    (above); keyboard focus draws a 2 px near-white outline, 3 px off. */
 .lcars-btn:focus-visible, .lcars-btn.is-focus { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
-/* The primary action ring: only a form's primary button, on hover and on keyboard focus (not when
-   disabled). It replaces the normal focus outline there. */
-form .btn-primary {
+/* The primary action ring: only a form's primary button, only on hover (not when disabled).
+   Keyboard focus there keeps the normal near-white outline (the .lcars-btn rule above). */
+form .btn-primary:not(:focus-visible, .is-focus) {
   outline: var(--act-ring-w) solid transparent;
   outline-offset: var(--act-ring-off);
   transition: outline-color 0.15s;
 }
-form .btn-primary:not([aria-disabled="true"], :disabled):is(:hover, .is-hover, :focus-visible, .is-focus) { outline: var(--act-ring-w) solid var(--act-ring); outline-offset: var(--act-ring-off); }
+form .btn-primary:not([aria-disabled="true"], :disabled, :focus-visible, .is-focus):is(:hover, .is-hover) { outline: var(--act-ring-w) solid var(--act-ring); outline-offset: var(--act-ring-off); }
 html.still form .btn-primary { transition: none; }
 @media (prefers-reduced-motion: reduce) { form .btn-primary { transition: none; } }
 

@@ -12,13 +12,25 @@ main.showcase {
   max-width: 76rem;
   min-height: 0;
   margin: 0 auto;
-  padding: 5.5rem 2.5rem 5rem;
+  padding: 3rem 2.5rem 5rem;     /* no site header on the style guide */
   text-align: left;
   view-transition-name: none;
 }
 
 .showcase h2, .showcase h3, .showcase h4, .sc-h1 { margin: 0; font-weight: 400; }
+/* Enterprsr (r-art, OFL: public/fonts/Enterprsr-OFL.txt): only "Enterprise-R" (E n t e r p i s, hyphen,
+   R, space). Used for the showcase H1 only; the page loads it, the rest of the site does not. ss01 turns
+   the plain R into the lone sage R (not the logo R); without the font the fallback shows a plain R. */
+@font-face {
+  font-family: 'Enterprsr';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/Enterprsr-Regular.woff2) format('woff2');
+}
 .sc-title { background: none; filter: none; margin: 0 0 0.25rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 2.2rem; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
+.sc-title-brand { font-family: Enterprsr, Audiowide, Rajdhani, sans-serif; font-feature-settings: "ss01"; letter-spacing: 0; margin: 0; }
+.sc-subtitle { margin: 0.1rem 0 0.6rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--ui-fg-light); }
 .sc-lede { margin: 0 0 1.5rem; color: var(--ui-fg-light); font-size: 1.05rem; max-width: 52rem; }
 
 /* section labels: orange LCARS caps, like the palette sheet */
@@ -147,7 +159,7 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
 .sc-bd .photo.sc-wide { background-image: url(/assets/about-backdrop.jpg); background-position: 70% 50%; }
 
 @media (max-width: 900px) {
-  main.showcase { padding: 5rem 1rem 4rem; }
+  main.showcase { padding: 2rem 1rem 4rem; }
   .sc-grid.cols-2, .sc-grid.cols-3, .sc-form { grid-template-columns: 1fr; }
   .sc-states { grid-template-columns: repeat(2, auto); }
   .sc-type { grid-template-columns: 1fr; }

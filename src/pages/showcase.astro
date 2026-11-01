@@ -33,9 +33,10 @@ const named = [
   ["Bright magenta", "--ui-magenta-bright", "#D2BCED"], ["Brown", "--ui-brown", "#A88070"],
 ];
 ---
-<Base title="UI showcase · Enterprise-R" description="Enterprise-R UI style guide." backdrop="none" noindex>
+<Base title="UI showcase · Enterprise-R" description="Enterprise-R UI style guide." backdrop="none" noindex header={false}>
   <main class="showcase">
-    <h1 class="sc-title">UI showcase</h1>
+    <h1 class="sc-title sc-title-brand">Enterprise-R</h1>
+    <p class="sc-subtitle">UI showcase</p>
     <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette; the core brand colours stay for the logo and hero graphics. The page shows the live colours (option A); add <code>?option=b</code>, <code>c</code> or <code>d</code> to the address to preview another option.</p>
 
     <section class="sc-section">
@@ -64,7 +65,7 @@ const named = [
         <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, focus</figcaption></figure>
         <figure><span class="lcars-group"><a class="lcars-btn" aria-disabled="true">Off</a></span><figcaption class="sc-cap">Disabled</figcaption></figure>
       </div>
-      <p class="sc-note">Normal highlight: navigation and other buttons, links and the Home corner get a lighter fill on hover and a 2 px near-white outline (--nav-focus, 3 px off) on keyboard focus. The lime ring is only for the primary action button of a form (see Forms).</p>
+      <p class="sc-note">Normal highlight: navigation and other buttons, links and the Home corner get a lighter fill on hover and a 2 px near-white outline (--nav-focus, 3 px off) on keyboard focus. The lime ring is only for the primary action button of a form, on hover (see Forms).</p>
       <p class="sc-note" id="contrast">Label contrast: …</p>
     </section>
 
@@ -138,11 +139,11 @@ const named = [
         <div class="sc-states sc-form-states">
           <figure><span class="lcars-group"><button class="lcars-btn btn-primary" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary</figcaption></figure>
           <figure><span class="lcars-group"><button class="lcars-btn btn-primary is-hover" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, hover (lime ring)</figcaption></figure>
-          <figure><span class="lcars-group"><button class="lcars-btn btn-primary is-focus" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, focus (lime ring)</figcaption></figure>
+          <figure><span class="lcars-group"><button class="lcars-btn btn-primary is-focus" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, focus (normal outline)</figcaption></figure>
           <figure><span class="lcars-group"><button class="lcars-btn is-hover" type="button" style="border:0;font-family:inherit">Clear</button></span><figcaption class="sc-cap">Other, hover</figcaption></figure>
           <figure><span class="lcars-group"><button class="lcars-btn is-focus" type="button" style="border:0;font-family:inherit">Clear</button></span><figcaption class="sc-cap">Other, focus</figcaption></figure>
         </div>
-        <p class="sc-note">Lime ring (#8DFF3C, 2 px, 3 px off, following the shape): only the form's primary action button (class <code>btn-primary</code> inside a form), on hover and on keyboard focus. Tokens: --act-ring, --act-ring-w, --act-ring-off (site.css).</p>
+        <p class="sc-note">Lime ring (#8DFF3C, 2 px, 3 px off, following the shape): only the form's primary action button (class <code>btn-primary</code> inside a form), on hover only. Keyboard focus on it is the normal near-white outline (--nav-focus), like every other control. Tokens: --act-ring, --act-ring-w, --act-ring-off (site.css).</p>
       </form>
     </section>
 
