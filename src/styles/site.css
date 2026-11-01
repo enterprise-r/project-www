@@ -293,8 +293,8 @@ body {
    LCARS extended palette). Hover colours are the fills lightened by hand: the palette's
    "Bright green" is darker than its green. Change the colours here. */
 :root {
-  --nav-elbow: var(--ui-border);         /* #3F2C53, Inactive border: the frame is not a control, so it stays quiet */
-  --nav-elbow-hover: #4A3561;            /* the corner is still the Home link: a touch lighter on hover */
+  --nav-elbow: var(--ui-selection);      /* #41285B, the wide logo's pill (pill E, Founder 1 Nov) */
+  --nav-elbow-hover: #4E3270;            /* the pill is still the Home link: a touch lighter on hover */
   --nav-rail-from: var(--ui-border);     /* #3F2C53, flat */
   --nav-rail-to: var(--ui-border);
   --nav-current: var(--ui-green);        /* #77AF8A */
@@ -380,46 +380,56 @@ body {
 }
 
 /* The rail and the buttons sit at the top of the page and scroll away with it. Only the corner
-   (elbow) stays on screen. At the top it reads "Enterprise-R" in Enterprsr with the lone wide R
-   (ss01; silver word, sage R), no logo; past a few pixels of scroll it morphs into a small bubble in the top-left corner, and a
-   click on it then scrolls back up (where it grows back into the Home link). The shrink is a
-   clip-path; the lockup moves with transforms, clip-paths and opacity only, so nothing around it
-   moves and the motion stays on the compositor.
-   The morph (a slide): "Enterprise-" slides left off the screen edge while the R glides left and
-   grows into the bubble; the word is clipped at the R's moving left edge, so it tucks in behind it.
-   In the bubble the R becomes the colour logo (data-compact="logo") or stays the lone R ("r"). */
+   stays on screen. At the top it is the wide logo (Founder, 1 Nov, pill E): "Enterprise-" in
+   Enterprsr with ss01 (silver) and the lone wide R (sage, amber bowl) inside a deep lilac pill
+   #41285B with a 1px #BA9EDA rim (edge E1). Past a few pixels of scroll it turns into the plain
+   colour logo, with no shape behind it, in the top-left corner, and a click on it then scrolls back
+   up (where it grows back into the Home link).
+   The morph: the pill shrinks onto the logo's box and fades, "Enterprise-" fades fast while it is
+   clipped at the R's moving edge (it tucks in behind the R), and the R glides and grows into the
+   logo's place, cross-fading into it. Transforms, opacity and clip-paths only on the lockup; the pill animates its box. */
 :root {
   --lk-h: 1.7rem;        /* lockup band (font units -338..1649): the logo R is 83% of it */
-  --lk-pl: 1rem;         /* padding left / right of the lockup in the big corner */
-  --lk-pr: 1.15rem;
-  --lk-k: 1.15;          /* logo size in the bubble, relative to the big corner */
+  --pill-x: 0.5rem;      /* pill inset from the screen's left edge */
+  /* Pill E, standard padding (font units): band 1987 + 2 x 330 = 2647 tall, fully round ends,
+     side padding 0.62 x the radius (820.6) past the ink: 14514 x 2647 (5.4832 : 1). */
+  --pill-h: calc(var(--lk-h) * 1.33216);
+  --pill-w: calc(var(--pill-h) * 5.4832);
+  --pill-y: calc((var(--elbow-h) - var(--pill-h)) / 2);
+  --pill-rim: var(--ui-border-active);  /* #BA9EDA, 1px (edge E1) */
+  --lk-pl: calc(var(--pill-x) + var(--lk-h) * 0.41297); /* ink left of the word */
+  --lk-k: 1.15;          /* logo size in the compact state, relative to the big corner */
   --logo-silver: #C8CDD2;
-  --lk-kr: 1.15;         /* lone R size in the bubble (as tall as the logo there) */
-  --elbow-w: calc(var(--lk-pl) + var(--lk-h) * 6.4786 + var(--lk-pr)); /* full corner: fits "Enterprise-R" */
-  --elbow-h: 2.75rem;
-  --elbow-r: 1.4rem;
-  --elbow-c: 2.75rem;    /* compact: a square bubble around the logo */
-  --elbow-cr: 1.1rem;
+  --lk-kr: 1.15;         /* the R grows as tall as the logo on its way */
+  --elbow-w: calc(var(--pill-x) + var(--pill-w)); /* the corner's place in the row */
+  --elbow-h: 2.75rem;    /* the row */
+  --elbow-c: 2.75rem;    /* compact: the square the plain logo is centred in (and the click area) */
   --elbow-t: 0.34s;
   --elbow-curve: cubic-bezier(0.3, 0.7, 0.3, 1);
   --elbow-ease: var(--elbow-t) var(--elbow-curve);
   /* Lockup geometry (font units / 1987 band units, ink): "Enterprise-" 68..11631, the lone R (R.alt,
      ss01) pen at 11693 (hyphen kern included), its ink 11761..12941 x 0..1649 (as tall as the logo
-     R); the logo (1750 wide, shown only in the bubble) sits with its sage R on it (right edges). */
+     R); the logo (1750 wide, shown only when compact) sits with its sage R on it (right edges). */
   --lk-ww: calc(var(--lk-h) * 5.8193);           /* word width */
-  --lk-rx: calc(var(--lk-pl) + var(--lk-h) * 5.8848); /* lone R ink left in the big corner */
+  --lk-rx: calc(var(--lk-pl) + var(--lk-h) * 5.8848); /* lone R ink left */
   --lk-rw: calc(var(--lk-h) * 0.59386);          /* lone R ink width */
   --lk-rh: calc(var(--lk-h) * 0.82989);          /* lone R ink height */
-  --lk-rt: var(--lk-top);                        /* lone R ink top (the band's top) */
-  --lk-rdx: calc((var(--elbow-c) - var(--lk-rw) * var(--lk-kr)) / 2 - var(--lk-rx));
-  --lk-rdy: calc((var(--elbow-c) - var(--lk-rh) * var(--lk-kr)) / 2 - var(--lk-rt));
-  --lk-mx: calc(var(--lk-pl) + var(--lk-h) * 5.5979); /* logo left (it is only shown in the bubble) */
+  --lk-top: calc(var(--pill-y) + var(--lk-h) * 0.16608); /* band top inside the pill */
+  --lk-rt: var(--lk-top);
+  --lk-mx: calc(var(--lk-pl) + var(--lk-h) * 5.5979); /* logo left (shown only when compact) */
   --lk-mw: calc(var(--lk-h) * 0.88072);          /* logo width */
-  --lk-top: calc((var(--elbow-h) - var(--lk-h)) / 2);
-  /* Logo move into the bubble (origin top-left): centred on its ink (top 83% of the band). */
+  /* Logo move into the compact square (origin top-left): centred on its ink (top 83% of the band). */
   --lk-dx: calc((var(--elbow-c) - var(--lk-mw) * var(--lk-k)) / 2 - var(--lk-mx));
   --lk-dy: calc((var(--elbow-c) - var(--lk-h) * 0.82989 * var(--lk-k)) / 2 - var(--lk-top));
-  --lk-slide: 4rem;      /* slide: how far the word itself moves left */
+  /* The R lands on the logo's sage R: same right edge and top, as tall as the logo's ink. */
+  --lk-rdx: calc(var(--lk-dx) + var(--lk-mx) + (var(--lk-mw) - var(--lk-rw)) * var(--lk-k) - var(--lk-rx));
+  --lk-rdy: calc(var(--lk-dy) + var(--lk-top) - var(--lk-rt));
+  /* Where the pill ends up: the logo's box. */
+  --pill-cx: calc((var(--elbow-c) - var(--lk-mw) * var(--lk-k)) / 2);
+  --pill-cy: calc((var(--elbow-c) - var(--lk-rh) * var(--lk-k)) / 2);
+  --pill-cw: calc(var(--lk-mw) * var(--lk-k));
+  --pill-ch: calc(var(--lk-rh) * var(--lk-k));
+  --lk-slide: 0.5rem;    /* how far the word itself drifts left as it fades (it stays inside the pill) */
 }
 
 .site-head {
@@ -432,10 +442,11 @@ body {
   align-items: center;
   gap: 0.35rem;
   min-height: var(--elbow-h);
-  padding-left: calc(var(--elbow-w) + 0.35rem); /* the corner's place in the row; it is fixed on top */
+  padding-left: calc(var(--elbow-w) + 0.5rem); /* the corner's place in the row; it is fixed on top */
   padding-right: clamp(0.75rem, 2vw, 1.5rem);
 }
 
+/* The link box: the pill's box at the top, the logo's square when compact (the click area). */
 .elbow {
   position: relative;
   display: block;
@@ -443,29 +454,22 @@ body {
   flex: none;
   width: var(--elbow-w);
   height: var(--elbow-h);
-  /* The clip reaches the ring's width past the corner's open edges (right and bottom), so the
-     highlight's outer ring shows; the fill and the highlight are drawn by ::before below. */
-  clip-path: inset(0 calc(var(--hl-ring-w) * -1 - 1px) calc(var(--hl-ring-w) * -1 - 1px) 0 round 0 0 calc(var(--elbow-r) + var(--hl-ring-w) + 1px) 0);
-  transition: clip-path var(--elbow-ease);
 }
-/* The corner's fill (#3F2C53, the Inactive border, as the Google logo background) and its
-   focus-field highlight (the --hl-* tokens: the same line and ring as a focused field). The top
-   and left edges are the screen's, so the line sits just off screen there. It grows and shrinks
-   with the corner. */
+/* The pill: fill #41285B, 1px rim #BA9EDA. It shrinks onto the logo and fades when compact. */
 .elbow::before {
   content: "";
   position: absolute;
-  top: calc(var(--hl-line-w) * -1);
-  left: calc(var(--hl-line-w) * -1);
-  width: calc(var(--elbow-w) + var(--hl-line-w));
-  height: calc(var(--elbow-h) + var(--hl-line-w));
+  left: var(--pill-x);
+  top: var(--pill-y);
+  width: var(--pill-w);
+  height: var(--pill-h);
   box-sizing: border-box;
   background: var(--nav-elbow);
-  border: var(--hl-line-w) solid var(--hl-line);
-  border-radius: 0 0 var(--elbow-r) 0;
-  box-shadow: 0 0 0 var(--hl-ring-w) var(--hl-ring);
+  border: 1px solid var(--pill-rim);
+  border-radius: calc(var(--pill-h) / 2);
   pointer-events: none;
-  transition: width var(--elbow-ease), height var(--elbow-ease), border-radius var(--elbow-ease), background-color 0.15s;
+  transition: left var(--elbow-ease), top var(--elbow-ease), width var(--elbow-ease), height var(--elbow-ease),
+    border-radius var(--elbow-ease), opacity calc(var(--elbow-t) * 0.7) linear, background-color 0.15s;
 }
 .site-head .elbow {
   position: fixed;
@@ -475,25 +479,27 @@ body {
   view-transition-name: nav-elbow;
 }
 .elbow:hover::before { background-color: var(--nav-elbow-hover); }
-.elbow.is-compact {
-  clip-path: inset(0 calc(var(--elbow-w) - var(--elbow-c) - var(--hl-ring-w) - 1px) calc(var(--elbow-h) - var(--elbow-c) - var(--hl-ring-w) - 1px) 0 round 0 0 calc(var(--elbow-cr) + var(--hl-ring-w) + 1px) 0);
-}
+.elbow.is-compact { width: var(--elbow-c); height: var(--elbow-c); }
 .elbow.is-compact::before {
-  width: calc(var(--elbow-c) + var(--hl-line-w));
-  height: calc(var(--elbow-c) + var(--hl-line-w));
-  border-radius: 0 0 var(--elbow-cr) 0;
+  left: var(--pill-cx);
+  top: var(--pill-cy);
+  width: var(--pill-cw);
+  height: var(--pill-ch);
+  border-radius: calc(var(--pill-ch) / 4);
+  opacity: 0;
 }
 
-/* The lockup: the word, the R and the (hidden) logo on one band, placed absolutely over the fill. */
+/* The lockup: the word, the R and the (hidden) logo on one band, placed absolutely over the pill. */
 .lk { position: absolute; inset: 0; pointer-events: none; }
 .lk svg { position: absolute; top: var(--lk-top); height: var(--lk-h); display: block; overflow: visible; }
-/* The word and the R are live text in Enterprsr with ss01. Their em boxes are set so the glyphs sit
-   on the band: font-size = band height x 2048/1987, each box starts 68 units (the side bearing)
-   left of its ink, and the line box is shifted up 66 units so the baseline sits at 1649/1987 of the
-   band (the font's line box puts it at 1715). */
-.lk-word, .lk-r {
+/* The word is live text in Enterprsr with ss01. Its em box is set so the glyphs sit on the band:
+   font-size = band height x 2048/1987, the box starts 68 units (the side bearing) left of its ink,
+   and the line box is shifted up 66 units so the baseline sits at 1649/1987 of the band. */
+.lk-word {
   position: absolute;
   top: calc(var(--lk-top) - var(--lk-h) * 66 / 1987);
+  left: calc(var(--lk-pl) - var(--lk-h) * 68 / 1987);
+  width: calc(var(--lk-ww) + var(--lk-h) * 68 / 1987);
   height: var(--lk-h);
   margin: 0;
   font-family: Enterprsr, Audiowide, sans-serif;
@@ -505,46 +511,34 @@ body {
   white-space: nowrap;
   display: block;
   color: var(--logo-silver);
-}
-.lk-word {
-  left: calc(var(--lk-pl) - var(--lk-h) * 68 / 1987);
-  width: calc(var(--lk-ww) + var(--lk-h) * 68 / 1987);
   transform-origin: 50% 50%;
   clip-path: inset(0 -1px 0 -1px);
 }
-/* The lone R, in the sage of the logo's R. Origin at its ink's top-left, so the bubble move is a
-   translate + scale. */
-.lk-r {
+/* The lone R: an inline SVG of the R.alt outline (sage) over its own counter (amber), pen at 0,
+   so its box starts 68 units left of the ink. Origin at the ink's top-left: translate + scale. */
+.lk svg.lk-r {
   left: calc(var(--lk-rx) - var(--lk-h) * 68 / 1987);
-  color: var(--ui-green);
-  transform-origin: calc(var(--lk-h) * 68 / 1987) calc(var(--lk-h) * 66 / 1987);
+  width: calc(var(--lk-h) * 1316 / 1987);
+  transform-origin: calc(var(--lk-h) * 68 / 1987) 0;
 }
-.elbow.is-compact .lk-r { transform: translate(var(--lk-rdx), var(--lk-rdy)) scale(var(--lk-kr)); }
+.elbow.is-compact .lk-r { transform: translate(var(--lk-rdx), var(--lk-rdy)) scale(var(--lk-kr)); opacity: 0; }
 .lk-mark {
   left: var(--lk-mx);
   width: var(--lk-mw);
   transform-origin: 0 0;
   opacity: 0;
 }
-.elbow.is-compact .lk-mark { transform: translate(var(--lk-dx), var(--lk-dy)) scale(var(--lk-k)); }
-/* data-compact="logo": in the bubble the R hands over to the colour logo (a cross-fade on the way). */
-.elbow.is-compact .lk[data-compact="logo"] .lk-mark { opacity: 1; }
-.elbow.is-compact .lk[data-compact="logo"] .lk-r { opacity: 0; }
-/* data-compact="r": the lone sage R stays; the logo is never shown. */
-.lk[data-compact="r"] .lk-mark { display: none; }
+.elbow.is-compact .lk-mark { transform: translate(var(--lk-dx), var(--lk-dy)) scale(var(--lk-k)); opacity: 1; }
 
-/* The slide: one clock for everything, so the word's clip edge rides the logo's left edge. The
-   clip's right inset grows by (logo travel - word travel) and ends past the word's width. */
 .lk-word, .lk-r, .lk-mark {
   transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity var(--elbow-ease);
 }
 .elbow.is-compact .lk-word {
   transform: translateX(calc(var(--lk-slide) * -1));
-  clip-path: inset(0 calc(var(--lk-dx) * -1 - var(--lk-slide)) 0 -1px);
+  clip-path: inset(0 calc(var(--lk-rdx) * -1 - var(--lk-slide)) 0 -1px);
   opacity: 0;
-  transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity calc(var(--elbow-t) * 0.5) linear calc(var(--elbow-t) * 0.4);
+  transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity calc(var(--elbow-t) * 0.35) linear;
 }
-.elbow.is-compact .lk[data-compact="r"] .lk-word { clip-path: inset(0 calc(var(--lk-rdx) * -1 - var(--lk-slide)) 0 -1px); }
 
 /* Reduced motion, first paint and the frozen style guide: an instant swap. */
 .elbow.instant, .elbow.instant::before, .elbow.instant :is(.lk-word, .lk-r, .lk-mark),
@@ -604,19 +598,21 @@ html.still form .btn-primary { transition: none; }
   content: "";
   position: absolute;
   z-index: 1;
-  top: 4px;
-  left: 4px;
-  width: calc(var(--elbow-w) - 8px);
-  height: calc(var(--elbow-h) - 8px);
+  top: calc(var(--pill-y) - 4px);
+  left: calc(var(--pill-x) - 4px);
+  width: calc(var(--pill-w) + 8px);
+  height: calc(var(--pill-h) + 8px);
   border: 2px solid var(--nav-focus);
-  border-radius: 0 0 calc(var(--elbow-r) - 4px) 0;
+  border-radius: calc(var(--pill-h) / 2 + 4px);
   box-sizing: border-box;
   pointer-events: none;
 }
 .elbow.is-compact:focus-visible::after {
-  width: calc(var(--elbow-c) - 8px);
-  height: calc(var(--elbow-c) - 8px);
-  border-radius: 0 0 calc(var(--elbow-cr) - 4px) 0;
+  top: 2px;
+  left: 2px;
+  width: calc(var(--elbow-c) - 4px);
+  height: calc(var(--elbow-c) - 4px);
+  border-radius: 0.6rem;
 }
 
 /* Terminal panels: a small dark backing that hugs each block of text sitting on a picture,
@@ -797,7 +793,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 @media (max-width: 640px) {
   main { padding-top: 4.5rem; }
   /* The lockup at 1.25rem fits next to two 5.5rem buttons down to a 360px screen. */
-  :root { --lk-h: 1.25rem; --lk-pl: 0.55rem; --lk-pr: 0.65rem; --lk-k: 1.65; --lk-slide: 3rem; --elbow-h: 3.4rem; --elbow-r: 1.1rem; --elbow-c: 2.9rem; --elbow-cr: 0.95rem; }
+  :root { --lk-h: 1.25rem; --pill-x: 0.4rem; --lk-k: 1.65; --lk-slide: 0.4rem; --elbow-h: 3.4rem; --elbow-c: 2.9rem; }
   .site-head nav a, .lcars-btn { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
   .site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
   .site-head nav a:last-child, .lcars-group > .lcars-btn:last-child { border-top-right-radius: 1.375rem; border-bottom-right-radius: 1.375rem; }
