@@ -85,7 +85,9 @@
   --ui-fg-bright: #FFF3E6;
   --ui-yellow: #E4D58B;
   --ui-yellow-bright: #EFE3A6;
-  --ui-orange: #F4B965;          /* also Accent */
+  --ui-orange: #F4B965;          /* plain Orange: a palette colour, no longer the accent */
+  --ui-accent: #F0A202;          /* UI Accent: brand amber (palette option B). Other-page buttons, accent text, the logo bowl */
+  --ui-accent-hover: #F4BB46;    /* lighter amber for hover on accent fills */
   --ui-green: #77AF8A;
   --ui-green-bright: #659474;
   --ui-cyan: #96C5CF;
@@ -141,7 +143,7 @@ body {
   height: 52vh; /* a soft, wide glow that blends into the purple */
   background:
     radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
-    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(244, 185, 101, 0.08), transparent 70%);
+    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(240, 162, 2, 0.08), transparent 70%); /* accent amber */
 }
 
 .grid {
@@ -280,8 +282,8 @@ body {
   --nav-rail-to: var(--ui-border);
   --nav-current: var(--ui-green);        /* #77AF8A */
   --nav-current-hover: #8DC09E;
-  --nav-other: var(--ui-orange);         /* #F4B965 */
-  --nav-other-hover: #F7CA88;
+  --nav-other: var(--ui-accent);         /* #F0A202, label contrast 9.5:1 */
+  --nav-other-hover: var(--ui-accent-hover); /* #F4BB46, 11.6:1 */
   --nav-text: var(--ui-bg);              /* #0C040F, button labels */
   --nav-focus: #f2f6f3;                  /* the normal highlight: keyboard focus on links and buttons */
   /* Primary action ring (style-guide rule): ONLY the primary action button of a form (class
@@ -315,8 +317,8 @@ body {
   --nav-rail-to: var(--ui-border-active);
   --nav-current: var(--ui-green);
   --nav-current-hover: #8DC09E;
-  --nav-other: var(--ui-orange);
-  --nav-other-hover: #F7CA88;
+  --nav-other: var(--ui-accent);
+  --nav-other-hover: var(--ui-accent-hover);
   --nav-text: var(--ui-bg);
   --text-body: var(--ui-fg);
   --text-small: var(--ui-fg-light);
@@ -349,8 +351,8 @@ body {
   --nav-rail-to: var(--ui-magenta);
   --nav-current: #7CC376;        /* palette green 75% + brand lime 25% */
   --nav-current-hover: #96CF91;
-  --nav-other: var(--ui-orange);
-  --nav-other-hover: #F7CA88;
+  --nav-other: var(--ui-accent);
+  --nav-other-hover: var(--ui-accent-hover);
   --nav-text: var(--ui-bg-darker);
   --text-body: var(--ui-fg);
   --text-small: var(--ui-fg-light);
@@ -709,8 +711,8 @@ h1 {
 /* Home: a click anywhere lifts off (see index.astro), so the whole page shows the hand. */
 html:has(.liftoff-prompt) body { cursor: pointer; }
 
-/* The @ in the address, in the 'other page' button orange; the rest keeps the link colour. */
-.at { color: var(--ui-orange); }
+/* The @ in the address, in the accent amber of the 'other page' buttons; the rest keeps the link colour. */
+.at { color: var(--ui-accent); }
 
 .comms:hover {
   border-color: var(--ui-magenta-bright);

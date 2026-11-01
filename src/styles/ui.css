@@ -39,7 +39,7 @@ main.showcase {
   display: flex; align-items: center; gap: 0.75rem;
   margin-bottom: 1.1rem;
   font-family: Rajdhani, sans-serif; font-size: 0.95rem; font-weight: 700;
-  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-orange);
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent);
 }
 .sc-section > h2.sc-label::after { content: ""; flex: 1; height: 2px; border-radius: 1px; background: var(--ui-border); }
 
@@ -91,7 +91,7 @@ main.showcase {
 .sc-type h1 { margin: 0; font-size: 3.2rem; }
 .sc-h2 { font-family: Audiowide, Rajdhani, sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
 .sc-h3 { font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.45rem; letter-spacing: 0.05em; color: var(--ui-magenta); }
-.sc-h4 { font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-orange); }
+.sc-h4 { font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent); }
 .sc-body { margin: 0; font-size: 1.2rem; color: var(--text-body); max-width: 42rem; }
 .sc-small { margin: 0; font-size: 0.95rem; color: var(--text-small); }
 .showcase a.sc-link, .sc-link { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--ui-muted); text-underline-offset: 0.2em; }
@@ -130,7 +130,7 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
   border: 1px solid var(--ui-border); border-left: 4px solid var(--ui-magenta); border-radius: 0.6rem;
 }
 .sc-code .k { color: var(--ui-magenta); }
-.sc-code .v { color: var(--ui-orange); }
+.sc-code .v { color: var(--ui-accent); }
 .sc-code .c { color: var(--ui-fg-dark); }
 .sc-code .s { color: var(--ui-cyan); }
 .showcase :not(pre) > code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; }
@@ -143,11 +143,11 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
 .sc-bd-sky { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(196, 139, 255, 0.18), rgba(196, 139, 255, 0) 100%); }
 .sc-bd-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 45%;
   background:
-    radial-gradient(ellipse 90% 100% at 50% 100%, rgba(141, 255, 60, 0.34), rgba(141, 255, 60, 0.1) 42%, transparent 74%),
-    radial-gradient(ellipse 46% 80% at 50% 100%, rgba(240, 162, 2, 0.16), transparent 70%); }
+    radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
+    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(240, 162, 2, 0.08), transparent 70%); } /* as the Home horizon */
 .sc-bd-grid { position: absolute; left: -60%; right: -60%; bottom: -30%; height: 90%;
   transform: perspective(300px) rotateX(68deg); transform-origin: center top;
-  background-image: repeating-linear-gradient(90deg, var(--lime-dim) 0 1px, transparent 1px 40px), repeating-linear-gradient(0deg, var(--lime-dim) 0 1px, transparent 1px 40px);
+  background-image: repeating-linear-gradient(90deg, rgba(119, 175, 138, 0.34) 0 1px, transparent 1px 40px), repeating-linear-gradient(0deg, rgba(119, 175, 138, 0.34) 0 1px, transparent 1px 40px); /* the Home floor green */
   mask-image: linear-gradient(to bottom, transparent 0%, #000 40%); }
 .sc-bd .photo { position: absolute; inset: 0; view-transition-name: none; }
 .sc-bd .sc-bd-text .term p { margin: 0; }
