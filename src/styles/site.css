@@ -768,8 +768,8 @@ h1 {
   --ring-orange: #C38263;
   --ring-ice: #9EA2A6;
   --rule-line: linear-gradient(90deg, transparent, var(--ring-green) 12%, var(--ring-lilac) 31%, var(--ring-orange) 50%, var(--ring-lilac) 69%, var(--ring-ice) 88%, transparent);
-  /* The nav rail: the same run, solid green from the elbow, fading out only at the right end. */
-  --rail-line: linear-gradient(90deg, var(--ring-green), var(--ring-lilac) 25%, var(--ring-orange) 50%, var(--ring-lilac) 72%, var(--ring-ice) 88%, transparent);
+  /* The nav rail: the same run, fading in on the left as it fades out on the right. */
+  --rail-line: var(--rule-line);
 }
 
 .comms {
