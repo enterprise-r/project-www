@@ -5,14 +5,12 @@ import Base from "../layouts/Base.astro";
 import "../styles/ui.css";
 import ElbowLockup from "../components/ElbowLockup.astro";
 
-const brand = [
-  { name: "Lime", token: "--lime", hex: "#8DFF3C", use: "logo, hero glow" },
-  { name: "Deep lilac", token: "(nav corner today)", hex: "#573680", use: "logo backdrop" },
-  { name: "Lilac", token: "--lilac", hex: "#C48BFF", use: "sky glow" },
-  { name: "Amber", token: "--amber", hex: "#F0A202", use: "hero accents" },
-  { name: "Green", token: "--green", hex: "#0E6A3C", use: "logo shading" },
-  { name: "Silver", token: "--silver", hex: "#C8CDD2", use: "logo" },
-  { name: "Ink", token: "--ink", hex: "#0E0012", use: "page background" },
+const accent = [
+  { name: "Amber · Accent", token: "--ui-accent", hex: "#F0A202", use: "other-page buttons, accent text, logo bowl" },
+  { name: "Amber · Accent hover", token: "--ui-accent-hover", hex: "#F4BB46", use: "hover on accent fills" },
+];
+const extra = [
+  { name: "Lime", token: "--act-ring", hex: "#8DFF3C", use: "only the hover ring of a form's primary button" },
 ];
 const surfaces = [
   ["Darker background", "--ui-bg-darker", "#09030D"], ["Dark background", "--ui-bg-dark", "#0A030E"],
@@ -26,18 +24,19 @@ const foregrounds = [
 ];
 const named = [
   ["Yellow", "--ui-yellow", "#E4D58B"], ["Bright yellow", "--ui-yellow-bright", "#EFE3A6"],
-  ["Orange / Accent", "--ui-orange", "#F4B965"], ["Green", "--ui-green", "#77AF8A"],
+  ["Orange", "--ui-orange", "#F4B965"], ["Green", "--ui-green", "#77AF8A"],
   ["Bright green", "--ui-green-bright", "#659474"], ["Cyan", "--ui-cyan", "#96C5CF"],
   ["Bright cyan", "--ui-cyan-bright", "#CAD9E7"], ["Blue", "--ui-blue", "#A5ACE1"],
   ["Bright blue", "--ui-blue-bright", "#BDCBD9"], ["Magenta", "--ui-magenta", "#BA9EDA"],
   ["Bright magenta", "--ui-magenta-bright", "#D2BCED"], ["Brown", "--ui-brown", "#A88070"],
+  ["Red", "--ui-red", "#EC8790"], ["Bright red", "--ui-red-bright", "#FFA5AD"],
 ];
 ---
 <Base title="UI showcase · Enterprise-R" description="Enterprise-R UI style guide." backdrop="none" noindex header={false}>
   <main class="showcase">
     <h1 class="sc-title sc-title-brand">Enterprise-R</h1>
     <p class="sc-subtitle">UI showcase</p>
-    <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette; the core brand colours stay for the logo and hero graphics. The page shows the live colours (option A); add <code>?option=b</code>, <code>c</code> or <code>d</code> to the address to preview another option.</p>
+    <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette with brand amber as the accent; lime is only the hover ring of a form's primary button. The page shows the live colours (option A); add <code>?option=b</code>, <code>c</code> or <code>d</code> to the address to preview another option.</p>
 
     <section class="sc-section">
       <h2 class="sc-label">Navigation bar</h2>
@@ -72,15 +71,21 @@ const named = [
     <section class="sc-section">
       <h2 class="sc-label">Colours</h2>
       <div class="sc-brand-box">
-        <h3 class="sc-subhead" style="margin-top:0">Core brand · logo and hero graphics only</h3>
+        <h3 class="sc-subhead" style="margin-top:0">Accent · amber</h3>
         <div class="sc-swatches">
-          {brand.map((c) => (
-            <div class="sc-swatch"><i style={`background:${c.hex}`}></i><div><b>{c.name}</b><code>{c.hex}</code><small>{c.use}</small></div></div>
+          {accent.map((c) => (
+            <div class="sc-swatch"><i style={`background:var(${c.token})`}></i><div><b>{c.name}</b><code>{c.hex}</code><small>{c.token} · {c.use}</small></div></div>
           ))}
         </div>
-        <p class="sc-note">Too strong for interface parts. Do not recolour the logo.</p>
+        <h3 class="sc-subhead">Extra · lime</h3>
+        <div class="sc-swatches">
+          {extra.map((c) => (
+            <div class="sc-swatch"><i style={`background:var(${c.token})`}></i><div><b>{c.name}</b><code>{c.hex}</code><small>{c.token} · {c.use}</small></div></div>
+          ))}
+        </div>
+        <p class="sc-note">Labels on amber use the background ink #0C040F: 9.5:1 on #F0A202, 11.6:1 on the hover #F4BB46 (AA needs 4.5:1).</p>
       </div>
-      <h3 class="sc-subhead">LCARS extended UI palette · surfaces</h3>
+      <h3 class="sc-subhead">UI base · LCARS extended palette · surfaces</h3>
       <div class="sc-swatches">
         {surfaces.map(([n, t, h]) => (<div class="sc-swatch"><i style={`background:var(${t})`}></i><div><b>{n}</b><code>{h}</code><small>{t}</small></div></div>))}
       </div>
@@ -92,7 +97,6 @@ const named = [
       <div class="sc-swatches">
         {named.map(([n, t, h]) => (<div class="sc-swatch"><i style={`background:var(${t})`}></i><div><b>{n}</b><code>{h}</code><small>{t}</small></div></div>))}
       </div>
-      <p class="sc-note">Red and bright red from the theme are left out (no red).</p>
     </section>
 
     <section class="sc-section">
@@ -152,7 +156,7 @@ const named = [
       <pre class="sc-code"><code><span class="c">/* To adopt an option, copy its values into the nav and text block in site.css */</span>
 <span class="k">:root</span> {"{"}
   <span class="k">--nav-current</span>: <span class="v">var(--ui-green)</span>;   <span class="c">/* #77AF8A */</span>
-  <span class="k">--nav-other</span>: <span class="v">var(--ui-orange)</span>;    <span class="c">/* #F4B965 */</span>
+  <span class="k">--nav-other</span>: <span class="v">var(--ui-accent)</span>;    <span class="c">/* #F0A202 */</span>
   <span class="k">--text-body</span>: <span class="v">var(--ui-fg)</span>;        <span class="c">/* #E0E6E2 */</span>
 {"}"}
 <span class="c">// preview on any page</span>
@@ -162,7 +166,7 @@ location.search = <span class="s">"?option=b"</span>;</code></pre>
     <section class="sc-section">
       <h2 class="sc-label">Backdrops</h2>
       <div class="sc-grid cols-3">
-        <figure style="margin:0"><div class="sc-bd"><div class="sc-bd-sky"></div><div class="sc-bd-grid"></div><div class="sc-bd-floor"></div></div><figcaption class="sc-cap">Home: space, lilac sky, lime floor (brand)</figcaption></figure>
+        <figure style="margin:0"><div class="sc-bd"><div class="sc-bd-sky"></div><div class="sc-bd-grid"></div><div class="sc-bd-floor"></div></div><figcaption class="sc-cap">Home: space, lilac sky, green floor</figcaption></figure>
         <figure style="margin:0"><div class="sc-bd"><div class="photo warpchi sc-wide"></div></div><figcaption class="sc-cap">About picture, untouched (no scrim)</figcaption></figure>
         <figure style="margin:0"><div class="sc-bd"><div class="photo warpchi sc-wide"></div><div class="sc-bd-text"><div class="term term-head"><div class="about-heading">About</div></div><div class="term"><p>Text on a terminal panel, as on the page</p></div></div></div><figcaption class="sc-cap">About picture with terminal panels</figcaption></figure>
       </div>
