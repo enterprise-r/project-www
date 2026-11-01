@@ -12,7 +12,7 @@ main.showcase {
   max-width: 76rem;
   min-height: 0;
   margin: 0 auto;
-  padding: 5.5rem 2.5rem 5rem;
+  padding: 3rem 2.5rem 5rem;     /* no site header on the style guide */
   text-align: left;
   view-transition-name: none;
 }
@@ -147,7 +147,7 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
 .sc-bd .photo.sc-wide { background-image: url(/assets/about-backdrop.jpg); background-position: 70% 50%; }
 
 @media (max-width: 900px) {
-  main.showcase { padding: 5rem 1rem 4rem; }
+  main.showcase { padding: 2rem 1rem 4rem; }
   .sc-grid.cols-2, .sc-grid.cols-3, .sc-form { grid-template-columns: 1fr; }
   .sc-states { grid-template-columns: repeat(2, auto); }
   .sc-type { grid-template-columns: 1fr; }
