@@ -72,6 +72,13 @@
   --ui-muted: #7D6D91;
   --ui-border: #3F2C53;          /* Inactive border */
   --ui-border-active: #BA9EDA;   /* Active border */
+  /* Focus highlight: the double highlight of a focused field (a 1 px Active border line plus a soft
+     3 px lilac ring outside it). Shared by .sc-input:focus (ui.css) and the Home corner (.elbow),
+     so the two stay in step: change it here. */
+  --hl-line: var(--ui-border-active);
+  --hl-line-w: 1px;
+  --hl-ring-w: 3px;
+  --hl-ring: rgba(186, 158, 218, 0.25);
   --ui-fg-dark: #9385A5;
   --ui-fg: #E0E6E2;
   --ui-fg-light: #B6C1CC;
@@ -131,10 +138,10 @@ body {
   right: 0;
   bottom: 0;
   z-index: 1;
-  height: 34vh;
+  height: 52vh; /* a soft, wide glow that blends into the purple */
   background:
-    radial-gradient(ellipse 90% 100% at 50% 100%, rgba(141, 255, 60, 0.34), rgba(141, 255, 60, 0.1) 42%, transparent 74%),
-    radial-gradient(ellipse 46% 80% at 50% 100%, rgba(240, 162, 2, 0.16), transparent 70%);
+    radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
+    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(244, 185, 101, 0.08), transparent 70%);
 }
 
 .grid {
@@ -145,7 +152,7 @@ body {
   overflow: hidden;
   transform: perspective(520px) rotateX(68deg);
   transform-origin: center top;
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.45) 16%, #000 34%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 20%, rgba(0, 0, 0, 0.85) 40%, #000 80%, transparent 100%);
 }
 
 .veil {
@@ -154,18 +161,24 @@ body {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.55) 78%);
 }
 
+/* The floor: dense and fine, in the UI green (floor option 2). Change the cell, line and speed here;
+   the drift distance is one cell, so 40 px in 2 s keeps the grid at 20 px/s. */
 .sheet {
+  --cell: 40px;
+  --drift-time: 2s;
+  --floor-w: 0.6px;
+  --floor-line: rgba(119, 175, 138, 0.34);
   position: absolute;
   left: 0;
   right: 0;
-  top: -80px;
-  height: calc(100% + 160px);
+  top: calc(var(--cell) * -1);
+  height: calc(100% + var(--cell) * 2);
   background-image:
-    repeating-linear-gradient(90deg, transparent 0, var(--lime-dim) 1px, transparent 2px 80px),
-    repeating-linear-gradient(0deg, transparent 0, var(--lime-dim) 1px, transparent 2px 80px);
-  /* Lines are a 2 px soft ramp (same brightness overall as the old hard 1 px line), so a line
-     between two screen pixels shares out its light instead of snapping on and off: less shimmer. */
-  animation: drift 4s linear infinite; /* 80 px per cycle: 4 s = 20 px/s (12.3 s was 6.5 px/s) */
+    repeating-linear-gradient(90deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell)),
+    repeating-linear-gradient(0deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell));
+  /* Lines are a soft ramp twice the line width, so a line between two screen pixels shares out its
+     light instead of snapping on and off: less shimmer. */
+  animation: drift var(--drift-time) linear infinite;
   will-change: transform;
   backface-visibility: hidden; /* keep the sheet on its own composited layer */
 }
@@ -187,11 +200,32 @@ body {
 @media (max-aspect-ratio: 3/2) {
   .warpchi { background-position: 4.5% 40%; } /* 3:2 to 7:5: still the saucer and the fingertips */
 }
+/* 7:5 and narrower (4:3, square, portrait monitors and tablets), phones aside: the wide picture can't
+   keep both the ship and the hand, so a tall copy of it takes over: the picture untouched in the
+   middle band, extended upwards and downwards into a 9:16 picture with the picture's own sky, glow
+   and stars (scripts/build-about-tall.py). Drawn the width of the screen (cover fits the width down
+   to 9:16), it always shows the whole ship and the hand, centred, and only trims the extended sky.
+   Only these screens download it: AVIF or WebP where the browser takes them, JPEG otherwise; the
+   1600 px copy unless the screen is 1500 px wide or sharper than 1.5x.
+   .warm-tall is a 1 px element Home adds after load to fetch the same picture ahead of the lift-off. */
 @media (max-aspect-ratio: 7/5) {
-  .warpchi { background-position: 80% 50%; } /* 4:3, 5:4: the ship can't stay in, so the hand and the stream */
+  .warpchi, .warm-tall {
+    background-image: url(/assets/about-backdrop-tall-1600.jpg);
+    background-image: image-set(url(/assets/about-backdrop-tall-1600.avif) type("image/avif"), url(/assets/about-backdrop-tall-1600.webp) type("image/webp"), url(/assets/about-backdrop-tall-1600.jpg) type("image/jpeg"));
+  }
+  .warpchi { background-position: 50% 50%; }
 }
-@media (max-aspect-ratio: 3/4) {
-  .warpchi { background-image: url(/assets/about-backdrop-phone.jpg); background-position: 50% 25%; } /* portrait: phone master */
+@media (max-aspect-ratio: 7/5) and (min-resolution: 1.5dppx), (max-aspect-ratio: 7/5) and (min-width: 1500px) {
+  .warpchi, .warm-tall {
+    background-image: url(/assets/about-backdrop-tall.jpg);
+    background-image: image-set(url(/assets/about-backdrop-tall.avif) type("image/avif"), url(/assets/about-backdrop-tall.webp) type("image/webp"), url(/assets/about-backdrop-tall.jpg) type("image/jpeg"));
+  }
+}
+.warm-tall { position: fixed; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+/* Phones (portrait, narrower than 900 px): the phone master. */
+@media (max-aspect-ratio: 3/4) and (max-width: 899px) {
+  .warpchi { background-image: url(/assets/about-backdrop-phone.jpg); background-position: 50% 25%; }
+  .warm-tall { background-image: none; }
 }
 /* Phones: the wide picture as a strip for the lift-off camera pan (see "Lift-off" below). It sits
    hidden under the phone picture, lined up with it, and is only seen during the transition.
@@ -224,9 +258,14 @@ body {
     }
   }
 }
+/* Portrait screens 900 px and wider land on the tall picture, whose middle band IS the wide picture:
+   the strip ends exactly on that band (the width of the tall picture, centred), see the pan below. */
+@media (max-aspect-ratio: 3/4) and (min-width: 900px) {
+  .warpchi-pan, .fx-strip { top: calc(50vh - var(--pic-w) * 3.978 * 9 / 32); }
+}
 
 @keyframes drift {
-  to { transform: translate3d(0, 80px, 0); }
+  to { transform: translate3d(0, var(--cell), 0); }
 }
 
 /* Top navigation, LCARS style: the elbow is the home link, the blocks are the
@@ -245,6 +284,12 @@ body {
   --nav-other-hover: #F7CA88;
   --nav-text: var(--ui-bg);              /* #0C040F, button labels */
   --nav-focus: #f2f6f3;
+  /* Action ring (style-guide rule): action buttons (the nav buttons, LCARS buttons, the primary Send)
+     get the same ring on hover and on keyboard focus: a thin line in the brand core lime, a small
+     gap off the button, following its shape. Change it here. */
+  --act-ring: var(--lime);               /* #8DFF3C */
+  --act-ring-w: 2px;
+  --act-ring-off: 3px;
   --nav-disabled: var(--ui-border);
   --nav-disabled-text: var(--ui-fg-dark);
   /* Page text. The Home title uses the About heading's colour and glow (flat #77AF8A). */
@@ -348,11 +393,30 @@ body {
   flex: none;
   width: var(--elbow-w);
   height: var(--elbow-h);
-  background: var(--nav-elbow);
-  border-radius: 0 0 var(--elbow-r) 0;
-  clip-path: inset(0 0 0 0 round 0 0 var(--elbow-r) 0);
-  transition: clip-path var(--elbow-ease), background-color 0.15s;
+  /* The clip reaches the ring's width past the corner's open edges (right and bottom), so the
+     highlight's outer ring shows; the fill and the highlight are drawn by ::before below. */
+  clip-path: inset(0 calc(var(--hl-ring-w) * -1 - 1px) calc(var(--hl-ring-w) * -1 - 1px) 0 round 0 0 calc(var(--elbow-r) + var(--hl-ring-w) + 1px) 0);
+  transition: clip-path var(--elbow-ease);
 }
+/* The corner's fill and its focus-field highlight (the --hl-* tokens: the same line and ring as a
+   focused field). The top and left edges are the screen's, so the line sits just off screen there.
+   It grows and shrinks with the corner. */
+.elbow::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--hl-line-w) * -1);
+  left: calc(var(--hl-line-w) * -1);
+  width: calc(var(--elbow-w) + var(--hl-line-w));
+  height: calc(var(--elbow-h) + var(--hl-line-w));
+  box-sizing: border-box;
+  background: var(--nav-elbow);
+  border: var(--hl-line-w) solid var(--hl-line);
+  border-radius: 0 0 var(--elbow-r) 0;
+  box-shadow: 0 0 0 var(--hl-ring-w) var(--hl-ring);
+  pointer-events: none;
+  transition: width var(--elbow-ease), height var(--elbow-ease), border-radius var(--elbow-ease), background-color 0.15s;
+}
+.elbow img { position: relative; } /* over the fill */
 .site-head .elbow {
   position: fixed;
   top: 0;
@@ -361,15 +425,20 @@ body {
   view-transition-name: nav-elbow;
 }
 .elbow img { display: block; width: 1.85rem; height: auto; transition: transform var(--elbow-ease); }
-.elbow:hover { background: var(--nav-elbow-hover); }
+.elbow:hover::before { background-color: var(--nav-elbow-hover); }
 .elbow.is-compact {
-  clip-path: inset(0 calc(var(--elbow-w) - var(--elbow-c)) calc(var(--elbow-h) - var(--elbow-c)) 0 round 0 0 var(--elbow-cr) 0);
+  clip-path: inset(0 calc(var(--elbow-w) - var(--elbow-c) - var(--hl-ring-w) - 1px) calc(var(--elbow-h) - var(--elbow-c) - var(--hl-ring-w) - 1px) 0 round 0 0 calc(var(--elbow-cr) + var(--hl-ring-w) + 1px) 0);
+}
+.elbow.is-compact::before {
+  width: calc(var(--elbow-c) + var(--hl-line-w));
+  height: calc(var(--elbow-c) + var(--hl-line-w));
+  border-radius: 0 0 var(--elbow-cr) 0;
 }
 .elbow.is-compact img {
   transform: translate(calc((var(--elbow-c) - var(--elbow-w)) / 2), calc((var(--elbow-c) - var(--elbow-h)) / 2));
 }
-.elbow.instant, .elbow.instant img, html.still .elbow, html.still .elbow img { transition: none; }
-@media (prefers-reduced-motion: reduce) { .elbow, .elbow img { transition: none; } }
+.elbow.instant, .elbow.instant::before, .elbow.instant img, html.still .elbow, html.still .elbow::before, html.still .elbow img { transition: none; }
+@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow img { transition: none; } }
 
 .rail {
   flex: 1;
@@ -396,6 +465,9 @@ body {
   text-decoration: none;
   line-height: 1;
   border-radius: 0.25rem;
+  outline: var(--act-ring-w) solid transparent;
+  outline-offset: var(--act-ring-off);
+  transition: outline-color 0.15s;
 }
 .site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
 .site-head nav a:last-child, .lcars-group > .lcars-btn:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
@@ -403,14 +475,19 @@ body {
 .site-head nav a[aria-current="page"], .lcars-btn[aria-current="page"] { background: var(--nav-current); }
 .site-head nav a[aria-current="page"]:hover, .lcars-btn[aria-current="page"]:hover, .lcars-btn[aria-current="page"].is-hover { background: var(--nav-current-hover); }
 .lcars-btn[aria-disabled="true"] { background: var(--nav-disabled); color: var(--nav-disabled-text); cursor: not-allowed; }
-.lcars-btn:focus-visible, .lcars-btn.is-focus { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
+/* The action ring, on hover and on keyboard focus (not on a disabled button). */
+.site-head nav a:hover, .site-head nav a:focus-visible,
+.lcars-btn:not([aria-disabled="true"]):is(:hover, .is-hover, :focus-visible, .is-focus) { outline-color: var(--act-ring); }
+html.still :is(.site-head nav a, .lcars-btn) { transition: none; }
+@media (prefers-reduced-motion: reduce) { .site-head nav a, .lcars-btn { transition: none; } }
 
-.site-head a:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
+.site-head a:not(nav a):focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 3px; }
 /* The corner's focus ring is drawn inside it, so the clip never cuts it off. */
 .site-head a.elbow:focus-visible, a.elbow:focus-visible { outline: none; }
 .elbow:focus-visible::after {
   content: "";
   position: absolute;
+  z-index: 1;
   top: 4px;
   left: 4px;
   width: calc(var(--elbow-w) - 8px);
@@ -450,6 +527,11 @@ main.lower-left h1, .about-heading { background: var(--text-about-heading); -web
 /* About: heading lower-left, below the ship; portrait (3:4 and taller) keeps the centred layout */
 @media not all and (max-aspect-ratio: 3/4) {
   main.lower-left { align-items: flex-start; justify-content: flex-end; text-align: left; padding: 5.5rem 6vw 11vh; }
+}
+/* Portrait screens 900 px and wider (tall picture): the text starts just under the picture's middle
+   band, so it never sits on the ship or the hand. */
+@media (max-aspect-ratio: 3/4) and (min-width: 900px) {
+  main.lower-left { justify-content: flex-start; padding-top: calc(50vh + max(100vw, 100vh * 2560 / 4552) * 9 / 32 + 4vh); }
 }
 
 main {
@@ -733,6 +815,21 @@ html:has(.liftoff-prompt) { overscroll-behavior-y: none; } /* swipe down lifts o
     --drop-ground: 1s;
   }
 }
+/* Portrait screens 900 px and wider (vertical monitors, large tablets): the same pan, but it lands
+   on the tall picture, which shows the whole wide picture across the screen. The strip is then the
+   width of the tall picture (one screen, down to 9:16), so 1 unit is a quarter screen: it comes in
+   from the right edge with the ship's nose leading (left edge at 100% of the screen), shows the ship
+   with the hand still off to the right (30% -> 18%), then glides on to the whole picture (0%). */
+@media (max-aspect-ratio: 3/4) and (min-width: 900px) {
+  :root {
+    --pic-w: calc(max(100vw, 100vh * 2560 / 4552) / 3.978);
+    --pan-from: 2.489;          /* left edge at the right edge of the screen */
+    --pan-ship: -0.296;         /* left edge at 30%: the ship mid-screen */
+    --pan-ship-to: -0.773;      /* to 18% */
+    --pan-end: -1.489;          /* left edge at 0: lined up with the tall picture (don't change) */
+    --pan-edge: 2%;
+  }
+}
 
 @view-transition { navigation: auto; }
 
@@ -926,6 +1023,9 @@ html.still .liftoff-prompt { animation: none; opacity: 0.85; }
   94% { filter: brightness(0.82); }
   100% { filter: brightness(0.83); }
 }
+@media (max-aspect-ratio: 3/4) and (min-width: 900px) {
+  @keyframes pan-glide-dim { from, to { filter: none; } } /* the tall picture keeps the core: no dip */
+}
 @keyframes pan-glide-back { to { translate: calc((var(--pan-ship-to) - var(--pan-end)) * var(--pic-w)); } }
 @keyframes pan-cruise-back { to { transform: translateX(calc((var(--pan-ship) - var(--pan-ship-to)) / 3.978 * 100%)); } }
 @keyframes pan-out {
@@ -1090,80 +1190,3 @@ html.fx-in-down .liftoff-prompt { animation: lift-fade-in 0.4s linear calc(var(-
 @keyframes fx-rm { from { opacity: 0; } }
 html.fx-rm-out body { animation: lift-fade-out 0.2s linear both; }
 html.fx-rm-in body { animation: fx-rm 0.2s linear both; }
-
-
-/* ------------------------------------------------------------------------------------------
-   Proposals (previews only, the live look above is unchanged). Switched on per tab by the head
-   script in Base.astro: ?floor=1|2|3, ?edge=silver|amber|lime, ?logo=sage.
-   ------------------------------------------------------------------------------------------ */
-
-/* Home floor. Each keeps the grid speed at 20 px/s (drift distance = one cell). */
-@keyframes drift-cell { to { transform: translate3d(0, var(--cell), 0); } }
-html:is(.floor-1, .floor-2, .floor-3) .sheet {
-  background-image:
-    repeating-linear-gradient(90deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell)),
-    repeating-linear-gradient(0deg, transparent 0, var(--floor-line) var(--floor-w), transparent calc(var(--floor-w) * 2) var(--cell));
-  top: calc(var(--cell) * -1);
-  height: calc(100% + var(--cell) * 2);
-  animation: drift-cell var(--drift-time) linear infinite;
-}
-/* 1: toned. UI green instead of lime, a little denser, thinner, and fading out sooner with distance. */
-html.floor-1 { --cell: 64px; --drift-time: 3.2s; --floor-w: 0.8px; --floor-line: rgba(119, 175, 138, 0.42); }
-html.floor-1 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 22%, rgba(0, 0, 0, 0.8) 42%, #000 80%, transparent 100%); }
-html.floor-1 .horizon {
-  background:
-    radial-gradient(ellipse 90% 100% at 50% 100%, rgba(119, 175, 138, 0.28), rgba(119, 175, 138, 0.08) 42%, transparent 74%),
-    radial-gradient(ellipse 46% 80% at 50% 100%, rgba(240, 162, 2, 0.12), transparent 70%);
-}
-/* 2: dense and fine, with a softer, wider glow that blends into the purple. */
-html.floor-2 { --cell: 40px; --drift-time: 2s; --floor-w: 0.6px; --floor-line: rgba(119, 175, 138, 0.34); }
-html.floor-2 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 20%, rgba(0, 0, 0, 0.85) 40%, #000 80%, transparent 100%); }
-html.floor-2 .horizon {
-  height: 52vh;
-  background:
-    radial-gradient(ellipse 130% 100% at 50% 100%, rgba(119, 175, 138, 0.2), rgba(65, 40, 91, 0.22) 46%, transparent 82%),
-    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(244, 185, 101, 0.08), transparent 70%);
-}
-/* 3: calm. A faint grid in haze, the glow moved to lilac and teal (extended palette). */
-html.floor-3 { --cell: 64px; --drift-time: 3.2s; --floor-w: 0.8px; --floor-line: rgba(150, 197, 207, 0.22); }
-html.floor-3 .grid { mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.12) 26%, rgba(0, 0, 0, 0.55) 50%, #000 84%, transparent 100%); }
-html.floor-3 .veil { background: linear-gradient(to bottom, rgba(24, 12, 34, 0.55), rgba(12, 4, 15, 0.35) 45%, rgba(0, 0, 0, 0.5) 85%); }
-html.floor-3 .horizon {
-  height: 44vh;
-  background:
-    radial-gradient(ellipse 110% 100% at 50% 100%, rgba(186, 158, 218, 0.22), rgba(150, 197, 207, 0.08) 48%, transparent 80%),
-    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(150, 197, 207, 0.12), transparent 70%);
-}
-html.still:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; }
-@media (prefers-reduced-motion: reduce) { html:is(.floor-1, .floor-2, .floor-3) .sheet { animation: none; } }
-
-/* Elbow border. A thin 2 px line along the corner's two open edges (right and bottom, the others are
-   the screen edges), following its rounded corner; it shrinks and grows with the corner. The logo
-   is untouched. */
-html.edge-silver { --elbow-edge: #C8CDD2; } /* the logo's silver, sampled from the logo */
-html.edge-amber { --elbow-edge: #F0A202; }
-html.edge-lime { --elbow-edge: #8DFF3C; }
-html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--elbow-w);
-  height: var(--elbow-h);
-  border-right: 2px solid var(--elbow-edge);
-  border-bottom: 2px solid var(--elbow-edge);
-  border-bottom-right-radius: var(--elbow-r);
-  box-sizing: border-box;
-  pointer-events: none;
-  transition: width var(--elbow-ease), height var(--elbow-ease), border-bottom-right-radius var(--elbow-ease);
-}
-html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.is-compact::before {
-  width: var(--elbow-c);
-  height: var(--elbow-c);
-  border-bottom-right-radius: var(--elbow-cr);
-}
-html:is(.edge-silver, .edge-amber, .edge-lime) .elbow.instant::before,
-html.still:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; }
-@media (prefers-reduced-motion: reduce) { html:is(.edge-silver, .edge-amber, .edge-lime) .elbow::before { transition: none; } }
-
-/* Sage web logo: no CSS, see ?logo=sage in Base.astro (pictures in /assets/preview/). */

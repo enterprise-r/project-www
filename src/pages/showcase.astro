@@ -48,7 +48,7 @@ const named = [
         <div class="sc-head sc-head-compact">
           <a class="elbow is-compact" href="#top" aria-label="Back to top"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
         </div>
-        <p class="sc-cap">On Home; on About the two buttons swap colours. The rail and buttons scroll away with the page; the corner stays and, once scrolled, tucks into the logo-only bubble (second row), which scrolls back to the top. At the top it is the Home link again.</p>
+        <p class="sc-cap">On Home; on About the two buttons swap colours. The rail and buttons scroll away with the page; the corner stays and, once scrolled, tucks into the logo-only bubble (second row), which scrolls back to the top. At the top it is the Home link again. The corner carries the focused-field highlight (the E-mail field's focus look: Active border line plus soft lilac ring, tokens --hl-*) as its resting look.</p>
       </div>
     </section>
 
@@ -56,13 +56,14 @@ const named = [
       <h2 class="sc-label">Buttons</h2>
       <div class="sc-states">
         <figure><span class="lcars-group"><a class="lcars-btn" href="#">Other</a></span><figcaption class="sc-cap">Other page</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#">Other</a></span><figcaption class="sc-cap">Other, hover</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#">Other</a></span><figcaption class="sc-cap">Other, focus</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#">Other</a></span><figcaption class="sc-cap">Other, hover (lime ring)</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#">Other</a></span><figcaption class="sc-cap">Other, focus (lime ring)</figcaption></figure>
         <figure><span class="lcars-group"><a class="lcars-btn" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current page</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, hover</figcaption></figure>
-        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, focus</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-hover" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, hover (lime ring)</figcaption></figure>
+        <figure><span class="lcars-group"><a class="lcars-btn is-focus" href="#" aria-current="page">Current</a></span><figcaption class="sc-cap">Current, focus (lime ring)</figcaption></figure>
         <figure><span class="lcars-group"><a class="lcars-btn" aria-disabled="true">Off</a></span><figcaption class="sc-cap">Disabled</figcaption></figure>
       </div>
+      <p class="sc-note">Action ring: action buttons (nav buttons, LCARS buttons, the primary Send) get the same thin lime (#8DFF3C) ring, a small gap off the button and following its shape, on hover and on keyboard focus. Tokens: --act-ring, --act-ring-w, --act-ring-off (site.css).</p>
       <p class="sc-note" id="contrast">Label contrast: …</p>
     </section>
 

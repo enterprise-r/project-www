@@ -52,30 +52,6 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       const o = sessionStorage.getItem("colour-option");
       if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
     } catch (e) {}
-    // Proposal previews (see "Proposals" at the end of site.css), kept for this tab like ?option:
-    // ?floor=1|2|3 (Home grid and horizon glow), ?edge=silver|amber|lime (elbow border),
-    // ?logo=sage (sage web logo). ?floor=0, ?edge=none, ?logo=now go back to the live look.
-    try {
-      const qs = new URLSearchParams(location.search);
-      const allowed = { floor: /^[123]$/, edge: /^(silver|amber|lime)$/, logo: /^sage$/ };
-      for (const k in allowed) {
-        const v = qs.get(k);
-        if (v) sessionStorage.setItem("preview-" + k, v.toLowerCase());
-        const kept = sessionStorage.getItem("preview-" + k);
-        if (kept && allowed[k].test(kept)) document.documentElement.classList.add(k + "-" + kept);
-      }
-    } catch (e) {}
-    // ?logo=sage: swap the logo pictures for the sage copies in /assets/preview/ (the masters and the
-    // live files are untouched).
-    if (document.documentElement.classList.contains("logo-sage")) {
-      document.addEventListener("DOMContentLoaded", () => {
-        const sage = { "/assets/icon-192.png": "/assets/preview/icon-192-sage.png", "/assets/logo.png": "/assets/preview/logo-sage.png" };
-        for (const img of document.querySelectorAll("img")) {
-          const to = sage[img.getAttribute("src")];
-          if (to) img.setAttribute("src", to);
-        }
-      });
-    }
     // Lift-off fallback (see the script at the end of the body and the end of site.css): browsers
     // without cross-document view transitions get the second half of the move here, set before the
     // first paint so the page never flashes in its final state. The flag is set by the page just
