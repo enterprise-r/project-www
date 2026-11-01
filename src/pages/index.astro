@@ -10,7 +10,8 @@ const page = {
 };
 
 // 🖼️ Images: swap the file in public/assets/ (keep the same name).
-const logo = "/assets/logo.png";
+// The flat colour logo (silver mirrored R, sage R, amber #F0A202 bowl), not the round badge.
+const logo = "/assets/logo-color.svg";
 
 import Base from "../layouts/Base.astro";
 ---
@@ -43,9 +44,9 @@ import Base from "../layouts/Base.astro";
         <i style="--a:188deg;--n:21"></i>
         </div>
       </div>
-      <a class="liftoff-logo" href="/about/" aria-label="About Enterprise-R"><img class="logo" src={logo} width="1024" height="1024" alt=""></a>
+      <a class="liftoff-logo" href="/about/" aria-label="About Enterprise-R"><img class="logo" src={logo} width="1047" height="998" alt=""></a>
     </div>
-    <h1>{page.heading}</h1>
+    <h1 class="home-title">{page.heading}</h1>
     <a class="comms" href={`mailto:${page.email}`}>{page.email.split("@")[0]}<span class="at">@</span>{page.email.split("@")[1]}</a>
   </main>
   <a class="liftoff-prompt" href="/about/">{page.prompt}</a>
@@ -53,13 +54,21 @@ import Base from "../layouts/Base.astro";
     const root = document.documentElement;
     const mark = document.querySelector(".mark");
     const warp = document.querySelector(".warp");
+    // The streaks start at the logo's centre, measured from the warp layer's own box (not the
+    // screen): .warp is position: fixed, but while the Firefox lift-off fallback moves <main> with
+    // `translate` (html.fx-*), <main> becomes its containing block. Screen coordinates taken then
+    // put the burst 100vh too low and it stayed there (stars rising from the bottom, Firefox only).
+    // Re-measured whenever those classes change, on resize and once the logo has loaded.
     const placeWarp = () => {
       const box = mark.getBoundingClientRect();
-      warp.style.setProperty("--cx", `${box.left + box.width / 2}px`);
-      warp.style.setProperty("--cy", `${box.top + box.height / 2}px`);
+      const ref = warp.getBoundingClientRect();
+      warp.style.setProperty("--cx", `${box.left - ref.left + box.width / 2}px`);
+      warp.style.setProperty("--cy", `${box.top - ref.top + box.height / 2}px`);
     };
     placeWarp();
     addEventListener("resize", placeWarp);
+    addEventListener("load", placeWarp);
+    new MutationObserver(placeWarp).observe(root, { attributes: true, attributeFilter: ["class"] });
     // Lift-off triggers: the logo, the ABOUT button and the prompt are plain links to /about/
     // (the page transition itself is CSS, see "Lift-off" in site.css; browsers without it get
     // the fallback in Base.astro, window.liftTo). Two extra triggers here:

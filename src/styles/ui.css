@@ -18,16 +18,7 @@ main.showcase {
 }
 
 .showcase h2, .showcase h3, .showcase h4, .sc-h1 { margin: 0; font-weight: 400; }
-/* Enterprsr (r-art, OFL: public/fonts/Enterprsr-OFL.txt): only "Enterprise-R" (E n t e r p i s, hyphen,
-   R, space). Used for the showcase H1 only; the page loads it, the rest of the site does not. ss01 turns
-   the plain R into the lone sage R (not the logo R); without the font the fallback shows a plain R. */
-@font-face {
-  font-family: 'Enterprsr';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(/fonts/Enterprsr-Regular.woff2) format('woff2');
-}
+/* The showcase title in Enterprsr (@font-face in site.css) with ss01: the lone wide R, as on Home. */
 .sc-title { background: none; filter: none; margin: 0 0 0.25rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 2.2rem; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
 .sc-title-brand { font-family: Enterprsr, Audiowide, Rajdhani, sans-serif; font-feature-settings: "ss01"; letter-spacing: 0; margin: 0; }
 .sc-subtitle { margin: 0.1rem 0 0.6rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--ui-fg-light); }
