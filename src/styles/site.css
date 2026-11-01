@@ -365,11 +365,8 @@ body {
    a logo-only bubble in the top-left corner, and a click on it then scrolls back up (where it
    grows back into the Home link). The shrink is a clip-path; the lockup moves with transforms and
    clip-paths only, so nothing around it moves and the motion stays on the compositor.
-   Two morphs, picked by a class on <html> (?morph=slide|fold, see Base.astro):
-     slide: the word slides left off the screen edge while the logo glides left over it; the word is
-            clipped at the logo's moving left edge, so it tucks in behind the logo.
-     fold:  the word folds into its middle (clipped from both sides into the centre, slightly
-            squeezed and faded), then the logo glides to the corner; reversed on the way back. */
+   The morph (a slide): the word slides left off the screen edge while the logo glides left over
+   it; the word is clipped at the logo's moving left edge, so it tucks in behind the logo. */
 :root {
   --lk-h: 1.7rem;        /* lockup band (font units -338..1649): the logo R is 83% of it */
   --lk-pl: 1rem;         /* padding left / right of the lockup in the big corner */
@@ -474,35 +471,17 @@ body {
 }
 .elbow.is-compact .lk-mark { transform: translate(var(--lk-dx), var(--lk-dy)) scale(var(--lk-k)); }
 
-/* slide: one clock for everything, so the word's clip edge rides the logo's left edge. The
+/* The slide: one clock for everything, so the word's clip edge rides the logo's left edge. The
    clip's right inset grows by (logo travel - word travel) and ends past the word's width. */
-.morph-slide .lk-word, .morph-slide .lk-mark {
+.lk-word, .lk-mark {
   transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity var(--elbow-ease);
 }
-.morph-slide .elbow.is-compact .lk-word {
+.elbow.is-compact .lk-word {
   transform: translateX(calc(var(--lk-slide) * -1));
   clip-path: inset(0 calc(var(--lk-dx) * -1 - var(--lk-slide)) 0 -1px);
   opacity: 0;
   transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity calc(var(--elbow-t) * 0.5) linear calc(var(--elbow-t) * 0.4);
 }
-
-/* fold: the word folds into its middle first, then the corner and the logo tuck in; on the way
-   back the corner opens first and the word unfolds into it. */
-.morph-fold .elbow.is-compact .lk-word {
-  transform: scaleX(0.55);
-  clip-path: inset(0 50% 0 50%);
-  opacity: 0;
-}
-.morph-fold .lk-word {
-  transition: transform 0.24s var(--elbow-curve) 0.2s, clip-path 0.24s var(--elbow-curve) 0.2s, opacity 0.2s linear 0.22s;
-}
-.morph-fold .elbow.is-compact .lk-word {
-  transition: transform 0.22s cubic-bezier(0.5, 0, 0.7, 0.4), clip-path 0.22s cubic-bezier(0.5, 0, 0.7, 0.4), opacity 0.16s linear 0.06s;
-}
-.morph-fold .lk-mark { transition: transform var(--elbow-ease); }
-.morph-fold .elbow.is-compact .lk-mark { transition: transform var(--elbow-ease) 0.14s; }
-.morph-fold .elbow.is-compact { transition: clip-path var(--elbow-ease) 0.14s; }
-.morph-fold .elbow.is-compact::before { transition: width var(--elbow-ease) 0.14s, height var(--elbow-ease) 0.14s, border-radius var(--elbow-ease) 0.14s, background-color 0.15s; }
 
 /* Reduced motion, first paint and the frozen style guide: an instant swap. */
 .elbow.instant, .elbow.instant::before, .elbow.instant .lk svg,

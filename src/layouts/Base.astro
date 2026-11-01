@@ -53,15 +53,6 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       const o = sessionStorage.getItem("colour-option");
       if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
     } catch (e) {}
-    // Corner morph preview (see the corner in site.css): ?morph=slide|fold picks how the big
-    // "Enterprise-R" corner turns into the logo-only bubble on scroll, kept for this tab.
-    // slide (default): the word slides left and the logo glides over it; fold: the word folds into its middle.
-    try {
-      const m = new URLSearchParams(location.search).get("morph");
-      if (m) sessionStorage.setItem("morph", m.toLowerCase());
-      const v = sessionStorage.getItem("morph");
-      document.documentElement.classList.add(v === "fold" ? "morph-fold" : "morph-slide");
-    } catch (e) { document.documentElement.classList.add("morph-slide"); }
     // Lift-off fallback (see the script at the end of the body and the end of site.css): browsers
     // without cross-document view transitions get the second half of the move here, set before the
     // first paint so the page never flashes in its final state. The flag is set by the page just
