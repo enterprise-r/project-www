@@ -358,16 +358,39 @@ body {
 }
 
 /* The rail and the buttons sit at the top of the page and scroll away with it. Only the corner
-   (elbow) stays on screen: past a few pixels of scroll it tucks into a logo-only bubble in the
-   top-left corner, and a click on it then scrolls back up (where it grows back into the Home link).
-   The shrink is a clip-path plus a transform on the logo, so nothing around it moves. */
+   (elbow) stays on screen. At the top it shows the Enterprise-R lockup (the word in Enterprsr and
+   the colour logo R, same spacing as the Google logo); past a few pixels of scroll it morphs into
+   a logo-only bubble in the top-left corner, and a click on it then scrolls back up (where it
+   grows back into the Home link). The shrink is a clip-path; the lockup moves with transforms and
+   clip-paths only, so nothing around it moves and the motion stays on the compositor.
+   Two morphs, picked by a class on <html> (?morph=slide|fold, see Base.astro):
+     slide: the word slides left off the screen edge while the logo glides left over it; the word is
+            clipped at the logo's moving left edge, so it tucks in behind the logo.
+     fold:  the word folds into its middle (clipped from both sides into the centre, slightly
+            squeezed and faded), then the logo glides to the corner; reversed on the way back. */
 :root {
-  --elbow-w: 7.5rem;     /* full corner */
+  --lk-h: 1.7rem;        /* lockup band (font units -338..1649): the logo R is 83% of it */
+  --lk-pl: 1rem;         /* padding left / right of the lockup in the big corner */
+  --lk-pr: 1.15rem;
+  --lk-k: 1.15;          /* logo size in the bubble, relative to the big corner */
+  --logo-silver: #C8CDD2;
+  --elbow-w: calc(var(--lk-pl) + var(--lk-h) * 6.6301 + var(--lk-pr)); /* full corner: fits the lockup */
   --elbow-h: 2.75rem;
   --elbow-r: 1.4rem;
   --elbow-c: 2.75rem;    /* compact: a square bubble around the logo */
   --elbow-cr: 1.1rem;
-  --elbow-ease: 0.34s cubic-bezier(0.3, 0.7, 0.3, 1);
+  --elbow-t: 0.34s;
+  --elbow-curve: cubic-bezier(0.3, 0.7, 0.3, 1);
+  --elbow-ease: var(--elbow-t) var(--elbow-curve);
+  /* Lockup geometry (font units / 1987 band units): word 68..11631, logo 11492..13242. */
+  --lk-ww: calc(var(--lk-h) * 5.8193);           /* word width */
+  --lk-mx: calc(var(--lk-pl) + var(--lk-h) * 5.7494); /* logo left in the big corner */
+  --lk-mw: calc(var(--lk-h) * 0.88072);          /* logo width */
+  --lk-top: calc((var(--elbow-h) - var(--lk-h)) / 2);
+  /* Logo move into the bubble (origin top-left): centred on its ink (top 83% of the band). */
+  --lk-dx: calc((var(--elbow-c) - var(--lk-mw) * var(--lk-k)) / 2 - var(--lk-mx));
+  --lk-dy: calc((var(--elbow-c) - var(--lk-h) * 0.82989 * var(--lk-k)) / 2 - var(--lk-top));
+  --lk-slide: 4rem;      /* slide: how far the word itself moves left */
 }
 
 .site-head {
@@ -386,9 +409,7 @@ body {
 
 .elbow {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* logo centred in the corner, both ways */
+  display: block;
   align-self: flex-start;
   flex: none;
   width: var(--elbow-w);
@@ -398,9 +419,10 @@ body {
   clip-path: inset(0 calc(var(--hl-ring-w) * -1 - 1px) calc(var(--hl-ring-w) * -1 - 1px) 0 round 0 0 calc(var(--elbow-r) + var(--hl-ring-w) + 1px) 0);
   transition: clip-path var(--elbow-ease);
 }
-/* The corner's fill and its focus-field highlight (the --hl-* tokens: the same line and ring as a
-   focused field). The top and left edges are the screen's, so the line sits just off screen there.
-   It grows and shrinks with the corner. */
+/* The corner's fill (#3F2C53, the Inactive border, as the Google logo background) and its
+   focus-field highlight (the --hl-* tokens: the same line and ring as a focused field). The top
+   and left edges are the screen's, so the line sits just off screen there. It grows and shrinks
+   with the corner. */
 .elbow::before {
   content: "";
   position: absolute;
@@ -416,7 +438,6 @@ body {
   pointer-events: none;
   transition: width var(--elbow-ease), height var(--elbow-ease), border-radius var(--elbow-ease), background-color 0.15s;
 }
-.elbow img { position: relative; } /* over the fill */
 .site-head .elbow {
   position: fixed;
   top: 0;
@@ -424,7 +445,6 @@ body {
   z-index: 4;
   view-transition-name: nav-elbow;
 }
-.elbow img { display: block; width: 1.85rem; height: auto; transition: transform var(--elbow-ease); }
 .elbow:hover::before { background-color: var(--nav-elbow-hover); }
 .elbow.is-compact {
   clip-path: inset(0 calc(var(--elbow-w) - var(--elbow-c) - var(--hl-ring-w) - 1px) calc(var(--elbow-h) - var(--elbow-c) - var(--hl-ring-w) - 1px) 0 round 0 0 calc(var(--elbow-cr) + var(--hl-ring-w) + 1px) 0);
@@ -434,11 +454,58 @@ body {
   height: calc(var(--elbow-c) + var(--hl-line-w));
   border-radius: 0 0 var(--elbow-cr) 0;
 }
-.elbow.is-compact img {
-  transform: translate(calc((var(--elbow-c) - var(--elbow-w)) / 2), calc((var(--elbow-c) - var(--elbow-h)) / 2));
+
+/* The lockup: two inline SVGs on one band, placed absolutely over the fill. */
+.lk { position: absolute; inset: 0; pointer-events: none; }
+.lk svg { position: absolute; top: var(--lk-top); height: var(--lk-h); display: block; overflow: visible; }
+.lk-word {
+  left: var(--lk-pl);
+  width: var(--lk-ww);
+  color: var(--logo-silver);
+  transform-origin: 50% 50%;
+  clip-path: inset(0 -1px 0 -1px);
 }
-.elbow.instant, .elbow.instant::before, .elbow.instant img, html.still .elbow, html.still .elbow::before, html.still .elbow img { transition: none; }
-@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow img { transition: none; } }
+.lk-mark {
+  left: var(--lk-mx);
+  width: var(--lk-mw);
+  transform-origin: 0 0;
+}
+.elbow.is-compact .lk-mark { transform: translate(var(--lk-dx), var(--lk-dy)) scale(var(--lk-k)); }
+
+/* slide: one clock for everything, so the word's clip edge rides the logo's left edge. The
+   clip's right inset grows by (logo travel - word travel) and ends past the word's width. */
+.morph-slide .lk-word, .morph-slide .lk-mark {
+  transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity var(--elbow-ease);
+}
+.morph-slide .elbow.is-compact .lk-word {
+  transform: translateX(calc(var(--lk-slide) * -1));
+  clip-path: inset(0 calc(var(--lk-dx) * -1 - var(--lk-slide)) 0 -1px);
+  opacity: 0;
+  transition: transform var(--elbow-ease), clip-path var(--elbow-ease), opacity calc(var(--elbow-t) * 0.5) linear calc(var(--elbow-t) * 0.4);
+}
+
+/* fold: the word folds into its middle first, then the corner and the logo tuck in; on the way
+   back the corner opens first and the word unfolds into it. */
+.morph-fold .elbow.is-compact .lk-word {
+  transform: scaleX(0.55);
+  clip-path: inset(0 50% 0 50%);
+  opacity: 0;
+}
+.morph-fold .lk-word {
+  transition: transform 0.24s var(--elbow-curve) 0.2s, clip-path 0.24s var(--elbow-curve) 0.2s, opacity 0.2s linear 0.22s;
+}
+.morph-fold .elbow.is-compact .lk-word {
+  transition: transform 0.22s cubic-bezier(0.5, 0, 0.7, 0.4), clip-path 0.22s cubic-bezier(0.5, 0, 0.7, 0.4), opacity 0.16s linear 0.06s;
+}
+.morph-fold .lk-mark { transition: transform var(--elbow-ease); }
+.morph-fold .elbow.is-compact .lk-mark { transition: transform var(--elbow-ease) 0.14s; }
+.morph-fold .elbow.is-compact { transition: clip-path var(--elbow-ease) 0.14s; }
+.morph-fold .elbow.is-compact::before { transition: width var(--elbow-ease) 0.14s, height var(--elbow-ease) 0.14s, border-radius var(--elbow-ease) 0.14s, background-color 0.15s; }
+
+/* Reduced motion, first paint and the frozen style guide: an instant swap. */
+.elbow.instant, .elbow.instant::before, .elbow.instant .lk svg,
+html.still .elbow, html.still .elbow::before, html.still .elbow .lk svg { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow .lk svg { transition: none !important; } }
 
 .rail {
   flex: 1;
@@ -670,8 +737,8 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 
 @media (max-width: 640px) {
   main { padding-top: 4.5rem; }
-  :root { --elbow-w: 3.6rem; --elbow-h: 3.4rem; --elbow-r: 1.1rem; --elbow-c: 2.9rem; --elbow-cr: 0.95rem; }
-  .elbow img { width: 1.6rem; }
+  /* The lockup at 1.25rem fits next to two 5.5rem buttons down to a 360px screen. */
+  :root { --lk-h: 1.25rem; --lk-pl: 0.55rem; --lk-pr: 0.65rem; --lk-k: 1.65; --lk-slide: 3rem; --elbow-h: 3.4rem; --elbow-r: 1.1rem; --elbow-c: 2.9rem; --elbow-cr: 0.95rem; }
   .site-head nav a, .lcars-btn { min-width: 5.5rem; height: 2.75rem; padding-bottom: 0.3rem; } /* 44px tap targets */
   .site-head nav a:first-child, .lcars-group > .lcars-btn:first-child { border-top-left-radius: 1.375rem; border-bottom-left-radius: 1.375rem; }
   .site-head nav a:last-child, .lcars-group > .lcars-btn:last-child { border-top-right-radius: 1.375rem; border-bottom-right-radius: 1.375rem; }

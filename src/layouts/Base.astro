@@ -2,6 +2,7 @@
 // Shared page shell: <head>, favicons, fonts/CSS, backdrop and top navigation.
 // Images live in public/assets/ — replace a file with the same name to update it.
 import "../styles/site.css";
+import ElbowLockup from "../components/ElbowLockup.astro";
 
 interface Props {
   title: string;
@@ -52,6 +53,15 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
       const o = sessionStorage.getItem("colour-option");
       if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
     } catch (e) {}
+    // Corner morph preview (see the corner in site.css): ?morph=slide|fold picks how the big
+    // "Enterprise-R" corner turns into the logo-only bubble on scroll, kept for this tab.
+    // slide (default): the word slides left and the logo glides over it; fold: the word folds into its middle.
+    try {
+      const m = new URLSearchParams(location.search).get("morph");
+      if (m) sessionStorage.setItem("morph", m.toLowerCase());
+      const v = sessionStorage.getItem("morph");
+      document.documentElement.classList.add(v === "fold" ? "morph-fold" : "morph-slide");
+    } catch (e) { document.documentElement.classList.add("morph-slide"); }
     // Lift-off fallback (see the script at the end of the body and the end of site.css): browsers
     // without cross-document view transitions get the second half of the move here, set before the
     // first paint so the page never flashes in its final state. The flag is set by the page just
@@ -86,7 +96,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   {backdrop === "space" && <div class="fx-strip" aria-hidden="true"></div>}
   {backdrop !== "none" && <div class="fx-sky" aria-hidden="true"></div>}
   <header class="site-head">
-    <a class="elbow" href="/" aria-label="Home" title="Home"><img src="/assets/icon-192.png" width="192" height="192" alt=""></a>
+    <a class="elbow" href="/" aria-label="Home" title="Home"><ElbowLockup /></a>
     <span class="rail" aria-hidden="true"></span>
     <nav aria-label="Main">
       {links.map((l) => (
@@ -95,7 +105,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
     </nav>
   </header>
   <script is:inline>
-    // The corner (elbow) stays on screen. Scrolled down past a few pixels it shrinks to the logo
+    // The corner (elbow) stays on screen. Scrolled down past a few pixels it morphs into the logo
     // alone and becomes "Back to top": a click scrolls up (no page change), and at the top it is
     // the Home link again. A passive scroll listener, read once per frame; the look is all CSS.
     (() => {

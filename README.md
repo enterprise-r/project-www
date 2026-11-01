@@ -37,3 +37,5 @@ python3 scripts/build-assets.py      # R_ART_DIR=…, --badge/--mark SVG, --back
 ```
 
 `logo.png` is `source/logo-badge-large.svg`; the favicons and icons are `source/logo-refined.svg` fitted to a transparent square. `og-image.jpg` (the 1200×630 link preview) is the WarpChi wallpaper (`art/warpchi.jpg`, from Drive `Wallpapers/`) with the mark small in the top-left corner.
+
+The Enterprise-R lockup in the top-left corner (`src/components/ElbowLockup.astro`) is inline SVG, not a web font: the word "Enterprise-" is drawn from the Enterprsr font (r-art, spacing and kerning from the built font) and the R is the full-colour logo. Inline SVG is pixel-exact at any size, the colour R cannot come from a font, and the font files stay out of this public repo. On scroll the corner morphs into the logo-only bubble; `?morph=slide` (default) or `?morph=fold` picks the motion (see the corner in `src/styles/site.css`).
