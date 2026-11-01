@@ -29,6 +29,7 @@ const named = [
   ["Bright cyan", "--ui-cyan-bright", "#CAD9E7"], ["Blue", "--ui-blue", "#A5ACE1"],
   ["Bright blue", "--ui-blue-bright", "#BDCBD9"], ["Magenta", "--ui-magenta", "#BA9EDA"],
   ["Bright magenta", "--ui-magenta-bright", "#D2BCED"], ["Brown", "--ui-brown", "#A88070"],
+  ["Red", "--ui-red", "#EC8790"], ["Bright red", "--ui-red-bright", "#FFA5AD"],
 ];
 ---
 <Base title="UI showcase · Enterprise-R" description="Enterprise-R UI style guide." backdrop="none" noindex header={false}>
@@ -96,7 +97,6 @@ const named = [
       <div class="sc-swatches">
         {named.map(([n, t, h]) => (<div class="sc-swatch"><i style={`background:var(${t})`}></i><div><b>{n}</b><code>{h}</code><small>{t}</small></div></div>))}
       </div>
-      <p class="sc-note">Red and bright red from the theme are left out (no red).</p>
     </section>
 
     <section class="sc-section">

@@ -62,7 +62,7 @@
 
 /* LCARS extended UI palette (the Founder's theme index, r-art/palettes/lcars-extended):
    toned-down colours for interface parts. The core brand colours above stay for the
-   logo and hero graphics. Red and bright red are left out (no-red rule). */
+   logo and hero graphics. */
 :root {
   --ui-bg-darker: #09030D;
   --ui-bg-dark: #0A030E;
@@ -97,6 +97,8 @@
   --ui-magenta: #BA9EDA;
   --ui-magenta-bright: #D2BCED;
   --ui-brown: #A88070;
+  --ui-red: #EC8790;
+  --ui-red-bright: #FFA5AD;
 }
 
 * { box-sizing: border-box; }
