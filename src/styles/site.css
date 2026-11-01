@@ -1,4 +1,15 @@
 /* Self-hosted fonts (were Google Fonts): Audiowide 400, Rajdhani 500/600. */
+/* Enterprsr 1.002 (r-art fonts/enterprsr, OFL: public/fonts/Enterprsr-OFL.txt): only the letters of
+   "Enterprise-R" (E n t e r p i s, hyphen, R, space). Used for the Home title, the showcase title and
+   the word in the corner lockup, always with ss03: the plain typographic R, not the logo R (the
+   font's default R). Preloaded in Base.astro (3 KB); until it arrives Audiowide stands in. */
+@font-face {
+  font-family: 'Enterprsr';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/Enterprsr-Regular.woff2) format('woff2');
+}
 @font-face {
   font-family: 'Audiowide';
   font-style: normal;
@@ -303,8 +314,8 @@ body {
   --text-body: var(--ui-fg);             /* #E0E6E2, About paragraph */
   --text-small: var(--ui-fg-light);      /* #B6C1CC, small print: the e-mail pill on Home */
   --text-link: var(--ui-magenta-bright); /* #D2BCED, links in running text */
-  --text-prompt: var(--ui-green);        /* #77AF8A, "lift off" prompt on Home */
-  --text-prompt-glow: rgba(119, 175, 138, 0.55);
+  --text-prompt: var(--lime);            /* #8DFF3C, "Click or press Enter" prompt on Home (Founder, 1 Nov) */
+  --text-prompt-glow: rgba(141, 255, 60, 0.55);
   --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green)); /* flat #77AF8A */
   --text-about-heading-glow: rgba(119, 175, 138, 0.3);
 }
@@ -462,9 +473,25 @@ body {
 /* The lockup: two inline SVGs on one band, placed absolutely over the fill. */
 .lk { position: absolute; inset: 0; pointer-events: none; }
 .lk svg { position: absolute; top: var(--lk-top); height: var(--lk-h); display: block; overflow: visible; }
+/* The word is live text in Enterprsr (ss03, though "Enterprise-" has no R). Its em box is set so the
+   glyphs land where the old outlines did: font-size = band height x 2048/1987, the box starts 68
+   units (the E's side bearing) left of the ink, and the line box is shifted up 66 units so the
+   baseline sits at 1649/1987 of the band (the font's line box puts it at 1715). */
 .lk-word {
-  left: var(--lk-pl);
-  width: var(--lk-ww);
+  position: absolute;
+  top: calc(var(--lk-top) - var(--lk-h) * 66 / 1987);
+  height: var(--lk-h);
+  left: calc(var(--lk-pl) - var(--lk-h) * 68 / 1987);
+  width: calc(var(--lk-ww) + var(--lk-h) * 68 / 1987);
+  margin: 0;
+  font-family: Enterprsr, Audiowide, sans-serif;
+  font-feature-settings: "ss03";
+  font-kerning: normal;
+  font-size: calc(var(--lk-h) * 2048 / 1987);
+  line-height: var(--lk-h);
+  letter-spacing: 0;
+  white-space: nowrap;
+  display: block;
   color: var(--logo-silver);
   transform-origin: 50% 50%;
   clip-path: inset(0 -1px 0 -1px);
@@ -489,9 +516,9 @@ body {
 }
 
 /* Reduced motion, first paint and the frozen style guide: an instant swap. */
-.elbow.instant, .elbow.instant::before, .elbow.instant .lk svg,
-html.still .elbow, html.still .elbow::before, html.still .elbow .lk svg { transition: none !important; }
-@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow .lk svg { transition: none !important; } }
+.elbow.instant, .elbow.instant::before, .elbow.instant :is(.lk-word, .lk-mark),
+html.still .elbow, html.still .elbow::before, html.still .elbow :is(.lk-word, .lk-mark) { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .elbow, .elbow::before, .elbow :is(.lk-word, .lk-mark) { transition: none !important; } }
 
 .rail {
   flex: 1;
@@ -605,7 +632,8 @@ main {
 }
 
 .mark {
-  --logo: min(14.5rem, 62vw);
+  /* The flat logo has no badge ring around it, so it is drawn a little smaller than the old badge (14.5rem, 62vw). */
+  --logo: min(12.5rem, 52vw);
   position: relative;
   width: var(--logo);
   display: grid;
@@ -618,7 +646,8 @@ main {
   display: block;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 0 16px rgba(141, 255, 60, 0.45));
+  /* The company logo glows from the bottom (brand rule): the lime glow sits under it. */
+  filter: drop-shadow(0 0.7rem 1rem rgba(141, 255, 60, 0.42)) drop-shadow(0 0 0.35rem rgba(141, 255, 60, 0.2));
 }
 
 .warp {
@@ -683,6 +712,13 @@ h1 {
   color: transparent;
   filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
 }
+/* The Home title in Enterprsr with the plain R (ss03); the font's own spacing (as in the lockup). */
+.home-title {
+  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
+  font-feature-settings: "ss03";
+  font-kerning: normal;
+  letter-spacing: 0.02em;
+}
 
 /* Underline of the Home prompt: the colour run of the agent-badge ring, read clockwise from its
    green (sampled from badges/hotbit.jpg): green, lilac, copper orange, lilac, ice. */
@@ -741,7 +777,7 @@ html:has(.liftoff-prompt) body { cursor: pointer; }
 }
 
 /* Lift-off prompt on Home, bottom centre. The wording lives in src/pages/index.astro (page.prompt). */
-.liftoff-logo { display: block; border-radius: 50%; }
+.liftoff-logo { display: block; border-radius: 0.75rem; }
 .liftoff-logo:focus-visible { outline: 2px solid var(--nav-focus); outline-offset: 6px; }
 .liftoff-prompt {
   position: fixed;
