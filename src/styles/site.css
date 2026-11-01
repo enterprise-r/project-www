@@ -381,8 +381,8 @@ body {
 
 /* The rail and the buttons sit at the top of the page and scroll away with it. Only the corner
    stays on screen. At the top it is the wide logo (Founder, 1 Nov, pill E): "Enterprise-" in
-   Enterprsr with ss01 (silver) and the lone wide R (sage, amber bowl) inside a deep lilac pill
-   #41285B with a 1px #BA9EDA rim (edge E1). Past a few pixels of scroll it turns into the plain
+   Enterprsr with ss01 (silver) and the lone wide R (sage, amber bowl) inside a flat deep lilac
+   pill #41285B, no rim and no glow (edge E0). Past a few pixels of scroll it turns into the plain
    colour logo, with no shape behind it, in the top-left corner, and a click on it then scrolls back
    up (where it grows back into the Home link).
    The morph: the pill shrinks onto the logo's box and fades, "Enterprise-" fades fast while it is
@@ -396,7 +396,6 @@ body {
   --pill-h: calc(var(--lk-h) * 1.33216);
   --pill-w: calc(var(--pill-h) * 5.4832);
   --pill-y: calc((var(--elbow-h) - var(--pill-h)) / 2);
-  --pill-rim: var(--ui-border-active);  /* #BA9EDA, 1px (edge E1) */
   --lk-pl: calc(var(--pill-x) + var(--lk-h) * 0.41297); /* ink left of the word */
   --lk-k: 1.15;          /* logo size in the compact state, relative to the big corner */
   --logo-silver: #C8CDD2;
@@ -455,7 +454,7 @@ body {
   width: var(--elbow-w);
   height: var(--elbow-h);
 }
-/* The pill: fill #41285B, 1px rim #BA9EDA. It shrinks onto the logo and fades when compact. */
+/* The pill: flat fill #41285B, no rim, no glow (edge E0, Founder 1 Nov). It shrinks onto the logo and fades when compact. */
 .elbow::before {
   content: "";
   position: absolute;
@@ -465,7 +464,6 @@ body {
   height: var(--pill-h);
   box-sizing: border-box;
   background: var(--nav-elbow);
-  border: 1px solid var(--pill-rim);
   border-radius: calc(var(--pill-h) / 2);
   pointer-events: none;
   transition: left var(--elbow-ease), top var(--elbow-ease), width var(--elbow-ease), height var(--elbow-ease),
