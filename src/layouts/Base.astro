@@ -12,8 +12,10 @@ interface Props {
   backdrop?: "space" | "warpchi" | "none";
   // Keep the page out of search engines (the style guide).
   noindex?: boolean;
+  // Show the LCARS site header (corner, rail, nav). The /showcase/ style guide turns it off.
+  header?: boolean;
 }
-const { title, description, backdrop = "space", noindex = false } = Astro.props;
+const { title, description, backdrop = "space", noindex = false, header = true } = Astro.props;
 
 // Top navigation: add a page here to get a new button.
 const links = [
@@ -86,7 +88,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   {backdrop === "warpchi" && <div class="photo warpchi" aria-hidden="true"></div>}
   {backdrop === "space" && <div class="fx-strip" aria-hidden="true"></div>}
   {backdrop !== "none" && <div class="fx-sky" aria-hidden="true"></div>}
-  <header class="site-head">
+  {header && <header class="site-head">
     <a class="elbow" href="/" aria-label="Home" title="Home"><ElbowLockup /></a>
     <span class="rail" aria-hidden="true"></span>
     <nav aria-label="Main">
@@ -94,7 +96,7 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
         <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
       ))}
     </nav>
-  </header>
+  </header>}
   <script is:inline>
     // The corner (elbow) stays on screen. Scrolled down past a few pixels it morphs into the logo
     // alone and becomes "Back to top": a click scrolls up (no page change), and at the top it is
