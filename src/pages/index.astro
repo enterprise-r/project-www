@@ -3,22 +3,11 @@
 const page = {
   title: "Enterprise-R",
   description: "Enterprise-R.",
-  heading: "Enterprise-R",
 };
 
-// Drive assets: wide lockup on large screens, compact lockup on narrow ones.
-const logoWide = "/assets/logo-wide.svg";
-const logoCompact = "/assets/logo-compact.svg";
+// The page heading is the title in the bar (layouts/Base.astro).
 import Base from "../layouts/Base.astro";
-import "../styles/home.css";
 ---
 <Base title={page.title} description={page.description}>
-  <main class="home">
-    <h1>
-      <picture>
-        <source media="(max-width: 640px)" srcset={logoCompact} width="320" height="128">
-        <img class="home-logo" src={logoWide} width="320" height="61" alt={page.heading}>
-      </picture>
-    </h1>
-  </main>
+  <main class="home"></main>
 </Base>

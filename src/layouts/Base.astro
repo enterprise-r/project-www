@@ -1,5 +1,5 @@
 ---
-// Shared page shell: head, favicons and the top navigation.
+// Shared page shell: head, favicons and the title bar with the navigation.
 import "../styles/palette.css";
 import "../styles/base.css";
 
@@ -20,6 +20,11 @@ const links = [
 const homeLink = links[0];
 const restLinks = links.slice(1);
 const here = Astro.url.pathname.replace(/\/?$/, "/");
+// The title in the bar is the page heading on Home only.
+const Brand = here === homeLink.href ? "h1" : "div";
+// Drive assets: wide lockup on large screens, compact lockup on narrow ones.
+const logoWide = "/assets/logo-wide.svg";
+const logoCompact = "/assets/logo-compact.svg";
 const url = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
 ---
@@ -51,6 +56,12 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
 <body>
   {header && (
     <header>
+      <Brand class="brand">
+        <picture>
+          <source media="(max-width: 640px)" srcset={logoCompact} width="320" height="128">
+          <img class="brand-logo" src={logoWide} width="320" height="61" alt="Enterprise-R">
+        </picture>
+      </Brand>
       <a class="home-btn" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
       <nav aria-label="Main">
         {restLinks.length > 0 && (
