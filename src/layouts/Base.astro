@@ -2,7 +2,6 @@
 // Shared page shell: head, favicons and the title bar with the navigation.
 import "../styles/palette.css";
 import "../styles/base.css";
-import { bannerId } from "../banner.js";
 
 interface Props {
   title: string;
@@ -34,8 +33,9 @@ const Brand = here === homeLink.href ? "h1" : "div";
 const logoWide = "/assets/logo-wide.svg";
 const logoCompact = "/assets/logo-compact.svg";
 const url = new URL(Astro.url.pathname, Astro.site).href;
-// Link preview: the 3x1 banner (Drive assets/banners/banner-3x1.png) at 1200 px.
-const ogImage = `https://lh3.googleusercontent.com/d/${bannerId}=w1200`;
+// Link preview: the wide logo (Drive assets/logos/logo-wide-og.png) at 1200 px.
+const ogImageId = "1binIYD5CI1QtKts1edLhLuyQDIaYR72M";
+const ogImage = `https://lh3.googleusercontent.com/d/${ogImageId}=w1200`;
 ---
 <!DOCTYPE html>
 <html lang="en">
