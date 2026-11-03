@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Render the site's derived images in public/assets/.
 
-Lockups, favicons and logo.png are the files from Google Drive assets/logos/.
-Copy those in. This script does not draw them. It builds the link-preview JPEG
-and the About backdrops.
+Lockups and favicons are the files from Google Drive assets/logos/.
+Copy those in. This script does not draw them. It builds the link-preview JPEG.
 
 Needs: pip install cairosvg pillow   (cairosvg needs the system cairo library)
 Usage: python3 scripts/build-assets.py [--mark SVG] [--backdrop JPG] [--backdrop-phone JPG] [--out DIR]
@@ -29,12 +28,6 @@ OUT = arg("--out", os.path.join(ROOT, "public", "assets"))
 
 # Link preview (og:image): the backdrop scaled and centre-cropped to 1200x630, the mark small in the top-left corner.
 OG = {"name": "og-image.jpg", "size": (1200, 630), "mark": 72, "margin": 32, "quality": 85}
-# About page backgrounds: each master as a web JPEG, at most `width` px wide (never scaled up).
-# The showcase terminal sample uses about-backdrop.jpg (ui.css, .sc-wide).
-ABOUT = [
-    {"name": "about-backdrop.jpg",       "src": BACKDROP,       "width": 2560, "quality": 84},
-    {"name": "about-backdrop-phone.jpg", "src": BACKDROP_PHONE, "width": 1290, "quality": 80},
-]
 
 RENDER_PX = 4096  # the long side the SVG is rasterised at to find its visible bounds
 DIRECT_MAX = 48   # sizes up to this are drawn straight at the target size (crisp favicons);
@@ -104,12 +97,3 @@ mark = fitted(SOURCES["mark"], m)
 bg.paste(mark, (OG["margin"], OG["margin"]), mark)
 bg.save(os.path.join(OUT, OG["name"]), quality=OG["quality"], optimize=True, progressive=True)
 print(f'{OG["name"]:22s} {W}x{H}  <- {os.path.relpath(BACKDROP, ROOT) if BACKDROP.startswith(ROOT) else BACKDROP} + mark')
-
-for a in ABOUT:
-    if not os.path.isfile(a["src"]):
-        sys.exit(f'backdrop not found: {a["src"]}')
-    about = Image.open(a["src"]).convert("RGB")
-    if about.width > a["width"]:
-        about = about.resize((a["width"], round(about.height * a["width"] / about.width)), Image.LANCZOS)
-    about.save(os.path.join(OUT, a["name"]), quality=a["quality"], optimize=True, progressive=True)
-    print(f'{a["name"]:22s} {about.width}x{about.height}  <- {os.path.relpath(a["src"], ROOT)}')
