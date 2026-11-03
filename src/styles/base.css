@@ -88,9 +88,14 @@
 
 * { box-sizing: border-box; }
 
-html, body { height: 100%; }
+html { height: 100%; }
 
+body { min-height: 100%; }
+
+/* Header, page, footer. The page fills the gap, so the footer stays at the bottom. */
 body {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   background-color: var(--ui-bg);
   color: var(--ui-fg);
@@ -109,6 +114,23 @@ header {
   min-height: var(--bar-h);
   background-color: var(--ui-border);
 }
+
+/* Footer: the same stripe, slim, with the social links at the right. */
+footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--nav-pad) clamp(0.75rem, 2vw, 1.5rem);
+  background-color: var(--ui-border);
+}
+
+/* Social links are bare black icons. Amber on hover, like the nav. */
+.social { display: flex; gap: 1rem; }
+
+footer a { display: flex; color: var(--ink); }
+
+footer a:hover { color: var(--nav-other-hover); }
+
+footer svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
 
 .brand {
   grid-column: 2;
@@ -212,6 +234,7 @@ header nav a[aria-current="page"]:hover,
 }
 
 header nav a:focus-visible,
+footer a:focus-visible,
 .home-btn:focus-visible,
 .lcars-btn:focus-visible,
 .lcars-btn.is-focus {
@@ -232,6 +255,8 @@ header nav a:focus-visible,
 }
 
 h1, h2, h3 { color: var(--text-heading); }
+
+main { flex: 1 0 auto; width: 100%; }
 
 main a { color: var(--text-link); }
 
