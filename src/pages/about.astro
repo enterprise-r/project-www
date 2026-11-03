@@ -12,6 +12,8 @@ const page = {
   ],
 };
 
+const [user, domain] = page.email.split("@");
+
 import Base from "../layouts/Base.astro";
 import "../styles/about.css";
 ---
@@ -19,6 +21,8 @@ import "../styles/about.css";
   <main>
     <h1>{page.heading}</h1>
     {page.text.map((t) => <p>{t}</p>)}
-    <p>Contact <a href={`mailto:${page.email}`}>{page.email}</a>.</p>
+    <p class="email">
+      <a href={`mailto:${page.email}`}>{user}<span class="email-at">@</span>{domain}</a>
+    </p>
   </main>
 </Base>

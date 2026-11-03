@@ -16,3 +16,16 @@ h1 {
 }
 
 p { margin: 0 0 1rem; }
+
+/* The email: centred in a bubble with the inactive border. The @ is orange. */
+.email { margin-top: 2rem; text-align: center; }
+
+.email a {
+  display: inline-block;
+  padding: 0.4rem 1.1rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.email-at { color: var(--ui-orange); }
