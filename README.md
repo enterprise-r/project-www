@@ -10,10 +10,11 @@ Where this sits: the logos, palette and fonts are built by [enterprise-r/project
 |---|---|
 | Page text (title, heading…) | the `page` block at the top of the page in `src/pages/` |
 | Contact email | the `page` block in `src/pages/about.astro` |
-| Homepage title image | `public/assets/logo-wide.svg` (large screens) and `public/assets/logo-compact.svg` (narrow) |
+| Title bar logo | `src/layouts/Base.astro`, showing `public/assets/logo-wide.svg` (large screens) and `public/assets/logo-compact.svg` (narrow) |
 | Images (logo, favicons) | the matching file in `public/assets/`, copied from Drive `assets/logos/` |
 | Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/about.css`, `src/styles/ui.css` (style guide) |
-| Shared head and navigation | `src/layouts/Base.astro` |
+| Shared head, title bar, navigation and footer (social links: `social`) | `src/layouts/Base.astro` |
+| Page not found | `src/pages/404.astro` |
 | Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
 | Audiowide and Rajdhani | `public/fonts/`. These are the subsetted files of the faces in Drive `assets/fonts/ttf/` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
@@ -59,8 +60,16 @@ The link preview (`og:image`) and the style guide's sample picture are not in th
 
 ## Design
 
-The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`), with the page background `--ui-bg`. `base.css` is the theme: type, the title bar with the navigation, and the style-guide specimens. It uses only `--ui-*` variables. `about.css` holds only the rules the text pages use.
+The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`), with the page background `--ui-bg`. `base.css` is the theme: type, the title bar with the navigation, the footer, and the style-guide specimens. It uses only `--ui-*` variables. `about.css` holds only the rules the text pages use.
 
-The navigation is one row: Home on the left, every other page on the right. The Home button reads ® (its accessible name is Home), on `--ui-border` with the mark in `--ui-green-bright`. It does not change on hover. The current page is `--ui-green` (hover `--ui-green-bright`). Other pages are `--ui-orange` (hover `--ui-accent`). Keyboard focus is a 2 px `--ui-fg-bright` outline, 3 px off.
+The title bar is one full-width `--ui-border` stripe with the logo in the middle: the wide lockup, or the compact one at 640 px and below, where the title has its own row and the buttons go below it. On Home the logo is the page heading (`h1`).
+
+The Home button reads ® (its accessible name is Home), on `--ui-border` with the mark in `--ui-green-bright`. It floats fixed at the bottom left of the bar and does not change on hover. Scrolled down, it goes back to the top; at the top, it goes to the home page. Every other page sits at the bottom right of the bar. The current page is `--ui-green` (hover `--ui-green-bright`). Other pages are `--ui-orange` (hover `--ui-accent`). Keyboard focus is a 2 px `--ui-fg-bright` outline, 3 px off.
+
+The footer is a slim `--ui-border` stripe with the LinkedIn and GitHub icons in the middle, black (`--ink`), amber on hover. The icons are inline paths from Simple Icons (CC0). On short pages it sits at the bottom of the window.
+
+On About, the email sits centred in a bubble with a thin `--ui-border` border, and the @ is `--ui-orange`.
+
+`/404.html` (`src/pages/404.astro`) is the page-not-found page. It is not indexed.
 
 `/showcase/` is the style guide (`src/pages/showcase.astro`, `src/styles/ui.css`). It is not in the menu and not indexed: open it directly.
