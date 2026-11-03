@@ -49,8 +49,9 @@ Logos, favicons and Enterprsr come from Google Drive `assets/`. Copy them into `
 | `fonts/woff2/Enterprsr-Regular.woff2` | `public/fonts/Enterprsr-Regular.woff2` |
 | `fonts/licenses/OFL-*.txt` (Enterprsr, Audiowide, Rajdhani) | `public/fonts/` (same names) |
 | `palette/palette.css` | `src/styles/palette.css` |
+| `palette/palette.json` | `src/styles/palette.json` |
 
-`palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is. To change a colour, change it in project-branding, then copy the CSS again. Do not edit the colours in this repo.
+`palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is, with `palette.json` next to it for the style guide's swatches. To change a colour, change it in project-branding, then copy both files again. Do not edit the colours in this repo.
 
 The lockup geometry is described in project-branding [`logo/README.md`](https://github.com/enterprise-r/project-branding/blob/main/logo/README.md).
 
