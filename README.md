@@ -19,7 +19,7 @@ Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showc
 | Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
 | Audiowide and Rajdhani | `public/fonts/`. Google Fonts makes the latin and latin-ext subsets (Audiowide 400, Rajdhani 500 and 600) of the faces in Drive `assets/fonts/ttf/` |
 | Link preview picture (`og:image`) | the Drive file id `ogImageId` in `src/layouts/Base.astro` |
-| Style guide's sample picture | the Drive file id `bannerId` in `src/banner.js` |
+| Style guide's sample picture | the `banner` hotlink at the top of `src/pages/showcase.astro` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
 
 A new page = a new file in `src/pages/` using the `Base` layout. A text page also imports `src/styles/about.css`.
@@ -56,7 +56,7 @@ Two pictures are not in this repo. They are hotlinked from Drive as `https://lh3
 | Used for | Drive file | Id in |
 |---|---|---|
 | Link preview (`og:image`), 1200 px | `assets/logos/logo-wide-og.png` | `ogImageId`, `src/layouts/Base.astro` |
-| `/showcase/` sample picture, 1600 px | `assets/banners/banner-3x1.png` | `bannerId`, `src/banner.js` |
+| `/showcase/` sample picture, 1600 px | `assets/banners/banner-3x1.png` | `banner`, `src/pages/showcase.astro` |
 
 `palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is, with `palette.json` next to it for the style guide's swatches. To change a colour, change it in project-branding, then copy both files again. Do not edit the colours in this repo.
 

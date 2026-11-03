@@ -3,10 +3,9 @@
 import Base from "../layouts/Base.astro";
 import "../styles/ui.css";
 import palette from "../styles/palette.json";
-import { bannerId } from "../banner.js";
 
 // Sample picture: the 3x1 banner (Drive assets/banners/banner-3x1.png) at 1600 px.
-const banner = `https://lh3.googleusercontent.com/d/${bannerId}=w1600`;
+const banner = "https://lh3.googleusercontent.com/d/1EG6RdL2cQLBFWo_OEUmsheCx0SJd2ft9=w1600";
 
 // Swatches come from the palette source, copied from project-branding.
 const groups = palette.groups.map((g) => ({ ...g, colours: g.colours.filter((c) => c.var !== "--ui-accent") }));
