@@ -59,7 +59,6 @@
 /* Roles on top of the palette. Flat colours only. */
 :root {
   color-scheme: dark;
-  --ink: #0e0012;
   /* Nav buttons. Home is sage. Every other page is lighter orange. */
   --nav-current: var(--ui-green);
   --nav-current-hover: var(--ui-green-bright);
@@ -67,25 +66,10 @@
   --nav-other-hover: var(--ui-accent);
   --nav-text: var(--ui-bg);
   --nav-focus: #f2f6f3;
-  --nav-disabled: var(--ui-border);
-  --nav-disabled-text: var(--ui-fg-dark);
-  --nav-elbow: var(--ui-border);
-  --nav-elbow-hover: #4e3270;
   --nav-h: 2rem;
   --elbow-h: var(--nav-h);
   --elbow-r: calc(var(--elbow-h) / 2);
-  --elbow-w: calc(var(--elbow-h) + 0.85rem);
-  --hl-line: var(--ui-border-active);
-  --hl-line-w: 1px;
-  --hl-ring-w: 3px;
-  --hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
-  --text-body: var(--ui-fg);
-  --text-small: var(--ui-fg-light);
   --text-link: var(--ui-magenta-bright);
-  --text-prompt: var(--ui-green-bright);
-  --text-prompt-glow: rgb(from var(--ui-green-bright) r g b / 0.55);
-  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green));
-  --text-about-heading-glow: rgb(from var(--ui-green) r g b / 0.3);
 }
 
 * { box-sizing: border-box; }
@@ -115,17 +99,9 @@ header nav {
   padding: 0.65rem clamp(0.75rem, 2vw, 1.5rem) 0.65rem 0.35rem;
 }
 
-.nav-rest,
-.lcars-group { display: flex; gap: 0.3rem; }
+.nav-rest { display: flex; gap: 0.3rem; margin-left: auto; }
 
-.nav-rest { margin-left: auto; }
-
-header nav a,
-.lcars-btn,
-.elbow { font-size: 0.95rem; }
-
-header nav a,
-.lcars-btn {
+header nav a {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -134,6 +110,7 @@ header nav a,
   padding: 0 0.75rem 0.2rem;
   color: var(--nav-text);
   background-color: var(--nav-other);
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -142,17 +119,10 @@ header nav a,
   border-radius: 0.25rem;
 }
 
-button.lcars-btn {
-  border: 0;
-  cursor: pointer;
-  font-family: inherit;
-}
-
 /* Home is the only button set in Enterprsr.
    Short half pill: flat on the left, round on the right, mark centered.
    Fill matches the title pill. The mark is bright green. Home does not change on hover. */
-header nav a.nav-home,
-.lcars-btn.nav-home {
+header nav a.nav-home {
   font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
   font-weight: 400;
   font-feature-settings: "ss01";
@@ -167,93 +137,21 @@ header nav a.nav-home,
   border-radius: 0 var(--elbow-r) var(--elbow-r) 0;
 }
 
-.nav-rest > a:first-child,
-.lcars-group > .lcars-btn:first-child { border-top-left-radius: var(--elbow-r); border-bottom-left-radius: var(--elbow-r); }
+.nav-rest > a:first-child { border-top-left-radius: var(--elbow-r); border-bottom-left-radius: var(--elbow-r); }
 
-.nav-rest > a:last-child,
-.lcars-group > .lcars-btn:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
+.nav-rest > a:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
 
-header nav a:not(.nav-home):hover,
-.lcars-btn:not(.nav-home):hover,
-.lcars-btn:not(.nav-home).is-hover { background-color: var(--nav-other-hover); }
+header nav a:not(.nav-home):hover { background-color: var(--nav-other-hover); }
 
-.lcars-btn[aria-current="page"] { background-color: var(--nav-current); }
-
-.lcars-btn[aria-current="page"]:hover,
-.lcars-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
-
-.lcars-btn[aria-disabled="true"] {
-  background-color: var(--nav-disabled);
-  color: var(--nav-disabled-text);
-  cursor: not-allowed;
-}
-
-header nav a:focus-visible,
-.lcars-btn:focus-visible,
-.lcars-btn.is-focus {
+header nav a:focus-visible {
   outline: 2px solid var(--nav-focus);
   outline-offset: 3px;
 }
 
-/* Corner mark, used by the style guide's sample bar. */
-.elbow {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  flex: none;
-  width: var(--elbow-w);
-  height: var(--elbow-h);
-  padding: 0 0.75rem 0.2rem;
-  text-decoration: none;
-  clip-path: inset(0 round 0 var(--elbow-r) var(--elbow-r) 0);
-}
-
-.elbow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: var(--nav-elbow);
-  border-radius: 0 var(--elbow-r) var(--elbow-r) 0;
-  pointer-events: none;
-}
-
-.elbow:hover::before { background-color: var(--nav-elbow-hover); }
-
-.lk { position: relative; z-index: 1; pointer-events: none; }
-
-.lk-word {
-  margin: 0;
-  font-family: Audiowide, sans-serif;
-  line-height: 1;
-  letter-spacing: 0;
-  white-space: nowrap;
-  color: var(--ui-green-bright);
-}
-
-.elbow:focus-visible { outline: none; }
-
-.elbow:focus-visible::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  top: 4px;
-  left: 4px;
-  width: calc(var(--elbow-w) - 8px);
-  height: calc(var(--elbow-h) - 8px);
-  border: 2px solid var(--nav-focus);
-  border-radius: 0 calc(var(--elbow-r) - 4px) calc(var(--elbow-r) - 4px) 0;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
 @media (max-width: 640px) {
   :root { --nav-h: 2.75rem; }
-  header nav a,
-  .lcars-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
-  header nav a.nav-home,
-  .lcars-btn.nav-home { min-width: 0; padding: 0 1rem 0 0.7rem; }
-  .elbow { padding-bottom: 0.3rem; }
+  header nav a { min-width: 5.5rem; padding-bottom: 0.3rem; }
+  header nav a.nav-home { min-width: 0; padding: 0 1rem 0 0.7rem; }
 }
 
 main a { color: var(--text-link); }
@@ -264,47 +162,3 @@ main a:focus-visible {
   outline: 2px solid var(--nav-focus);
   outline-offset: 3px;
 }
-
-/* Style-guide specimens. The live pages do not use these. */
-.at { color: var(--ui-accent); }
-
-.home-title {
-  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
-  font-feature-settings: "ss01";
-  font-kerning: normal;
-  letter-spacing: 0.02em;
-  background: var(--ui-striped);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.home-enter { position: relative; }
-
-.about-heading {
-  background: var(--text-about-heading);
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
-}
-
-.liftoff-prompt {
-  color: var(--text-prompt);
-  font-family: Audiowide, Rajdhani, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.term {
-  width: fit-content;
-  max-width: 100%;
-  padding: 0.5rem 0.9rem;
-  background-color: rgba(12, 4, 15, 0.72);
-  border: 1px solid var(--ui-border);
-  border-radius: 0.6rem;
-}
-
-.term-head { padding: 0.45rem 1rem 0.55rem; }

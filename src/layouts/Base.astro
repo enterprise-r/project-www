@@ -6,11 +6,8 @@ import "../styles/base.css";
 interface Props {
   title: string;
   description: string;
-  // The style guide is not indexed and draws its own sample bar.
-  noindex?: boolean;
-  header?: boolean;
 }
-const { title, description, noindex = false, header = true } = Astro.props;
+const { title, description } = Astro.props;
 
 // First link sits on the left. Every other page sits on the right.
 const links = [
@@ -31,7 +28,6 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#0C040F">
   <meta name="description" content={description}>
-  {noindex && <meta name="robots" content="noindex, nofollow">}
   <title>{title}</title>
   <link rel="preload" href="/fonts/Enterprsr-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <meta property="og:type" content="website">
@@ -49,21 +45,18 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
 </head>
 <body>
-  {header && (
-    <header>
-      <nav aria-label="Main">
-        <a class="nav-home" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
-        {restLinks.length > 0 && (
-          <span class="nav-rest">
-            {restLinks.map((l) => (
-              <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
-            ))}
-          </span>
-        )}
-      </nav>
-    </header>
-  )}
+  <header>
+    <nav aria-label="Main">
+      <a class="nav-home" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
+      {restLinks.length > 0 && (
+        <span class="nav-rest">
+          {restLinks.map((l) => (
+            <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
+          ))}
+        </span>
+      )}
+    </nav>
+  </header>
   <slot />
-  <slot name="scripts" />
 </body>
 </html>
