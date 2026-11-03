@@ -36,19 +36,15 @@ main.home h1 {
 
 main.home picture { display: block; line-height: 0; }
 
-/* Homepage title. Large screens: wide lockup (viewBox 13795×2628, named 320×61).
-   Narrow screens: compact lockup (viewBox 11181×4487, named 320×128).
+/* Homepage title: wide lockup on large screens, compact lockup on narrow ones.
+   The ratio comes from the image (and its width/height attributes).
    24.68rem / 20rem is the viewBox-width ratio, so the letters match. */
 .home-logo {
   display: block;
   width: min(24.68rem, calc(100vw - 5rem));
   height: auto;
-  aspect-ratio: 13795 / 2628;
 }
 
 @media (max-width: 640px) {
-  .home-logo {
-    width: min(20rem, calc(100vw - 5rem));
-    aspect-ratio: 11181 / 4487;
-  }
+  .home-logo { width: min(20rem, calc(100vw - 5rem)); }
 }
