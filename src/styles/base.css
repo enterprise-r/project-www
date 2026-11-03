@@ -59,7 +59,7 @@
 /* Roles on top of the palette. Flat colours only. */
 :root {
   color-scheme: dark;
-  /* Nav buttons. Home is sage. Every other page is lighter orange. */
+  /* Nav buttons. The current page is sage. Every other page is lighter orange. */
   --nav-current: var(--ui-green);
   --nav-current-hover: var(--ui-green-bright);
   --nav-other: var(--ui-orange);
@@ -142,6 +142,10 @@ header nav a.nav-home {
 .nav-rest > a:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
 
 header nav a:not(.nav-home):hover { background-color: var(--nav-other-hover); }
+
+header nav a:not(.nav-home)[aria-current="page"] { background-color: var(--nav-current); }
+
+header nav a:not(.nav-home)[aria-current="page"]:hover { background-color: var(--nav-current-hover); }
 
 header nav a:focus-visible {
   outline: 2px solid var(--nav-focus);
