@@ -9,5 +9,8 @@ const page = {
 import Base from "../layouts/Base.astro";
 ---
 <Base title={page.title} description={page.description}>
-  <main class="home"></main>
+  <main class="home">
+    <!-- No Home content yet: send visitors to About. -->
+    <script is:inline>location.replace("/about/");</script>
+  </main>
 </Base>
