@@ -101,8 +101,7 @@ header {
   background-color: var(--ui-bg);
 }
 
-/* Home on the left. The other pages are a group on the right.
-   The left inset is only enough for the Home focus ring. */
+/* The other pages are a group on the right. Home floats on its own (.home-btn). */
 header nav {
   display: flex;
   align-items: center;
@@ -118,6 +117,7 @@ header nav {
 
 /* .lcars-btn is the same button for the style guide's samples. */
 header nav a,
+.home-btn,
 .lcars-btn {
   display: flex;
   align-items: flex-end;
@@ -142,10 +142,14 @@ button.lcars-btn {
   font-family: inherit;
 }
 
-/* Home is the only button set in Enterprsr.
+/* Home is the only button set in Enterprsr, fixed at the top left, where it sits in the nav row.
    Short half pill: flat on the left, round on the right, mark centered.
    Fill matches the title pill. The mark is bright green. Home does not change on hover. */
-header nav a.nav-home {
+.home-btn {
+  position: fixed;
+  top: 0.65rem;
+  left: 0.35rem;
+  z-index: 10;
   font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
   font-weight: 400;
   font-feature-settings: "ss01";
@@ -166,14 +170,14 @@ header nav a.nav-home {
 .nav-rest > a:last-child,
 .lcars-group > .lcars-btn:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
 
-header nav a:not(.nav-home):hover,
+header nav a:hover,
 .lcars-btn:hover,
 .lcars-btn.is-hover { background-color: var(--nav-other-hover); }
 
-header nav a:not(.nav-home)[aria-current="page"],
+header nav a[aria-current="page"],
 .lcars-btn[aria-current="page"] { background-color: var(--nav-current); }
 
-header nav a:not(.nav-home)[aria-current="page"]:hover,
+header nav a[aria-current="page"]:hover,
 .lcars-btn[aria-current="page"]:hover,
 .lcars-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
 
@@ -184,6 +188,7 @@ header nav a:not(.nav-home)[aria-current="page"]:hover,
 }
 
 header nav a:focus-visible,
+.home-btn:focus-visible,
 .lcars-btn:focus-visible,
 .lcars-btn.is-focus {
   outline: 2px solid var(--nav-focus);
@@ -194,7 +199,7 @@ header nav a:focus-visible,
   :root { --nav-h: 2.75rem; }
   header nav a,
   .lcars-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
-  header nav a.nav-home { min-width: 0; padding: 0 1rem 0 0.7rem; }
+  .home-btn { min-width: 0; padding: 0 1rem 0 0.7rem; }
 }
 
 h1, h2, h3 { color: var(--text-heading); }

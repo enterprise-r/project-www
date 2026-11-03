@@ -51,8 +51,8 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
 <body>
   {header && (
     <header>
+      <a class="home-btn" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
       <nav aria-label="Main">
-        <a class="nav-home" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
         {restLinks.length > 0 && (
           <span class="nav-rest">
             {restLinks.map((l) => (
@@ -64,6 +64,14 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
     </header>
   )}
   <slot />
+  {header && (
+    <script is:inline>
+      // Home button: scrolled down, back to the top; at the top, the home page.
+      document.querySelector(".home-btn").addEventListener("click", (e) => {
+        if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
+      });
+    </script>
+  )}
   <slot name="scripts" />
 </body>
 </html>
