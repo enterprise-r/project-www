@@ -138,12 +138,7 @@ footer svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
   line-height: 0;
 }
 
-.brand picture { display: block; }
-
-/* Wide logo on large screens, compact logo on narrow ones.
-   The aspect ratio comes from the image's width/height attributes.
-   The widths, 24.68rem (wide) and 20rem (compact), are in the ratio of
-   their viewBox widths, so the letters render at the same size in both. */
+/* The wide logo on every screen. The aspect ratio comes from the image's width/height attributes. */
 .brand-logo {
   display: block;
   width: min(24.68rem, calc(100vw - 5rem));
@@ -243,12 +238,13 @@ footer a:focus-visible,
 }
 
 @media (max-width: 640px) {
-  /* Title row (compact logo, 8rem tall, plus padding), then the nav row. */
-  :root { --nav-h: 2.75rem; --bar-h: calc(9.5rem + var(--nav-h) + 2 * var(--nav-pad)); }
-  header { grid-template-columns: 1fr; }
-  .brand { grid-column: 1; justify-self: center; padding-top: 0.75rem; height: 9.5rem; }
-  .brand-logo { width: min(20rem, calc(100vw - 5rem)); }
-  header nav { grid-column: 1; }
+  /* Title row (wide logo, 6rem tall row), then the nav row. */
+  :root { --nav-h: 2.75rem; --bar-h: calc(6rem + var(--nav-h) + 2 * var(--nav-pad)); }
+  /* Two rows: the title row takes the page background, the nav row keeps the stripe. */
+  header { grid-template-columns: 1fr; background-color: var(--ui-bg); }
+  .brand { grid-column: 1; justify-self: center; display: flex; align-items: center; height: 6rem; }
+  .brand-logo { width: min(24.68rem, calc(100vw - 2rem)); }
+  header nav { grid-column: 1; background-color: var(--ui-border); }
   header nav a,
   .bar-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
   .home-btn { min-width: 0; padding: 0 1rem 0 0.7rem; }

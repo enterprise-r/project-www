@@ -29,9 +29,7 @@ const restLinks = links.slice(1);
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 // The title in the bar is the page heading on Home only.
 const Brand = here === homeLink.href ? "h1" : "div";
-// Wide logo on large screens, compact logo on narrow ones.
 const logoWide = "/assets/logo-wide.svg";
-const logoCompact = "/assets/logo-compact.svg";
 const url = new URL(Astro.url.pathname, Astro.site).href;
 // Link preview: built by pages/og-image.png.ts from the wide logo.
 const ogImage = new URL("/og-image.png", Astro.site).href;
@@ -66,10 +64,7 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   {header && (
     <header>
       <Brand class="brand">
-        <picture>
-          <source media="(max-width: 640px)" srcset={logoCompact} width="320" height="128">
-          <img class="brand-logo" src={logoWide} width="320" height="61" alt="Enterprise-R">
-        </picture>
+        <img class="brand-logo" src={logoWide} width="320" height="61" alt="Enterprise-R">
       </Brand>
       <a class="home-btn" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
       <nav aria-label="Main">

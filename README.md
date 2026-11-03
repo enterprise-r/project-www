@@ -11,7 +11,7 @@ Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showc
 | To change… | Edit |
 |---|---|
 | Page text (title, heading, contact email) | the `page` block at the top of the page in `src/pages/` |
-| Logo and favicons | `public/assets/`. The title bar in `src/layouts/Base.astro` shows `logo-wide.svg` on large screens and `logo-compact.svg` on narrow ones |
+| Logo and favicons | `public/assets/`. The title bar in `src/layouts/Base.astro` shows `logo-wide.svg` |
 | Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/about.css`, `src/styles/ui.css` (style guide) |
 | Shared head, title bar, navigation and footer (social links: `social`) | `src/layouts/Base.astro` |
 | Page not found | `src/pages/404.astro` |
@@ -42,7 +42,7 @@ Every brand file comes from the project-branding build (`build.sh`), shipped to 
 
 | In this repo | From |
 |---|---|
-| `public/assets/logo-wide.svg`, `logo-compact.svg`, `favicon.svg` | Drive `assets/logos/svg/` |
+| `public/assets/logo-wide.svg`, `favicon.svg` | Drive `assets/logos/svg/` |
 | `public/assets/favicon.ico`, `favicon-32.png` | Drive `assets/logos/favicon/` |
 | `public/assets/apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | Drive `assets/logos/favicon/` `favicon-180.png`, `favicon-192.png`, `favicon-512.png`, renamed |
 | `public/fonts/Enterprsr-Regular.woff2` | Drive `assets/fonts/woff2/` |
@@ -63,7 +63,7 @@ A lockup is the wordmark and the mark together (wide and compact). The plate is 
 
 The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`). Where a colour is used is the `use` line in `src/styles/palette.json`. `base.css` is the theme: type, the title bar with the navigation, and the footer. It uses only `--ui-*` variables. `about.css` holds only the rules the text pages use. The style guide is `ui.css`.
 
-The title bar is one full-width stripe with the logo in the middle: the wide lockup, or the compact one at 640 px and below, where the title has its own row and the buttons go below it. On Home the logo is the page heading (`h1`).
+The title bar is one full-width stripe with the logo in the middle: the wide lockup on every screen; at 640 px and below the title has its own row on the page background and the buttons go below it. On Home the logo is the page heading (`h1`).
 
 The Home button reads ® (its accessible name is Home). It floats fixed at the bottom left of the bar and does not change on hover. Scrolled down, it goes back to the top; at the top, it goes to the home page. Every other page sits at the bottom right of the bar. Keyboard focus is a 2 px outline, 3 px off.
 
