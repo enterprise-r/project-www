@@ -1,6 +1,8 @@
 # www.enterprise-r.com
 
-Public repo (needed for GitHub Pages on the Free tier). Built with [Astro](https://astro.build), plain HTML/CSS, no frameworks.
+The Enterprise-R website. Public repo (needed for GitHub Pages on the Free tier). Built with [Astro](https://astro.build), plain HTML/CSS, no frameworks.
+
+Where this sits: the logos, palette and fonts are built by [enterprise-r/project-branding](https://github.com/enterprise-r/project-branding) and shipped to Google Drive `assets/`. This repo copies them in as-is.
 
 ## Where things are
 
@@ -12,7 +14,7 @@ Public repo (needed for GitHub Pages on the Free tier). Built with [Astro](https
 | Images (logo, favicons) | the matching file in `public/assets/`, copied from Drive `assets/logos/` |
 | Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/home.css`, `src/styles/about.css` |
 | Shared head and navigation | `src/layouts/Base.astro` |
-| Enterprsr (Home button, and the R in the style-guide title) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
+| Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
 | Audiowide and Rajdhani | `public/fonts/`. These are the subsetted files of the faces in Drive `assets/fonts/ttf/` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
 
@@ -45,25 +47,23 @@ Logos, favicons and Enterprsr come from Google Drive `assets/`. Copy them into `
 | `logos/favicon/favicon-180.png` | `public/assets/apple-touch-icon.png` |
 | `logos/favicon/favicon-192.png` | `public/assets/icon-192.png` |
 | `logos/favicon/favicon-512.png` | `public/assets/icon-512.png` |
-| `logos/logo-badge-1024.png` | `public/assets/logo.png` |
 | `fonts/woff2/Enterprsr-Regular.woff2` | `public/fonts/Enterprsr-Regular.woff2` |
+| `fonts/licenses/OFL-*.txt` (Enterprsr, Audiowide, Rajdhani) | `public/fonts/` (same names) |
 | `palette/palette.css` | `src/styles/palette.css` |
 
-`palette.css` is copied as-is. It is generated from `palette.json` in Drive. Edit that JSON, then copy the CSS again. Do not edit the colours in this repo.
+`palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is. To change a colour, change it in project-branding, then copy the CSS again. Do not edit the colours in this repo.
 
-`logo.png` (the round badge) is not shown on any page. The wide lockup is named 320×61 and the compact lockup 320×128. The compact file is already the button. The wide file is transparent, and the homepage draws the pill around it.
+The lockup geometry is described in project-branding [`logo/README.md`](https://github.com/enterprise-r/project-branding/blob/main/logo/README.md).
 
-`scripts/build-assets.py` does not draw those. It builds `og-image.jpg` and the About backdrops:
+`scripts/build-assets.py` does not draw those. It builds `og-image.jpg` (the 1200×630 link preview): the WarpChi wallpaper with `logo-color.svg` small in the top-left corner. The wallpaper is read from a project-branding checkout next to this repo (`../project-branding/wallpapers/warpchi.jpg`).
 
 ```sh
 pip install cairosvg pillow          # cairosvg needs the system cairo library
-python3 scripts/build-assets.py      # --mark SVG, --backdrop JPG, --backdrop-phone JPG, --out DIR to override
+python3 scripts/build-assets.py      # --mark SVG, --backdrop JPG, --out DIR to override
 ```
 
-`og-image.jpg` (the 1200×630 link preview) is the WarpChi wallpaper (`art/warpchi.jpg`, from Drive `assets/wallpapers/`) with `logo-color.svg` small in the top-left corner.
+## Design
 
-The pages are a plain document on the company colour scheme (the LCARS extended palette, `src/styles/palette.css`). The page background is `--ui-bg` (`#0C040F`). There is no picture, star field, scrim or animation.
+The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`), with the page background `--ui-bg`. `base.css` is the theme: type and navigation. It uses only `--ui-*` variables. `home.css` and `about.css` hold only the rules those pages use.
 
-`base.css` is the theme: type, navigation, buttons, and the style-guide specimens. `home.css` and `about.css` hold only the rules those pages use. A text page imports `about.css`.
-
-The navigation is one row: Home on the left, every other page on the right. The Home button reads ® (its accessible name is Home). Its fill is the inactive border (`--ui-border`) and the mark is bright green (`--ui-green-bright`, #9ADD6D). It does not change on hover. The other pages are lighter orange (`--ui-orange`, #F4B965) and switch to amber (`--ui-accent`, #F0A202) on hover. Keyboard focus is a 2 px near-white outline, 3 px off. `/showcase/` is the style guide. It is not in the menu, and it does not show a navigation bar.
+The navigation is one row: Home on the left, every other page on the right. The Home button reads ® (its accessible name is Home), on `--ui-border` with the mark in `--ui-green-bright`. It does not change on hover. The current page is `--ui-green` (hover `--ui-green-bright`). Other pages are `--ui-orange` (hover `--ui-accent`). Keyboard focus is a 2 px `--ui-fg-bright` outline, 3 px off.
