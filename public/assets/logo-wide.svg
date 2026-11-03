@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-114 -1928 13795 2628" width="320" height="61" role="img" aria-label="Enterprise-R">
-<title>Enterprise-R wide logo, transparent, favicon plate behind the mark</title>
+<title>Enterprise-R wide logo, transparent</title>
 <defs>
 <linearGradient id="ring-gradient" gradientUnits="userSpaceOnUse" x1="68.00" y1="338.00" x2="11517.00" y2="-1538.00"><stop offset="0" stop-color="#F4B965"/><stop offset="0.33" stop-color="#BA9EDA"/><stop offset="0.75" stop-color="#77AF8A"/><stop offset="1" stop-color="#77AF8A"/></linearGradient>
 </defs>
 <g id="lockup">
-<path id="plate" d="M11436.84,-1746.74 L13296.64,-1746.74 L13499.48,-1611.51 L13499.48,383.51 L13296.64,518.74 L11436.84,518.74 L11234.00,383.51 L11234.00,-1611.51 Z" fill="#3F2C53"/>
 <g id="word" fill="url(#ring-gradient)">
 <path d="M1253 -586H432V-848H1253ZM1370 0H432Q378 0 314.0 -19.0Q250 -38 195.5 -81.5Q141 -125 104.5 -194.5Q68 -264 68 -365V-1303Q68 -1330 78.0 -1354.0Q88 -1378 105.5 -1396.0Q123 -1414 147.0 -1424.0Q171 -1434 199 -1434H1370V-1174H328V-365Q328 -314 355.0 -287.0Q382 -260 434 -260H1370Z"/>
 <path d="M2704 0H2444V-600Q2444 -651 2426.5 -691.5Q2409 -732 2379.0 -761.0Q2349 -790 2308.5 -805.5Q2268 -821 2221 -821H1766V0H1506V-952Q1506 -979 1516.0 -1002.5Q1526 -1026 1544.0 -1043.5Q1562 -1061 1586.0 -1071.0Q1610 -1081 1637 -1081H2223Q2272 -1081 2326.5 -1070.0Q2381 -1059 2434.5 -1034.5Q2488 -1010 2536.5 -972.5Q2585 -935 2622.5 -881.5Q2660 -828 2682.0 -758.0Q2704 -688 2704 -600Z"/>
