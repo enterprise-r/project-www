@@ -142,8 +142,9 @@ footer svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
 .brand picture { display: block; }
 
 /* Wide lockup on large screens, compact lockup on narrow ones.
-   The ratio comes from the image (and its width/height attributes).
-   24.68rem / 20rem is the viewBox-width ratio, so the letters match. */
+   The aspect ratio comes from the image's width/height attributes.
+   The widths, 24.68rem (wide) and 20rem (compact), are in the ratio of
+   their viewBox widths, so the letters render at the same size in both. */
 .brand-logo {
   display: block;
   width: min(24.68rem, calc(100vw - 5rem));
