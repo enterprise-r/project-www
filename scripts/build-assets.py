@@ -5,9 +5,10 @@ Lockups and favicons are the files from Google Drive assets/logos/.
 Copy those in. This script does not draw them. It builds the link-preview JPEG.
 
 Needs: pip install cairosvg pillow   (cairosvg needs the system cairo library)
-Usage: python3 scripts/build-assets.py [--mark SVG] [--backdrop JPG] [--backdrop-phone JPG] [--out DIR]
-  Defaults: --mark  public/assets/logo-color.svg   (Drive assets/logos/svg/logo-color.svg)
-            --out   public/assets
+Usage: python3 scripts/build-assets.py [--mark SVG] [--backdrop JPG] [--out DIR]
+  Defaults: --mark      public/assets/logo-color.svg   (Drive assets/logos/svg/logo-color.svg)
+            --backdrop  ../project-branding/wallpapers/warpchi.jpg   (a project-branding checkout next to this repo)
+            --out       public/assets
 """
 import io, os, sys
 import xml.etree.ElementTree as ET
@@ -22,8 +23,7 @@ def arg(name, default):
 SOURCES = {
     "mark": arg("--mark", os.path.join(ROOT, "public", "assets", "logo-color.svg")),  # colour mark, transparent
 }
-BACKDROP = arg("--backdrop", os.path.join(ROOT, "art", "warpchi.jpg"))  # WarpChi wallpaper, desktop master 3840x2160 (Drive assets/wallpapers/)
-BACKDROP_PHONE = arg("--backdrop-phone", os.path.join(ROOT, "art", "warpchi-phone.jpg"))  # WarpChi phone master 1290x2796
+BACKDROP = arg("--backdrop", os.path.join(os.path.dirname(ROOT), "project-branding", "wallpapers", "warpchi.jpg"))  # WarpChi wallpaper
 OUT = arg("--out", os.path.join(ROOT, "public", "assets"))
 
 # Link preview (og:image): the backdrop scaled and centre-cropped to 1200x630, the mark small in the top-left corner.
