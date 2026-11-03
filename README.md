@@ -15,9 +15,11 @@ Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showc
 | Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/about.css`, `src/styles/ui.css` (style guide) |
 | Shared head, title bar, navigation and footer (social links: `social`) | `src/layouts/Base.astro` |
 | Page not found | `src/pages/404.astro` |
+| Search engines | `public/robots.txt`, and the indexed pages listed in `src/pages/sitemap.xml.ts` |
 | Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
 | Audiowide and Rajdhani | `public/fonts/`. Google Fonts makes the latin and latin-ext subsets (Audiowide 400, Rajdhani 500 and 600) of the faces in Drive `assets/fonts/ttf/` |
-| 3x1 banner (link preview and the style guide's picture) | the Drive file id `bannerId` in `src/banner.js` |
+| Link preview picture (`og:image`) | the Drive file id `ogImageId` in `src/layouts/Base.astro` |
+| Style guide's sample picture | the Drive file id `bannerId` in `src/banner.js` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
 
 A new page = a new file in `src/pages/` using the `Base` layout. A text page also imports `src/styles/about.css`.
@@ -34,15 +36,31 @@ npm run dev      # http://localhost:4321
 npm run build    # output in dist/
 ```
 
-## Regenerating images
+## Brand assets
 
-Copy each file from Google Drive `assets/` into this repo under the same name: `logos/svg/` and `logos/favicon/` into `public/assets/`, `fonts/woff2/` and `fonts/licenses/` into `public/fonts/`, and `palette/` into `src/styles/`. Three favicons are renamed: `favicon-180.png` to `apple-touch-icon.png`, `favicon-192.png` to `icon-192.png`, and `favicon-512.png` to `icon-512.png`.
+Every brand file comes from the project-branding build (`build.sh`), shipped to Google Drive `assets/`. To refresh one, copy it in again from there.
+
+| In this repo | From |
+|---|---|
+| `public/assets/logo-wide.svg`, `logo-compact.svg`, `favicon.svg` | Drive `assets/logos/svg/` |
+| `public/assets/favicon.ico`, `favicon-32.png` | Drive `assets/logos/favicon/` |
+| `public/assets/apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | Drive `assets/logos/favicon/` `favicon-180.png`, `favicon-192.png`, `favicon-512.png`, renamed |
+| `public/fonts/Enterprsr-Regular.woff2` | Drive `assets/fonts/woff2/` |
+| `public/fonts/audiowide-*.woff2`, `rajdhani-*.woff2` | Google Fonts subsets of the faces in Drive `assets/fonts/ttf/` (see above) |
+| `public/fonts/OFL-Enterprsr.txt`, `OFL-Audiowide.txt`, `OFL-Rajdhani.txt` | Drive `assets/fonts/licenses/` |
+| `src/styles/palette.css` | Drive `assets/palette/palette.css` |
+| `src/styles/palette.json` | project-branding `palette/palette.json` |
+
+Two pictures are not in this repo. They are hotlinked from Drive as `https://lh3.googleusercontent.com/d/<id>=w<width>`, so each file must be viewable by anyone with the link:
+
+| Used for | Drive file | Id in |
+|---|---|---|
+| Link preview (`og:image`), 1200 px | `assets/logos/logo-wide-og.png` | `ogImageId`, `src/layouts/Base.astro` |
+| `/showcase/` sample picture, 1600 px | `assets/banners/banner-3x1.png` | `bannerId`, `src/banner.js` |
 
 `palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is, with `palette.json` next to it for the style guide's swatches. To change a colour, change it in project-branding, then copy both files again. Do not edit the colours in this repo.
 
 A lockup is the wordmark and the mark together (wide and compact). The plate is the inactive-border shape behind the mark. Geometry is in project-branding [`logo/README.md`](https://github.com/enterprise-r/project-branding/blob/main/logo/README.md).
-
-The link preview (`og:image`) and the style guide's sample picture are not in this repo. Both hotlink the 3x1 banner from Drive (`assets/banners/banner-3x1.png`).
 
 ## Design
 
