@@ -18,7 +18,7 @@ Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showc
 | Search engines | `public/robots.txt`, and the indexed pages listed in `src/pages/sitemap.xml.ts` |
 | Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
 | Audiowide and Rajdhani | `public/fonts/`. Google Fonts makes the latin and latin-ext subsets (Audiowide 400, Rajdhani 500 and 600) of the faces in Drive `assets/fonts/ttf/` |
-| Link preview picture (`og:image`) | the Drive file id `ogImageId` in `src/layouts/Base.astro` |
+| Link preview picture (`og:image`) | `src/pages/og-image.png.ts`, built from `public/assets/logo-wide.svg` on the title bar colour |
 | Style guide's sample picture | the `banner` hotlink at the top of `src/pages/showcase.astro` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
 
@@ -51,12 +51,9 @@ Every brand file comes from the project-branding build (`build.sh`), shipped to 
 | `src/styles/palette.css` | Drive `assets/palette/palette.css` |
 | `src/styles/palette.json` | project-branding `palette/palette.json` |
 
-Two pictures are not in this repo. They are hotlinked from Drive as `https://lh3.googleusercontent.com/d/<id>=w<width>`, so each file must be viewable by anyone with the link:
+The link preview (`og:image`, `/og-image.png`, 1200x400) is not a file in this repo: `src/pages/og-image.png.ts` renders `public/assets/logo-wide.svg` 1000 px wide on the title bar colour (`--ui-border`) at build time, with sharp (which Astro already installs).
 
-| Used for | Drive file | Id in |
-|---|---|---|
-| Link preview (`og:image`), 1200 px | `assets/logos/logo-wide-og.png` | `ogImageId`, `src/layouts/Base.astro` |
-| `/showcase/` sample picture, 1600 px | `assets/banners/banner-3x1.png` | `banner`, `src/pages/showcase.astro` |
+The `/showcase/` sample picture is the 3x1 banner, hotlinked from Drive `assets/banners/banner-3x1.png` as `https://lh3.googleusercontent.com/d/<id>=w1600` (the `banner` line in `src/pages/showcase.astro`). The file must be viewable by anyone with the link.
 
 `palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is, with `palette.json` next to it for the style guide's swatches. To change a colour, change it in project-branding, then copy both files again. Do not edit the colours in this repo.
 

@@ -33,9 +33,8 @@ const Brand = here === homeLink.href ? "h1" : "div";
 const logoWide = "/assets/logo-wide.svg";
 const logoCompact = "/assets/logo-compact.svg";
 const url = new URL(Astro.url.pathname, Astro.site).href;
-// Link preview: the wide logo (Drive assets/logos/logo-wide-og.png) at 1200 px.
-const ogImageId = "1binIYD5CI1QtKts1edLhLuyQDIaYR72M";
-const ogImage = `https://lh3.googleusercontent.com/d/${ogImageId}=w1200`;
+// Link preview: built by pages/og-image.png.ts from the wide logo.
+const ogImage = new URL("/og-image.png", Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
