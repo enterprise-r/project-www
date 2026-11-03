@@ -3,6 +3,9 @@
 import Base from "../layouts/Base.astro";
 import "../styles/ui.css";
 
+// Sample picture: the 3x1 banner, hotlinked from Drive assets/banners/banner-3x1.png.
+const banner = "https://lh3.googleusercontent.com/d/1EG6RdL2cQLBFWo_OEUmsheCx0SJd2ft9=w1600";
+
 const accent = [
   { name: "Amber · Accent", token: "--ui-accent", hex: "#F0A202", use: "other button hover, accent text" },
 ];
@@ -93,7 +96,7 @@ const named = [
         <div class="sc-card is-selected"><h3>Selection</h3><p>Selection fill, for a highlighted row or a chosen card.</p></div>
       </div>
       <figure class="sc-term-sample">
-        <div class="sc-bd"><div class="photo"></div><div class="sc-term-stack"><div class="term term-head"><div class="about-heading">Heading</div></div><div class="term"><p class="sc-body" style="margin:0">Terminal panel: a small dark backing (#0C040F at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
+        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="term term-head"><div class="about-heading">Heading</div></div><div class="term"><p class="sc-body" style="margin:0">Terminal panel: a small dark backing (#0C040F at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
         <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
       </figure>
     </section>

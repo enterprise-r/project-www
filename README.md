@@ -40,7 +40,6 @@ Logos, favicons and Enterprsr come from Google Drive `assets/`. Copy them into `
 |---|---|
 | `logos/svg/logo-wide.svg` | `public/assets/logo-wide.svg` |
 | `logos/svg/logo-compact.svg` | `public/assets/logo-compact.svg` |
-| `logos/svg/logo-color.svg` | `public/assets/logo-color.svg` |
 | `logos/svg/favicon.svg` | `public/assets/favicon.svg` |
 | `logos/favicon/favicon.ico` | `public/assets/favicon.ico` |
 | `logos/favicon/favicon-32.png` | `public/assets/favicon-32.png` |
@@ -55,12 +54,7 @@ Logos, favicons and Enterprsr come from Google Drive `assets/`. Copy them into `
 
 The lockup geometry is described in project-branding [`logo/README.md`](https://github.com/enterprise-r/project-branding/blob/main/logo/README.md).
 
-`scripts/build-assets.py` does not draw those. It builds `og-image.jpg` (the 1200×630 link preview): the WarpChi wallpaper with `logo-color.svg` small in the top-left corner. The wallpaper is read from a project-branding checkout next to this repo (`../project-branding/wallpapers/warpchi.jpg`).
-
-```sh
-pip install cairosvg pillow          # cairosvg needs the system cairo library
-python3 scripts/build-assets.py      # --mark SVG, --backdrop JPG, --out DIR to override
-```
+The link preview (`og:image`) and the style guide's sample picture are not in this repo. Both hotlink the 3x1 banner from Drive (`assets/banners/banner-3x1.png`).
 
 ## Design
 
