@@ -18,7 +18,7 @@ main.showcase {
 
 .showcase h2, .showcase h3, .showcase h4 { margin: 0; font-weight: 400; }
 /* The showcase title in Enterprsr (@font-face in base.css) with ss01: the lone wide R. */
-.sc-title { background: none; filter: none; margin: 0 0 0.25rem; font-family: Audiowide, Rajdhani, sans-serif; font-weight: 400; font-size: 2.2rem; line-height: 1.15; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
+.sc-title { background: none; filter: none; margin: 0 0 0.25rem; font-family: Audiowide, Rajdhani, sans-serif; font-weight: 400; font-size: 2.2rem; line-height: 1.15; letter-spacing: 0.06em; }
 .sc-title-brand { font-family: Enterprsr, Audiowide, Rajdhani, sans-serif; font-feature-settings: "ss01"; letter-spacing: 0; margin: 0; }
 .sc-subtitle { margin: 0.1rem 0 0.6rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--ui-fg-light); }
 .sc-lede { margin: 0 0 1.5rem; color: var(--ui-fg-light); font-size: 1.05rem; max-width: 52rem; }
@@ -41,7 +41,7 @@ main.showcase {
 .sc-card { padding: 1.2rem 1.3rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-lighter); }
 .sc-card.is-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
 .sc-card.is-selected { background: var(--ui-selection); border-color: var(--ui-selection); }
-.sc-card h3 { margin-bottom: 0.4rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.15rem; letter-spacing: 0.05em; color: var(--ui-fg-bright); }
+.sc-card h3 { margin-bottom: 0.4rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.15rem; letter-spacing: 0.05em; }
 .sc-card p { margin: 0; color: var(--ui-fg-light); }
 .sc-pill { display: inline-block; margin-top: 0.8rem; padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--nav-current); color: var(--nav-text); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
 .sc-pill.other { background: var(--nav-other); }

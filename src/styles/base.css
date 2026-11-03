@@ -76,6 +76,7 @@
   --hl-ring-w: 3px;
   --hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
   --text-body: var(--ui-fg);
+  --text-heading: var(--ui-green);
   --text-small: var(--ui-fg-light);
   --text-link: var(--ui-magenta-bright);
   --text-prompt: var(--ui-green-bright);
@@ -195,6 +196,8 @@ header nav a:focus-visible,
   .lcars-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
   header nav a.nav-home { min-width: 0; padding: 0 1rem 0 0.7rem; }
 }
+
+h1, h2, h3 { color: var(--text-heading); }
 
 main a { color: var(--text-link); }
 
