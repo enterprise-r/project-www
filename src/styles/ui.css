@@ -1,6 +1,5 @@
 /* UI showcase / style guide (/showcase/ only). Base theme: the LCARS extended palette
-   (--ui-* in palette.css). Nav buttons and page text follow the colour
-   option in use (--nav-*, --text-* in base.css), so the switcher at the top changes them. */
+   (--ui-* in palette.css). Nav buttons and page text use --nav-* and --text-* from base.css. */
 
 @view-transition { navigation: none; } /* no lift-off to or from this page */
 
@@ -33,8 +32,6 @@ main.showcase {
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent);
 }
 .sc-section > h2.sc-label::after { content: ""; flex: 1; height: 2px; border-radius: 1px; background: var(--ui-border); }
-
-/* option switcher */
 
 /* panels and cards */
 .sc-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-dark); }

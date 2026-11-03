@@ -88,47 +88,6 @@
   --text-about-heading-glow: rgb(from var(--ui-green) r g b / 0.3);
 }
 
-/* Colour options for /showcase/. ?option=b|c|d on any page. ?option=a returns to these colours. */
-:root.opt-b {
-  --nav-elbow: var(--ui-selection);
-  --nav-elbow-hover: #4e3270;
-  --nav-current: var(--ui-green);
-  --nav-other: var(--ui-orange);
-  --nav-text: var(--ui-bg);
-  --text-body: var(--ui-fg);
-  --text-small: var(--ui-fg-light);
-  --text-prompt: var(--ui-orange);
-  --text-prompt-glow: rgb(from var(--ui-orange) r g b / 0.5);
-  --text-about-heading: linear-gradient(180deg, var(--ui-fg-bright), var(--ui-magenta-bright));
-  --text-about-heading-glow: rgb(from var(--ui-magenta) r g b / 0.35);
-}
-:root.opt-c {
-  --nav-elbow: #573680;
-  --nav-elbow-hover: #6a4399;
-  --nav-current: #7fcb6f;
-  --nav-other: #f3b451;
-  --nav-text: var(--ui-bg);
-  --text-body: var(--ui-fg);
-  --text-small: var(--ui-fg-light);
-  --text-prompt: #7fcb6f;
-  --text-prompt-glow: rgba(127, 203, 111, 0.55);
-  --text-about-heading: linear-gradient(180deg, #f2fbea 0%, #c6ebb9 38%, #7fcb6f 75%, #3f7f4f 140%);
-  --text-about-heading-glow: rgba(127, 203, 111, 0.3);
-}
-:root.opt-d {
-  --nav-elbow: var(--ui-selection);
-  --nav-elbow-hover: #4e3270;
-  --nav-current: #7cc376;
-  --nav-other: var(--ui-orange);
-  --nav-text: var(--ui-bg-darker);
-  --text-body: var(--ui-fg);
-  --text-small: var(--ui-fg-light);
-  --text-prompt: #7cc376;
-  --text-prompt-glow: rgba(124, 195, 118, 0.5);
-  --text-about-heading: linear-gradient(var(--ui-fg-bright), var(--ui-fg-bright));
-  --text-about-heading-glow: rgba(124, 195, 118, 0.35);
-}
-
 * { box-sizing: border-box; }
 
 html, body { height: 100%; }

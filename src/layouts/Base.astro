@@ -34,15 +34,6 @@ const ogImage = new URL("/assets/og-image.jpg", Astro.site).href;
   {noindex && <meta name="robots" content="noindex, nofollow">}
   <title>{title}</title>
   <link rel="preload" href="/fonts/Enterprsr-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <script is:inline>
-    // Colour option preview for the style guide: ?option=b|c|d, kept for this tab.
-    try {
-      const q = new URLSearchParams(location.search).get("option");
-      if (q) sessionStorage.setItem("colour-option", q.toLowerCase());
-      const o = sessionStorage.getItem("colour-option");
-      if (o && /^[bcd]$/.test(o)) document.documentElement.classList.add("opt-" + o);
-    } catch (e) {}
-  </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content={title}>
   <meta property="og:url" content={url}>

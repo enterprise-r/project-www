@@ -1,6 +1,5 @@
 ---
 // UI showcase and style guide. Not in the nav, not indexed: open /showcase/ directly.
-// The colour options (A to D) live in src/styles/base.css ("Colour options").
 import Base from "../layouts/Base.astro";
 import "../styles/ui.css";
 
@@ -31,7 +30,7 @@ const named = [
   <main class="showcase">
     <h1 class="sc-title sc-title-brand">Enterprise-R</h1>
     <p class="sc-subtitle">UI showcase</p>
-    <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette with brand amber as the accent. The page shows the live colours (option A); add <code>?option=b</code>, <code>c</code> or <code>d</code> to the address to preview another option.</p>
+    <p class="sc-lede">Our style guide in one place. Interface parts use the LCARS extended palette with brand amber as the accent.</p>
 
     <section class="sc-section">
       <h2 class="sc-label">Buttons</h2>
@@ -125,20 +124,17 @@ const named = [
 
     <section class="sc-section">
       <h2 class="sc-label">Code</h2>
-      <pre class="sc-code"><code><span class="c">/* To adopt an option, copy its values into the nav and text block in base.css */</span>
-<span class="k">:root</span> {"{"}
+      <pre class="sc-code"><code><span class="k">:root</span> {"{"}
   <span class="k">--nav-current</span>: <span class="v">var(--ui-green)</span>;         <span class="c">/* sage #77AF8A */</span>
   <span class="k">--nav-current-hover</span>: <span class="v">var(--ui-green-bright)</span>; <span class="c">/* #9ADD6D */</span>
   <span class="k">--nav-other</span>: <span class="v">var(--ui-orange)</span>;          <span class="c">/* #F4B965 */</span>
   <span class="k">--nav-other-hover</span>: <span class="v">var(--ui-accent)</span>;    <span class="c">/* amber #F0A202 */</span>
   <span class="k">--text-body</span>: <span class="v">var(--ui-fg)</span>;        <span class="c">/* #E0E6E2 */</span>
-{"}"}
-<span class="c">// colour preview</span>
-location.search = <span class="s">"?option=b"</span>;</code></pre>
+{"}"}</code></pre>
     </section>
   </main>
   <script is:inline slot="scripts">
-    // Label contrast, from the colours on screen (the live ones, or the ?option= preview).
+    // Label contrast, from the colours on screen.
     (() => {
       const cs = getComputedStyle(document.documentElement);
       const hex = (v) => {
