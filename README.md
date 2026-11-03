@@ -12,7 +12,7 @@ Where this sits: the logos, palette and fonts are built by [enterprise-r/project
 | Contact email | the `page` block in `src/pages/about.astro` |
 | Homepage title image | `public/assets/logo-wide.svg` (large screens) and `public/assets/logo-compact.svg` (narrow) |
 | Images (logo, favicons) | the matching file in `public/assets/`, copied from Drive `assets/logos/` |
-| Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/home.css`, `src/styles/about.css` |
+| Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/home.css`, `src/styles/about.css`, `src/styles/ui.css` (style guide) |
 | Shared head and navigation | `src/layouts/Base.astro` |
 | Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
 | Audiowide and Rajdhani | `public/fonts/`. These are the subsetted files of the faces in Drive `assets/fonts/ttf/` |
@@ -64,6 +64,8 @@ python3 scripts/build-assets.py      # --mark SVG, --backdrop JPG, --out DIR to 
 
 ## Design
 
-The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`), with the page background `--ui-bg`. `base.css` is the theme: type and navigation. It uses only `--ui-*` variables. `home.css` and `about.css` hold only the rules those pages use.
+The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`), with the page background `--ui-bg`. `base.css` is the theme: type, navigation, and the style-guide specimens. It uses only `--ui-*` variables. `home.css` and `about.css` hold only the rules those pages use.
 
 The navigation is one row: Home on the left, every other page on the right. The Home button reads ® (its accessible name is Home), on `--ui-border` with the mark in `--ui-green-bright`. It does not change on hover. The current page is `--ui-green` (hover `--ui-green-bright`). Other pages are `--ui-orange` (hover `--ui-accent`). Keyboard focus is a 2 px `--ui-fg-bright` outline, 3 px off.
+
+`/showcase/` is the style guide (`src/pages/showcase.astro`, `src/styles/ui.css`). It is not in the menu and not indexed: open it directly.

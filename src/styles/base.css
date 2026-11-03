@@ -59,6 +59,7 @@
 /* Roles on top of the palette. Flat colours only. */
 :root {
   color-scheme: dark;
+  --ink: var(--ui-bg-darker);
   /* Nav buttons. The current page is sage. Every other page is lighter orange. */
   --nav-current: var(--ui-green);
   --nav-current-hover: var(--ui-green-bright);
@@ -66,10 +67,20 @@
   --nav-other-hover: var(--ui-accent);
   --nav-text: var(--ui-bg);
   --nav-focus: var(--ui-fg-bright);
+  --nav-disabled: var(--ui-border);
+  --nav-disabled-text: var(--ui-fg-dark);
   --nav-h: 2rem;
   --elbow-h: var(--nav-h);
   --elbow-r: calc(var(--elbow-h) / 2);
+  --hl-line: var(--ui-border-active);
+  --hl-ring-w: 3px;
+  --hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
+  --text-body: var(--ui-fg);
+  --text-small: var(--ui-fg-light);
   --text-link: var(--ui-magenta-bright);
+  --text-prompt: var(--ui-green-bright);
+  --text-about-heading: linear-gradient(var(--ui-green), var(--ui-green));
+  --text-about-heading-glow: rgb(from var(--ui-green) r g b / 0.3);
 }
 
 * { box-sizing: border-box; }
@@ -99,9 +110,14 @@ header nav {
   padding: 0.65rem clamp(0.75rem, 2vw, 1.5rem) 0.65rem 0.35rem;
 }
 
-.nav-rest { display: flex; gap: 0.3rem; margin-left: auto; }
+.nav-rest,
+.lcars-group { display: flex; gap: 0.3rem; }
 
-header nav a {
+.nav-rest { margin-left: auto; }
+
+/* .lcars-btn is the same button for the style guide's samples. */
+header nav a,
+.lcars-btn {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -117,6 +133,12 @@ header nav a {
   text-decoration: none;
   line-height: 1;
   border-radius: 0.25rem;
+}
+
+button.lcars-btn {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 /* Home is the only button set in Enterprsr.
@@ -137,24 +159,40 @@ header nav a.nav-home {
   border-radius: 0 var(--elbow-r) var(--elbow-r) 0;
 }
 
-.nav-rest > a:first-child { border-top-left-radius: var(--elbow-r); border-bottom-left-radius: var(--elbow-r); }
+.nav-rest > a:first-child,
+.lcars-group > .lcars-btn:first-child { border-top-left-radius: var(--elbow-r); border-bottom-left-radius: var(--elbow-r); }
 
-.nav-rest > a:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
+.nav-rest > a:last-child,
+.lcars-group > .lcars-btn:last-child { border-top-right-radius: var(--elbow-r); border-bottom-right-radius: var(--elbow-r); }
 
-header nav a:not(.nav-home):hover { background-color: var(--nav-other-hover); }
+header nav a:not(.nav-home):hover,
+.lcars-btn:hover,
+.lcars-btn.is-hover { background-color: var(--nav-other-hover); }
 
-header nav a:not(.nav-home)[aria-current="page"] { background-color: var(--nav-current); }
+header nav a:not(.nav-home)[aria-current="page"],
+.lcars-btn[aria-current="page"] { background-color: var(--nav-current); }
 
-header nav a:not(.nav-home)[aria-current="page"]:hover { background-color: var(--nav-current-hover); }
+header nav a:not(.nav-home)[aria-current="page"]:hover,
+.lcars-btn[aria-current="page"]:hover,
+.lcars-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
 
-header nav a:focus-visible {
+.lcars-btn[aria-disabled="true"] {
+  background-color: var(--nav-disabled);
+  color: var(--nav-disabled-text);
+  cursor: not-allowed;
+}
+
+header nav a:focus-visible,
+.lcars-btn:focus-visible,
+.lcars-btn.is-focus {
   outline: 2px solid var(--nav-focus);
   outline-offset: 3px;
 }
 
 @media (max-width: 640px) {
   :root { --nav-h: 2.75rem; }
-  header nav a { min-width: 5.5rem; padding-bottom: 0.3rem; }
+  header nav a,
+  .lcars-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
   header nav a.nav-home { min-width: 0; padding: 0 1rem 0 0.7rem; }
 }
 
@@ -166,3 +204,34 @@ main a:focus-visible {
   outline: 2px solid var(--nav-focus);
   outline-offset: 3px;
 }
+
+/* Style-guide specimens. The live pages do not use these. */
+.at { color: var(--ui-accent); }
+
+.about-heading {
+  background: var(--text-about-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
+}
+
+.liftoff-prompt {
+  color: var(--text-prompt);
+  font-family: Audiowide, Rajdhani, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.term {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.5rem 0.9rem;
+  background-color: rgb(from var(--ui-bg) r g b / 0.72);
+  border: 1px solid var(--ui-border);
+  border-radius: 0.6rem;
+}
+
+.term-head { padding: 0.45rem 1rem 0.55rem; }
