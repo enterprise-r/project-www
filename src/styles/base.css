@@ -115,10 +115,10 @@ header {
   background-color: var(--ui-border);
 }
 
-/* Footer: the same stripe, slim, with the social links at the right. */
+/* Footer: the same stripe, slim, with the social links in the middle. */
 footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   padding: var(--nav-pad) clamp(0.75rem, 2vw, 1.5rem);
   background-color: var(--ui-border);
 }
