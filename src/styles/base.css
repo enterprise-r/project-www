@@ -134,7 +134,7 @@ footer {
 /* Social links are bare Darker background icons. Amber (Accent) on hover, like the nav. */
 .social { display: flex; gap: 1rem; }
 
-footer a { display: flex; color: var(--ui-bg-darker); }
+footer a { display: flex; color: var(--ui-bg); }
 
 footer a:hover { color: var(--nav-other-hover); }
 

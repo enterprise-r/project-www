@@ -31,12 +31,12 @@ main.showcase {
 .sc-section > h2.sc-label::after { content: ""; flex: 1; height: 2px; border-radius: 1px; background: var(--ui-border); }
 
 /* panels and cards */
-.sc-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-dark); }
+.sc-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg); }
 .sc-grid { display: grid; gap: 1rem; }
 .sc-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .sc-card { padding: 1.2rem 1.3rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-lighter); }
 .sc-card.is-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
-.sc-card.is-selected { background: var(--ui-selection); border-color: var(--ui-selection); }
+.sc-card.is-selected { background: var(--ui-border); border-color: var(--ui-border-active); }
 .sc-card h3 { margin-bottom: 0.4rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.15rem; letter-spacing: 0.05em; }
 .sc-card p { margin: 0; color: var(--ui-fg-light); }
 .sc-pill { display: inline-block; margin-top: 0.8rem; padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--nav-current); color: var(--nav-text); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -52,7 +52,7 @@ main.showcase {
 .sc-nav-samples { display: grid; gap: 0.6rem; }
 .sc-bar { display: flex; align-items: center; min-height: calc(var(--nav-h) + 2 * var(--nav-pad)); padding: var(--nav-pad) 1rem; border-radius: 1rem; background-color: var(--ui-border); }
 .sc-bar.end { justify-content: flex-end; }
-.sc-bar.on-page { background-color: var(--ui-bg-dark); border: 1px solid var(--ui-border); }
+.sc-bar.on-page { background-color: var(--ui-bg); border: 1px solid var(--ui-border); }
 
 /* separators */
 .sc-sep { height: 2px; margin: 1.2rem 0 0.5rem; border: 0; background: var(--ui-separator); }
@@ -61,7 +61,7 @@ main.showcase {
 
 /* swatches */
 .sc-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: 0.7rem; }
-.sc-swatch { border: 1px solid var(--ui-border); border-radius: 0.8rem; overflow: hidden; background: var(--ui-bg-dark); }
+.sc-swatch { border: 1px solid var(--ui-border); border-radius: 0.8rem; overflow: hidden; background: var(--ui-bg); }
 .sc-swatch i { display: block; height: 3.4rem; }
 .sc-swatch div { padding: 0.45rem 0.65rem 0.55rem; line-height: 1.25; }
 .sc-swatch b { display: block; color: var(--ui-fg); font-weight: 600; font-size: 0.95rem; }
@@ -69,7 +69,7 @@ main.showcase {
 .sc-swatch small { display: block; color: var(--ui-fg-dark); font-size: 0.78rem; }
 .sc-subhead { margin: 1.8rem 0 0.7rem; color: var(--ui-magenta); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .sc-note { margin: 0.4rem 0 0; color: var(--ui-fg-dark); font-size: 0.95rem; }
-.sc-brand-box { padding: 1rem 1.2rem 1.2rem; border: 1px dashed var(--ui-muted); border-radius: 1rem; }
+.sc-brand-box { padding: 1rem 1.2rem 1.2rem; border: 1px dashed var(--ui-fg-dark); border-radius: 1rem; }
 
 /* type scale */
 .sc-type { display: grid; grid-template-columns: 11rem 1fr; gap: 0.9rem 1.5rem; align-items: baseline; }
@@ -79,7 +79,7 @@ main.showcase {
 .sc-h4 { font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent); }
 .sc-body { margin: 0; font-size: 1.2rem; color: var(--text-body); max-width: 42rem; }
 .sc-small { margin: 0; font-size: 0.95rem; color: var(--text-small); }
-.showcase a.sc-link, .sc-link { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--ui-muted); text-underline-offset: 0.2em; }
+.showcase a.sc-link, .sc-link { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--ui-fg-dark); text-underline-offset: 0.2em; }
 .sc-link:hover { color: var(--ui-fg-bright); text-decoration-color: var(--ui-magenta-bright); }
 .sc-prompt {
   display: inline-block;
@@ -103,10 +103,10 @@ main.showcase {
   background: var(--ui-bg-lighter); border: 1px solid var(--ui-border); border-radius: 0.6rem;
 }
 .sc-input::placeholder { color: var(--ui-fg-dark); }
-.sc-input:hover { border-color: var(--ui-muted); }
+.sc-input:hover { border-color: var(--ui-fg-dark); }
 /* focus: the shared focus-field highlight (--hl-* in base.css) */
 .sc-input:focus, .sc-input.is-focus { outline: none; border-color: var(--hl-line); box-shadow: 0 0 0 var(--hl-ring-w) var(--hl-ring); }
-.sc-input:disabled { color: var(--ui-fg-dark); background: var(--ui-bg-dark); border-style: dashed; }
+.sc-input:disabled { color: var(--ui-fg-dark); background: var(--ui-bg); border-style: dashed; }
 textarea.sc-input { min-height: 5.5rem; resize: vertical; }
 select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); background-image: linear-gradient(45deg, transparent 50%, var(--ui-fg-dark) 50%), linear-gradient(135deg, var(--ui-fg-dark) 50%, transparent 50%); background-position: right 1.1rem center, right 0.75rem center; background-size: 0.35rem 0.35rem; background-repeat: no-repeat; }
 .sc-checks { display: flex; gap: 1.4rem; flex-wrap: wrap; color: var(--ui-fg); }
@@ -118,7 +118,7 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
 .sc-code {
   margin: 0; padding: 1rem 1.2rem; overflow-x: auto;
   font: 0.95rem/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  color: var(--ui-fg); background: var(--ui-bg-darker);
+  color: var(--ui-fg); background: var(--ui-bg);
   border: 1px solid var(--ui-border); border-left: 4px solid var(--ui-magenta); border-radius: 0.6rem;
 }
 .sc-code .k { color: var(--ui-magenta); }
@@ -143,8 +143,8 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
   border-radius: 0.6rem;
 }
 .term-head { padding: 0.45rem 1rem 0.55rem; }
-.sc-bd { position: relative; height: 13rem; border-radius: 1rem; overflow: hidden; border: 1px solid var(--ui-border); background: var(--ui-bg-darker); }
-.sc-bd .photo { position: absolute; inset: 0; background-color: var(--ui-bg-darker); background-size: cover; background-repeat: no-repeat; }
+.sc-bd { position: relative; height: 13rem; border-radius: 1rem; overflow: hidden; border: 1px solid var(--ui-border); background: var(--ui-bg); }
+.sc-bd .photo { position: absolute; inset: 0; background-color: var(--ui-bg); background-size: cover; background-repeat: no-repeat; }
 .sc-term-sample { margin: 1.25rem 0 0; }
 .sc-term-stack { position: absolute; left: 1.4rem; right: 1.4rem; top: 50%; transform: translateY(-50%); z-index: 2; }
 .sc-term-stack .term { max-width: 34rem; }
