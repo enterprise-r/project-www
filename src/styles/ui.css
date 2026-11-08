@@ -113,6 +113,8 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
 .sc-checks label { display: inline-flex; align-items: center; gap: 0.45rem; }
 .sc-checks input { accent-color: var(--nav-current); width: 1.1rem; height: 1.1rem; }
 .sc-help { color: var(--ui-fg-dark); font-size: 0.85rem; }
+/* Form actions sit on their own row, at the right edge of the form. */
+.sc-actions { grid-column: 1 / -1; display: grid; gap: 0.35rem; justify-items: end; }
 
 /* code */
 .sc-code {
