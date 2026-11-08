@@ -289,8 +289,15 @@ footer a:focus-visible,
    the page you are on is Green (sage), aria-current="page". A crumb can be a .bar-menu to switch to a sibling.
    The slant is a clip-path; the next crumb tucks under it, leaving the nav's 0.3rem gap on the diagonal.
    The clip would cut the focus outline, so a crumb shows focus as an inner ring.
+   The root (Home) is the lone R, ®, in Enterprsr: the mark for the root of the content.
    <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a class="bar-btn" href="/">Home</a></li>…</ol></nav> */
-.crumbs { --slant: 0.6rem; }
+.crumbs {
+  /* Slant per unit of height, so the angle holds when the buttons grow on small screens. */
+  --k: 0.3;
+  --slant: calc(var(--nav-h) * var(--k));
+  /* Corner radius of the slanted shape, the same as the nav buttons. */
+  --c: 0.25rem;
+}
 .crumbs ol {
   display: flex;
   flex-wrap: wrap;
@@ -300,22 +307,51 @@ footer a:focus-visible,
 }
 .crumbs li { display: flex; }
 .crumbs li + li { margin-left: calc(0.3rem - var(--slant)); }
+/* --l and --r are the slants of the left and right edges, --kl and --kr their slope (0 when the edge is straight). */
 .crumbs li > .bar-btn,
 .crumbs li > .bar-menu > summary {
   --l: var(--slant);
   --r: var(--slant);
+  --kl: var(--k);
+  --kr: var(--k);
   min-width: 0;
   padding-left: calc(0.75rem + var(--l));
   padding-right: calc(0.75rem + var(--r));
+  border-radius: 0;
   clip-path: polygon(var(--l) 0, 100% 0, calc(100% - var(--r)) 100%, 0 100%);
 }
+/* Slant first, then round: the same shape with every corner rounded, slanted ones included. */
+@supports (clip-path: shape(from 0 0, line to 1px 1px)) {
+  .crumbs li > .bar-btn,
+  .crumbs li > .bar-menu > summary {
+    clip-path: shape(from calc(var(--l) + var(--c)) 0,
+      line to calc(100% - var(--c)) 0,
+      curve to calc(100% - var(--c) * var(--kr)) var(--c) with 100% 0,
+      line to calc(100% - var(--r) + var(--c) * var(--kr)) calc(100% - var(--c)),
+      curve to calc(100% - var(--r) - var(--c)) 100% with calc(100% - var(--r)) 100%,
+      line to var(--c) 100%,
+      curve to calc(var(--c) * var(--kl)) calc(100% - var(--c)) with 0 100%,
+      line to calc(var(--l) - var(--c) * var(--kl)) var(--c),
+      curve to calc(var(--l) + var(--c)) 0 with var(--l) 0,
+      close);
+  }
+}
 .crumbs li:first-child > .bar-btn,
-.crumbs li:first-child > .bar-menu > summary { --l: 0px; }
+.crumbs li:first-child > .bar-menu > summary { --l: 0px; --kl: 0; }
 .crumbs li:last-child > .bar-btn,
 .crumbs li:last-child > .bar-menu > summary {
   --r: 0px;
+  --kr: 0;
   border-top-right-radius: var(--pill-r);
   border-bottom-right-radius: var(--pill-r);
+}
+/* The root crumb is the lone R (®) in Enterprsr, like the Home button. Accessible name: Home. */
+.crumbs .crumb-root {
+  align-items: center;
+  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .crumbs .bar-btn:not([aria-current="page"]) { background-color: var(--crumb); }
 .crumbs .bar-btn:not([aria-current="page"]):hover,
