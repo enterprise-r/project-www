@@ -294,6 +294,8 @@ footer a:focus-visible,
   list-style: none;
 }
 .crumbs li { display: flex; }
+.crumbs li > .bar-btn,
+.crumbs li > .bar-menu > summary { min-width: 0; }
 .crumbs li:last-child > .bar-btn,
 .crumbs li:last-child > .bar-menu > summary { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
 
