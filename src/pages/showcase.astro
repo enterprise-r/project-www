@@ -35,6 +35,59 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     </section>
 
     <section class="sc-section">
+      <h2 class="sc-label">Navigation</h2>
+      <div class="sc-nav-samples">
+        <div class="sc-bar end">
+          <nav class="bar-group" aria-label="Sample navigation">
+            <a class="bar-btn" href="#">About</a>
+            <details class="bar-menu">
+              <summary class="bar-btn">Docs</summary>
+              <div class="bar-menu-list">
+                <a class="bar-btn" href="#">Guides</a>
+                <a class="bar-btn" href="#">Reference</a>
+                <a class="bar-btn" href="#">Changelog</a>
+              </div>
+            </details>
+            <a class="bar-btn" href="#" aria-current="page">Showcase</a>
+          </nav>
+        </div>
+        <span class="sc-cap">Nav buttons with a menu: Docs opens a list of its pages</span>
+      </div>
+      <div class="sc-nav-samples" style="margin-top:1.2rem">
+        <div class="sc-bar on-page">
+          <nav class="crumbs" aria-label="Sample breadcrumb">
+            <ol>
+              <li><a class="bar-btn" href="#">Home</a></li>
+              <li><a class="bar-btn" href="#">Docs</a></li>
+              <li>
+                <details class="bar-menu to-right">
+                  <summary class="bar-btn" aria-current="page">Guides</summary>
+                  <div class="bar-menu-list">
+                    <a class="bar-btn" href="#" aria-current="page">Guides</a>
+                    <a class="bar-btn" href="#">Reference</a>
+                    <a class="bar-btn" href="#">Changelog</a>
+                  </div>
+                </details>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <span class="sc-cap">Breadcrumbs with a sibling switch: the page you are on opens its siblings</span>
+      </div>
+      <p class="sc-note">Breadcrumbs are the nav buttons as bubbles, one per level, joined by a Muted chevron. Parents are Orange, the page you are on is Green (sage), with the same hover and focus. Any nav button or crumb can carry a menu: a caret on the button, and a stack of the same buttons on the title bar colour underneath. Click outside or press Esc to close it.</p>
+    </section>
+
+    <section class="sc-section">
+      <h2 class="sc-label">Separators</h2>
+      <hr class="sc-sep">
+      <span class="sc-cap">Separator (--ui-separator): Green (sage) at the faded edges, through Magenta, to Orange in the centre</span>
+      <div class="sc-striped-thin"></div>
+      <span class="sc-cap">Striped rule (--ui-striped): Orange, Magenta, Green (sage), bottom left to top right</span>
+      <div class="sc-striped" style="margin-top:1.2rem"></div>
+      <span class="sc-cap">Striped gradient: the badge ring and the words of the wide and compact logos</span>
+    </section>
+
+    <section class="sc-section">
       <h2 class="sc-label">Colours</h2>
       <div class="sc-brand-box">
         <h3 class="sc-subhead" style="margin-top:0">Amber (Accent)</h3>
@@ -113,6 +166,14 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     </section>
   </main>
   <script is:inline slot="scripts">
+    // Menus: one open at a time; click outside or Esc closes them.
+    (() => {
+      const menus = [...document.querySelectorAll("details.bar-menu")];
+      const close = (keep) => menus.forEach((m) => { if (m !== keep) m.open = false; });
+      menus.forEach((m) => m.addEventListener("toggle", () => { if (m.open) close(m); }));
+      document.addEventListener("click", (e) => { if (!e.target.closest("details.bar-menu")) close(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+    })();
     // Label contrast, from the colours on screen.
     (() => {
       const cs = getComputedStyle(document.documentElement);
