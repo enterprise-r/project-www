@@ -70,8 +70,8 @@
   --crumb: var(--ui-magenta);
   --crumb-hover: var(--ui-magenta-bright);
   /* Form actions. Generic is Orange like other pages, primary is Green (sage) like the current page.
-     Clear (reset the fields) is Cyan, cancel (abort, leave without saving) is Red. Each goes bright on hover. */
-  --act-clear: var(--ui-cyan);
+     Clear (reset the fields) is Bright blue, the mirrored R of the logo, and Bright cyan on hover; cancel (abort, leave without saving) is Red. Each goes bright on hover. */
+  --act-clear: var(--ui-blue-bright);
   --act-clear-hover: var(--ui-cyan-bright);
   --act-cancel: var(--ui-red);
   --act-cancel-hover: var(--ui-red-bright);
