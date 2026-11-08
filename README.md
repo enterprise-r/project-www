@@ -67,7 +67,7 @@ The title bar is one full-width stripe with the logo in the middle: the wide loc
 
 The Home button reads ® (its accessible name is Home). It floats fixed at the bottom left of the bar and does not change on hover. Scrolled down, it goes back to the top; at the top, it goes to the home page. Every other page sits at the bottom right of the bar. Keyboard focus is a 2 px outline, 3 px off.
 
-Breadcrumbs (`.crumbs`) are the same buttons as bubbles, one per level, joined by a Muted chevron: parents Orange, the page you are on Green (sage). Any nav button or crumb can carry a menu (`details.bar-menu`): a caret on the button and a stack of the same buttons on the title bar colour underneath, for a page's subpages or a crumb's siblings. Both live in `base.css` and are shown in `/showcase/`.
+Breadcrumbs (`.crumbs`) are the same buttons as bubbles, one per level, joined by a Muted chevron: parents Orange, the page you are on Green (sage). Any nav button or crumb can carry a menu (`details.bar-menu`): a caret on the left of the button, which takes its hover colour while open, and a stack of the same buttons on the title bar colour underneath (square under a nav button, pills under a crumb), for a page's subpages or a crumb's siblings. Both live in `base.css` and are shown in `/showcase/`.
 
 The footer is a slim stripe with the LinkedIn and GitHub icons in the middle. The icons are inline paths from Simple Icons (CC0). On short pages it sits at the bottom of the window.
 
