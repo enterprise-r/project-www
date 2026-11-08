@@ -66,6 +66,9 @@
   --nav-other-hover: var(--ui-accent);
   --nav-text: var(--ui-bg);
   --nav-focus: var(--ui-fg-bright);
+  /* Breadcrumb parents are links, so they take the link family: Magenta, Bright magenta on hover. */
+  --crumb: var(--ui-magenta);
+  --crumb-hover: var(--ui-magenta-bright);
   --nav-disabled: var(--ui-border);
   --nav-disabled-text: var(--ui-fg-dark);
   --nav-h: 2rem;
@@ -222,7 +225,11 @@ header nav a[aria-current="page"]:hover,
 .bar-btn[aria-current="page"]:hover,
 .bar-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
 
-.bar-btn[aria-disabled="true"] {
+/* The label keeps its colour on hover; only the fill changes. */
+main a.bar-btn:hover { color: var(--nav-text); }
+
+.bar-btn[aria-disabled="true"],
+main a.bar-btn[aria-disabled="true"]:hover {
   background-color: var(--nav-disabled);
   color: var(--nav-disabled-text);
   cursor: not-allowed;
@@ -235,6 +242,125 @@ footer a:focus-visible,
 .bar-btn.is-focus {
   outline: 2px solid var(--nav-focus);
   outline-offset: 3px;
+}
+
+/* Dropdown on a bar button, for a menu in the nav or the siblings of a breadcrumb.
+   <details class="bar-menu"><summary class="bar-btn">Docs</summary><div class="bar-menu-list">bar-btn links</div></details>
+   The button gets a caret on the left, away from the label, and takes its hover colour while open.
+   The list is a stack of the same squared buttons on the title bar colour. It opens under the button, right-aligned (add .to-right to open it from the left edge). */
+.bar-menu { position: relative; display: flex; }
+.bar-menu > summary { list-style: none; cursor: pointer; gap: 0.45rem; }
+.bar-menu > summary::-webkit-details-marker { display: none; }
+.bar-menu > summary::before {
+  content: "";
+  margin-right: auto;
+  margin-bottom: 0.3rem;
+  border-left: 0.28rem solid transparent;
+  border-right: 0.28rem solid transparent;
+  border-top: 0.32rem solid currentColor;
+  transition: transform 0.15s;
+}
+.bar-menu[open] > summary::before { transform: rotate(180deg); }
+.bar-menu[open] > summary { background-color: var(--nav-other-hover); }
+.bar-menu[open] > summary[aria-current="page"] { background-color: var(--nav-current-hover); }
+.bar-menu-list {
+  position: absolute;
+  top: calc(100% + 0.3rem);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 100%;
+  padding: 0.3rem;
+  background-color: var(--ui-border);
+  border-radius: 0.45rem;
+}
+.bar-menu.to-right > .bar-menu-list { right: auto; left: 0; }
+.bar-menu-list > .bar-btn { white-space: nowrap; }
+
+.bar-group > .bar-menu:first-child > summary { border-top-left-radius: var(--pill-r); border-bottom-left-radius: var(--pill-r); }
+
+.bar-group > .bar-menu:last-child > summary { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
+
+/* Breadcrumbs: the same buttons, one per level, joined on a diagonal ("/", like the striped gradient):
+   squared on the left, only the last rounded on the right.
+   Parents are links, so they are Magenta (--crumb), Bright magenta on hover;
+   the page you are on is Green (sage), aria-current="page". A crumb can be a .bar-menu to switch to a sibling.
+   The slant is a clip-path; the next crumb tucks under it, leaving the nav's 0.3rem gap on the diagonal.
+   The clip would cut the focus outline, so a crumb shows focus as an inner ring.
+   The root (Home) is the lone R, ®, in Enterprsr: the mark for the root of the content.
+   <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a class="bar-btn" href="/">Home</a></li>…</ol></nav> */
+.crumbs {
+  /* Slant per unit of height, so the angle holds when the buttons grow on small screens. */
+  --k: 0.3;
+  --slant: calc(var(--nav-h) * var(--k));
+  /* Corner radius of the slanted shape, the same as the nav buttons. */
+  --c: 0.25rem;
+}
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.crumbs li { display: flex; }
+.crumbs li + li { margin-left: calc(0.3rem - var(--slant)); }
+/* --l and --r are the slants of the left and right edges, --kl and --kr their slope (0 when the edge is straight). */
+.crumbs li > .bar-btn,
+.crumbs li > .bar-menu > summary {
+  --l: var(--slant);
+  --r: var(--slant);
+  --kl: var(--k);
+  --kr: var(--k);
+  min-width: 0;
+  padding-left: calc(0.75rem + var(--l));
+  padding-right: calc(0.75rem + var(--r));
+  border-radius: 0;
+  clip-path: polygon(var(--l) 0, 100% 0, calc(100% - var(--r)) 100%, 0 100%);
+}
+/* Slant first, then round: the same shape with every corner rounded, slanted ones included. */
+@supports (clip-path: shape(from 0 0, line to 1px 1px)) {
+  .crumbs li > .bar-btn,
+  .crumbs li > .bar-menu > summary {
+    clip-path: shape(from calc(var(--l) + var(--c)) 0,
+      line to calc(100% - var(--c)) 0,
+      curve to calc(100% - var(--c) * var(--kr)) var(--c) with 100% 0,
+      line to calc(100% - var(--r) + var(--c) * var(--kr)) calc(100% - var(--c)),
+      curve to calc(100% - var(--r) - var(--c)) 100% with calc(100% - var(--r)) 100%,
+      line to var(--c) 100%,
+      curve to calc(var(--c) * var(--kl)) calc(100% - var(--c)) with 0 100%,
+      line to calc(var(--l) - var(--c) * var(--kl)) var(--c),
+      curve to calc(var(--l) + var(--c)) 0 with var(--l) 0,
+      close);
+  }
+}
+.crumbs li:first-child > .bar-btn,
+.crumbs li:first-child > .bar-menu > summary { --l: 0px; --kl: 0; }
+.crumbs li:last-child > .bar-btn,
+.crumbs li:last-child > .bar-menu > summary {
+  --r: 0px;
+  --kr: 0;
+  border-top-right-radius: var(--pill-r);
+  border-bottom-right-radius: var(--pill-r);
+}
+/* The root crumb is the lone R (®) in Enterprsr, like the Home button. Accessible name: Home. */
+.crumbs .crumb-root {
+  align-items: center;
+  font-family: Enterprsr, Audiowide, Rajdhani, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.crumbs .bar-btn:not([aria-current="page"]) { background-color: var(--crumb); }
+.crumbs .bar-btn:not([aria-current="page"]):hover,
+.crumbs .bar-btn:not([aria-current="page"]).is-hover,
+.crumbs .bar-menu[open] > summary:not([aria-current="page"]) { background-color: var(--crumb-hover); }
+.crumbs li > .bar-btn:focus-visible,
+.crumbs li > .bar-menu > summary:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--nav-focus);
 }
 
 @media (max-width: 640px) {

@@ -49,6 +49,17 @@ main.showcase {
 .sc-form-states { margin-top: 1.1rem; }
 .sc-cap b { color: var(--ui-fg-light); font-weight: 600; }
 
+/* navigation samples: a strip in the title bar colour */
+.sc-nav-samples { display: grid; gap: 0.6rem; }
+.sc-bar { display: flex; align-items: center; min-height: calc(var(--nav-h) + 2 * var(--nav-pad)); padding: var(--nav-pad) 1rem; border-radius: 1rem; background-color: var(--ui-border); }
+.sc-bar.end { justify-content: flex-end; }
+.sc-bar.on-page { background-color: var(--ui-bg-dark); border: 1px solid var(--ui-border); }
+
+/* separators */
+.sc-sep { height: 2px; margin: 1.2rem 0 0.5rem; border: 0; background: var(--ui-separator); }
+.sc-striped { height: 3.4rem; border-radius: 0.8rem; background: var(--ui-striped); }
+.sc-striped-thin { height: 4px; margin: 1.2rem 0 0.5rem; border-radius: 2px; background: var(--ui-striped); }
+
 /* swatches */
 .sc-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: 0.7rem; }
 .sc-swatch { border: 1px solid var(--ui-border); border-radius: 0.8rem; overflow: hidden; background: var(--ui-bg-dark); }
