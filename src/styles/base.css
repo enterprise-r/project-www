@@ -66,6 +66,9 @@
   --nav-other-hover: var(--ui-accent);
   --nav-text: var(--ui-bg);
   --nav-focus: var(--ui-fg-bright);
+  /* Breadcrumb parents are links, so they take the link family: Magenta, Bright magenta on hover. */
+  --crumb: var(--ui-magenta);
+  --crumb-hover: var(--ui-magenta-bright);
   --nav-disabled: var(--ui-border);
   --nav-disabled-text: var(--ui-fg-dark);
   --nav-h: 2rem;
@@ -280,24 +283,49 @@ footer a:focus-visible,
 
 .bar-group > .bar-menu:last-child > summary { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
 
-/* Breadcrumbs: the same buttons, one per level, joined like the nav: squared, with only the last
-   rounded on the right, so the row reads as one arrow into the page you are on.
-   Parents are Orange like other pages; the page you are on is Green (sage), aria-current="page".
-   A crumb can be a .bar-menu to switch to a sibling.
+/* Breadcrumbs: the same buttons, one per level, joined on a diagonal ("/", like the striped gradient):
+   squared on the left, only the last rounded on the right.
+   Parents are links, so they are Magenta (--crumb), Bright magenta on hover;
+   the page you are on is Green (sage), aria-current="page". A crumb can be a .bar-menu to switch to a sibling.
+   The slant is a clip-path; the next crumb tucks under it, leaving the nav's 0.3rem gap on the diagonal.
+   The clip would cut the focus outline, so a crumb shows focus as an inner ring.
    <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a class="bar-btn" href="/">Home</a></li>…</ol></nav> */
+.crumbs { --slant: 0.6rem; }
 .crumbs ol {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .crumbs li { display: flex; }
+.crumbs li + li { margin-left: calc(0.3rem - var(--slant)); }
 .crumbs li > .bar-btn,
-.crumbs li > .bar-menu > summary { min-width: 0; }
+.crumbs li > .bar-menu > summary {
+  --l: var(--slant);
+  --r: var(--slant);
+  min-width: 0;
+  padding-left: calc(0.75rem + var(--l));
+  padding-right: calc(0.75rem + var(--r));
+  clip-path: polygon(var(--l) 0, 100% 0, calc(100% - var(--r)) 100%, 0 100%);
+}
+.crumbs li:first-child > .bar-btn,
+.crumbs li:first-child > .bar-menu > summary { --l: 0px; }
 .crumbs li:last-child > .bar-btn,
-.crumbs li:last-child > .bar-menu > summary { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
+.crumbs li:last-child > .bar-menu > summary {
+  --r: 0px;
+  border-top-right-radius: var(--pill-r);
+  border-bottom-right-radius: var(--pill-r);
+}
+.crumbs .bar-btn:not([aria-current="page"]) { background-color: var(--crumb); }
+.crumbs .bar-btn:not([aria-current="page"]):hover,
+.crumbs .bar-btn:not([aria-current="page"]).is-hover,
+.crumbs .bar-menu[open] > summary:not([aria-current="page"]) { background-color: var(--crumb-hover); }
+.crumbs li > .bar-btn:focus-visible,
+.crumbs li > .bar-menu > summary:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--nav-focus);
+}
 
 @media (max-width: 640px) {
   /* Title row (wide logo, 6rem tall row), then the nav row. */
