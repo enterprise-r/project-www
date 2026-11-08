@@ -69,6 +69,12 @@
   /* Breadcrumb parents are links, so they take the link family: Magenta, Bright magenta on hover. */
   --crumb: var(--ui-magenta);
   --crumb-hover: var(--ui-magenta-bright);
+  /* Form actions. Generic is Orange like other pages, primary is Green (sage) like the current page.
+     Clear (reset the fields) is Bright blue, the mirrored R of the logo, and Bright cyan on hover; cancel (abort, leave without saving) is Red. Each goes bright on hover. */
+  --act-clear: var(--ui-blue-bright);
+  --act-clear-hover: var(--ui-cyan-bright);
+  --act-cancel: var(--ui-red);
+  --act-cancel-hover: var(--ui-red-bright);
   --nav-disabled: var(--ui-border);
   --nav-disabled-text: var(--ui-fg-dark);
   --nav-h: 2rem;
@@ -227,6 +233,19 @@ header nav a[aria-current="page"]:hover,
 
 /* The label keeps its colour on hover; only the fill changes. */
 main a.bar-btn:hover { color: var(--nav-text); }
+
+/* Form actions on the same button: .primary, .clear (also any reset button), .cancel; no class is generic. */
+.bar-btn.primary { background-color: var(--nav-current); }
+.bar-btn.primary:hover,
+.bar-btn.primary.is-hover { background-color: var(--nav-current-hover); }
+.bar-btn.clear,
+button.bar-btn[type="reset"] { background-color: var(--act-clear); }
+.bar-btn.clear:hover,
+.bar-btn.clear.is-hover,
+button.bar-btn[type="reset"]:hover { background-color: var(--act-clear-hover); }
+.bar-btn.cancel { background-color: var(--act-cancel); }
+.bar-btn.cancel:hover,
+.bar-btn.cancel.is-hover { background-color: var(--act-cancel-hover); }
 
 .bar-btn[aria-disabled="true"],
 main a.bar-btn[aria-disabled="true"]:hover {
