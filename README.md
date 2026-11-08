@@ -69,6 +69,8 @@ The Home button reads ® (its accessible name is Home). It floats fixed at the b
 
 Breadcrumbs (`.crumbs`) are the same buttons joined in one row on a diagonal (a `clip-path` slant), one per level, with only the last rounded on the right, and the root as the lone R (®) in Enterprsr: parents Magenta (`--crumb`, they are links), the page you are on Green (sage). Any nav button or crumb can carry a menu (`details.bar-menu`): a caret on the left of the button, which takes its hover colour while open, and a stack of the same squared buttons on the title bar colour underneath, for a page's subpages or a crumb's siblings. Button labels keep their colour on hover. Both live in `base.css` and are shown in `/showcase/`.
 
+Form buttons are the same button with a role: generic (no class) Orange, `.primary` Green (sage), `.clear` (and any reset button) Cyan, `.cancel` Red, each brighter on hover (`--act-*` in `base.css`).
+
 The footer is a slim stripe with the LinkedIn and GitHub icons in the middle. The icons are inline paths from Simple Icons (CC0). On short pages it sits at the bottom of the window.
 
 On About, the email sits centred in a bubble.

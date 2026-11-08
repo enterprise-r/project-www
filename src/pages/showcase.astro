@@ -142,14 +142,17 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
           <div class="sc-field" style="grid-column: span 2"><label for="f-msg">Message</label><textarea class="sc-input" id="f-msg" placeholder="Your message"></textarea></div>
           <div class="sc-field"><span class="sc-cap">Options</span><div class="sc-checks"><label><input type="checkbox" checked> Updates</label><label><input type="checkbox"> Newsletter</label></div></div>
           <div class="sc-field"><span class="sc-cap">Channel</span><div class="sc-checks"><label><input type="radio" name="ch" checked> E-mail</label><label><input type="radio" name="ch"> Subspace</label></div></div>
-          <div class="sc-field" style="align-self:end"><span class="bar-group" style="display:flex;gap:.3rem"><button class="bar-btn" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button><button class="bar-btn" type="button" style="border:0;font-family:inherit">Clear</button></span><span class="sc-help">Primary action uses Green (sage).</span></div>
+          <div class="sc-field" style="align-self:end"><span class="bar-group"><button class="bar-btn primary" type="submit">Send</button><button class="bar-btn" type="button">Save</button><button class="bar-btn" type="reset">Clear</button><button class="bar-btn cancel" type="button">Cancel</button></span><span class="sc-help">Primary Green (sage), generic Orange, clear Cyan, cancel Red.</span></div>
         </div>
         <div class="sc-states sc-form-states">
-          <figure><span class="bar-group"><button class="bar-btn" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary</figcaption></figure>
-          <figure><span class="bar-group"><button class="bar-btn is-hover" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, hover</figcaption></figure>
-          <figure><span class="bar-group"><button class="bar-btn is-focus" type="button" aria-current="page" style="border:0;font-family:inherit">Send</button></span><figcaption class="sc-cap">Primary, focus</figcaption></figure>
-          <figure><span class="bar-group"><button class="bar-btn is-hover" type="button" style="border:0;font-family:inherit">Clear</button></span><figcaption class="sc-cap">Other, hover</figcaption></figure>
-          <figure><span class="bar-group"><button class="bar-btn is-focus" type="button" style="border:0;font-family:inherit">Clear</button></span><figcaption class="sc-cap">Other, focus</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn primary" type="submit">Send</button></span><figcaption class="sc-cap">Primary</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn primary is-hover" type="submit">Send</button></span><figcaption class="sc-cap">Primary, hover</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn" type="button">Save</button></span><figcaption class="sc-cap">Generic</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn is-hover" type="button">Save</button></span><figcaption class="sc-cap">Generic, hover</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn" type="reset">Clear</button></span><figcaption class="sc-cap">Clear</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn is-hover" type="reset">Clear</button></span><figcaption class="sc-cap">Clear, hover</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn cancel" type="button">Cancel</button></span><figcaption class="sc-cap">Cancel</figcaption></figure>
+          <figure><span class="bar-group"><button class="bar-btn cancel is-hover" type="button">Cancel</button></span><figcaption class="sc-cap">Cancel, hover</figcaption></figure>
         </div>
       </form>
     </section>
@@ -191,6 +194,7 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
       document.getElementById("contrast").textContent =
         `Label contrast (WCAG AA needs 4.5:1): on current ${ratio(label, v("--nav-current"))}:1, on other ${ratio(label, v("--nav-other"))}:1, ` +
         `on current hover ${ratio(label, v("--nav-current-hover"))}:1, on other hover ${ratio(label, v("--nav-other-hover"))}:1. ` +
+        `Clear ${ratio(label, v("--act-clear"))}:1 (hover ${ratio(label, v("--act-clear-hover"))}:1), cancel ${ratio(label, v("--act-cancel"))}:1 (hover ${ratio(label, v("--act-cancel-hover"))}:1). ` +
         `Body text on the page background ${ratio(v("--text-body"), v("--ui-bg"))}:1.`;
     })();
   </script>
