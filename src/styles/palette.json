@@ -6,35 +6,15 @@
       "title": "Surfaces",
       "colours": [
         {
-          "name": "Darker background",
-          "var": "--ui-bg-darker",
-          "hex": "#09030D",
-          "use": "footer icons"
-        },
-        {
-          "name": "Dark background",
-          "var": "--ui-bg-dark",
-          "hex": "#0A030E"
-        },
-        {
           "name": "Background",
           "var": "--ui-bg",
-          "hex": "#0C040F"
+          "hex": "#0C040F",
+          "use": "page, panels, footer icons"
         },
         {
           "name": "Lighter background",
           "var": "--ui-bg-lighter",
           "hex": "#181820"
-        },
-        {
-          "name": "Selection",
-          "var": "--ui-selection",
-          "hex": "#41285B"
-        },
-        {
-          "name": "Muted",
-          "var": "--ui-muted",
-          "hex": "#7D6D91"
         },
         {
           "name": "Inactive border",
