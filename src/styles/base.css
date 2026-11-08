@@ -222,7 +222,11 @@ header nav a[aria-current="page"]:hover,
 .bar-btn[aria-current="page"]:hover,
 .bar-btn[aria-current="page"].is-hover { background-color: var(--nav-current-hover); }
 
-.bar-btn[aria-disabled="true"] {
+/* The label keeps its colour on hover; only the fill changes. */
+main a.bar-btn:hover { color: var(--nav-text); }
+
+.bar-btn[aria-disabled="true"],
+main a.bar-btn[aria-disabled="true"]:hover {
   background-color: var(--nav-disabled);
   color: var(--nav-disabled-text);
   cursor: not-allowed;
@@ -240,8 +244,7 @@ footer a:focus-visible,
 /* Dropdown on a bar button, for a menu in the nav or the siblings of a breadcrumb.
    <details class="bar-menu"><summary class="bar-btn">Docs</summary><div class="bar-menu-list">bar-btn links</div></details>
    The button gets a caret on the left, away from the label, and takes its hover colour while open.
-   The list is a stack of the same buttons on the title bar colour, square like the nav buttons,
-   pills under a breadcrumb. It opens under the button, right-aligned (add .to-right to open it from the left edge). */
+   The list is a stack of the same squared buttons on the title bar colour. It opens under the button, right-aligned (add .to-right to open it from the left edge). */
 .bar-menu { position: relative; display: flex; }
 .bar-menu > summary { list-style: none; cursor: pointer; gap: 0.45rem; }
 .bar-menu > summary::-webkit-details-marker { display: none; }
@@ -277,33 +280,22 @@ footer a:focus-visible,
 
 .bar-group > .bar-menu:last-child > summary { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
 
-/* Breadcrumbs: the same buttons as bubbles, one per level, with a Muted chevron between.
+/* Breadcrumbs: the same buttons, one per level, joined like the nav: squared, with only the last
+   rounded on the right, so the row reads as one arrow into the page you are on.
    Parents are Orange like other pages; the page you are on is Green (sage), aria-current="page".
    A crumb can be a .bar-menu to switch to a sibling.
    <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a class="bar-btn" href="/">Home</a></li>…</ol></nav> */
 .crumbs ol {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 0.3rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.crumbs li { display: flex; align-items: center; gap: 0.3rem; }
-.crumbs li + li::before {
-  content: "";
-  width: 0.45rem;
-  height: 0.45rem;
-  margin: 0 0.3rem 0 0.1rem;
-  border-top: 2px solid var(--ui-muted);
-  border-right: 2px solid var(--ui-muted);
-  transform: rotate(45deg);
-}
-.crumbs li > .bar-btn,
-.crumbs li > .bar-menu > summary,
-.crumbs .bar-menu-list > .bar-btn { border-radius: var(--pill-r); }
-.crumbs .bar-menu-list { border-radius: calc(var(--pill-r) + 0.3rem); }
+.crumbs li { display: flex; }
+.crumbs li:last-child > .bar-btn,
+.crumbs li:last-child > .bar-menu > summary { border-top-right-radius: var(--pill-r); border-bottom-right-radius: var(--pill-r); }
 
 @media (max-width: 640px) {
   /* Title row (wide logo, 6rem tall row), then the nav row. */
