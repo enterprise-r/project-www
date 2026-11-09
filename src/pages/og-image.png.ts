@@ -4,7 +4,7 @@ import sharp from "sharp";
 import logo from "../../public/assets/logo-wide.svg?raw";
 import palette from "../styles/palette.json";
 
-// The title bar background in styles/base.css (header).
+// The title bar background in styles/bar.css (header).
 const bar = palette.groups.flatMap((g) => g.colours).find((c) => c.var === "--ui-border")!.hex;
 
 export const GET: APIRoute = async () => {

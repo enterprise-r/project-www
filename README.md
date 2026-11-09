@@ -12,12 +12,11 @@ Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showc
 |---|---|
 | Page text (title, heading, contact email) | the `page` block at the top of the page in `src/pages/` |
 | Logo and favicons | `public/assets/`. The title bar in `src/layouts/Base.astro` shows `logo-wide.svg` |
-| Styles | `src/styles/palette.css` (colours), `src/styles/base.css` (theme), `src/styles/about.css`, `src/styles/ui.css` (style guide) |
+| Styles | `src/styles/palette.css` (colours), `src/styles/theme/` (Dark-®), `src/styles/bar.css`, `src/styles/footer.css`, `src/styles/about.css`, `src/styles/ui.css` (style guide) |
 | Shared head, title bar, navigation and footer (social links: `social`) | `src/layouts/Base.astro` |
 | Page not found | `src/pages/404.astro` |
 | Search engines | `public/robots.txt`, and the indexed pages listed in `src/pages/sitemap.xml.ts` |
-| Enterprsr (Home button) | `public/fonts/Enterprsr-Regular.woff2`, from Drive `assets/fonts/woff2/` |
-| Audiowide and Rajdhani | `public/fonts/`. Google Fonts makes the latin and latin-ext subsets (Audiowide 400, Rajdhani 500 and 600) of the faces in Drive `assets/fonts/ttf/` |
+| Enterprsr, Audiowide and Rajdhani | `src/styles/fonts/woff2/`. Dark-® loads these from Drive `assets/fonts/woff2/` |
 | Link preview picture (`og:image`) | `src/pages/og-image.png.ts`, built from `public/assets/logo-wide.svg` on the title bar colour |
 | Style guide's sample picture | the `banner` hotlink at the top of `src/pages/showcase.astro` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
@@ -45,8 +44,8 @@ Every brand file comes from the project-branding build (`build.sh`), shipped to 
 | `public/assets/logo-wide.svg`, `favicon.svg` | Drive `assets/logos/svg/` |
 | `public/assets/favicon.ico`, `favicon-32.png` | Drive `assets/logos/favicon/` |
 | `public/assets/apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | Drive `assets/logos/favicon/` `favicon-180.png`, `favicon-192.png`, `favicon-512.png`, renamed |
-| `public/fonts/Enterprsr-Regular.woff2` | Drive `assets/fonts/woff2/` |
-| `public/fonts/audiowide-*.woff2`, `rajdhani-*.woff2` | Google Fonts subsets of the faces in Drive `assets/fonts/ttf/` (see above) |
+| `src/styles/theme/base.css`, `components.css` | Drive `assets/theme/`, copied as-is |
+| `src/styles/fonts/woff2/*.woff2` | Drive `assets/fonts/woff2/` (the files `theme/base.css` loads) |
 | `public/fonts/OFL-Enterprsr.txt`, `OFL-Audiowide.txt`, `OFL-Rajdhani.txt` | Drive `assets/fonts/licenses/` |
 | `src/styles/palette.css` | Drive `assets/palette/palette.css` |
 | `src/styles/palette.json` | project-branding `palette/palette.json` |
@@ -57,19 +56,21 @@ The `/showcase/` sample picture is the 3x1 banner, hotlinked from Drive `assets/
 
 `palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is, with `palette.json` next to it for the style guide's swatches. To change a colour, change it in project-branding, then copy both files again. Do not edit the colours in this repo.
 
+Dark-® (`src/styles/theme/base.css` and `components.css`) is Drive `assets/theme/`, copied as-is. Do not edit it here. It loads its fonts from `../fonts/woff2/`, so those files live at `src/styles/fonts/woff2/`. The palette this site imports stays `src/styles/palette.css`. The `palette.css` inside `assets/theme/` is for a project that links the theme on its own.
+
 A lockup is the wordmark and the mark together (wide and compact). The plate is the inactive-border shape behind the mark. Geometry is in project-branding [`logo/README.md`](https://github.com/enterprise-r/project-branding/blob/main/logo/README.md).
 
 ## Design
 
-The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`). Where a colour is used is the `use` line in `src/styles/palette.json`. `base.css` is the theme: type, the title bar with the navigation, and the footer. It uses only `--ui-*` variables. `about.css` holds only the rules the text pages use. The style guide is `ui.css`.
+The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`). Where a colour is used is the `use` line in `src/styles/palette.json`. Dark-® is the theme: `theme/base.css` (type and plain elements) and `theme/components.css` (buttons, menus, breadcrumbs, separators). It uses only `--ui-*` variables and adds `--r-*` roles. What the theme does not cover stays in its own file: `bar.css` (title bar and Home button), `footer.css`, `about.css` (text pages) and `ui.css` (style guide).
 
 The title bar is one full-width stripe with the logo in the middle: the wide lockup on every screen; at 640 px and below the title has its own row on the page background and the buttons go below it. On Home the logo is the page heading (`h1`).
 
-The Home button reads ® (its accessible name is Home). It floats fixed at the bottom left of the bar and does not change on hover. Scrolled down, it goes back to the top; at the top, it goes to the home page. Every other page sits at the bottom right of the bar. Keyboard focus is a 2 px outline, 3 px off.
+The Home button reads ® (its accessible name is Home). It floats fixed at the bottom left of the bar and does not change on hover. Scrolled down, it goes back to the top; at the top, it goes to the home page. Every other page sits at the bottom right of the bar, an `.r-btn` in an `.r-group`. Keyboard focus is a 2 px outline, 3 px off.
 
-Breadcrumbs (`.crumbs`) are the same buttons joined in one row on a diagonal (a `clip-path` slant), one per level, with only the last rounded on the right, and the root as the lone R (®) in Enterprsr: parents Magenta (`--crumb`, they are links), the page you are on Green (sage). Any nav button or crumb can carry a menu (`details.bar-menu`): a caret on the left of the button, which takes its hover colour while open, and a stack of the same squared buttons on the title bar colour underneath, for a page's subpages or a crumb's siblings. Button labels keep their colour on hover. Both live in `base.css` and are shown in `/showcase/`.
+Breadcrumbs (`.r-crumbs`) are the same buttons joined in one row on a diagonal (a `clip-path` slant), one per level, with only the last rounded on the right, and the root as the lone R (®) in Enterprsr (`.r-crumb-root`): parents Magenta (`--r-crumb`, they are links), the page you are on Green (sage). A button or a crumb can carry a menu (`details.r-menu`): a caret on the left of the button, which takes its hover colour while open, and a stack of the same squared buttons on the title bar colour underneath. Both live in `theme/components.css` and are shown in `/showcase/`.
 
-Form buttons are the same button with a role: generic (no class) Orange, `.primary` Green (sage), `.clear` (and any reset button) Bright blue, the mirrored R of the logo, `.cancel` Red, each brighter on hover (`--act-*` in `base.css`).
+Form buttons are the same button with a role: generic (no class) Orange, `.r-primary` Green (sage), `.r-clear` (and any reset button) Bright blue, the mirrored R of the logo, `.r-cancel` Red, each brighter on hover (`--r-*` in `theme/components.css`).
 
 The footer is a slim stripe with the LinkedIn and GitHub icons in the middle. The icons are inline paths from Simple Icons (CC0). On short pages it sits at the bottom of the window.
 
