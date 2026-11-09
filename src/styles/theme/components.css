@@ -192,3 +192,7 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    .r-striped is a thin bar of the striped gradient. */
 .r-sep { height: 2px; margin: 1.2rem 0; border: 0; background: var(--ui-separator); }
 .r-striped { height: 4px; margin: 1.2rem 0; border: 0; border-radius: 2px; background: var(--ui-striped); }
+
+/* Number columns in a table: right-aligned, figures of equal width.
+   <th class="r-num">Price</th> ... <td class="r-num">12.50</td> */
+.r-num { text-align: right; font-variant-numeric: tabular-nums; }

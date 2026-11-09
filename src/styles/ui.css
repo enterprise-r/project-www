@@ -13,8 +13,6 @@ main.showcase {
   text-align: left;
 }
 
-.showcase h2, .showcase h3, .showcase h4 { margin: 0; font-weight: 400; }
-
 .sc-title { margin: 0 0 0.75rem; line-height: 0; }
 .sc-title img { display: block; width: min(24.68rem, 100%); height: auto; }
 .sc-aw { font-family: var(--r-font-heading); }
@@ -99,9 +97,7 @@ main.showcase {
 
 .sc-type { display: grid; grid-template-columns: 11rem 1fr; gap: 0.9rem 1.5rem; align-items: baseline; }
 .sc-type > * { margin: 0; }
-.sc-h2 { font-family: var(--r-font-heading); font-size: 2rem; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
-.sc-h3 { font-family: var(--r-font-heading); font-size: 1.45rem; letter-spacing: 0.05em; color: var(--ui-magenta); }
-.sc-h4 { font-family: var(--r-font-text); font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent); }
+.sc-type ul { padding-left: 1.2rem; }
 .sc-type > .sc-cap { text-align: right; }
 .sc-type p { max-width: 42rem; }
 .sc-prompt {

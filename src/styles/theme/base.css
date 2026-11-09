@@ -1,6 +1,7 @@
 /* Dark-® base. Fonts and plain HTML elements, on the --ui-* variables of palette.css (link that first).
    Element selectors sit inside :where(), so they weigh nothing and an app's own rules always win.
-   Enterprsr is the brand font (the ® root mark). Audiowide for headings, Rajdhani for text.
+   Enterprsr is the brand font (the ® root mark). Audiowide for the top headings (h1-h3), Rajdhani for text
+   and minor headings (h4-h6). Three font variables pick the heading font per tier (see :root).
    Fonts load from ../fonts/woff2/, the fonts/ folder that ships next to theme/ in the assets. */
 @font-face {
   font-family: "Enterprsr";
@@ -37,7 +38,13 @@
   --r-text: var(--ui-fg);
   --r-text-small: var(--ui-fg-light);
   --r-text-dim: var(--ui-fg-dark);
+  /* Heading ladder: each level steps down in colour as well as size. */
   --r-heading: var(--ui-green);
+  --r-heading-2: var(--ui-fg-bright);
+  --r-heading-3: var(--ui-magenta);
+  --r-heading-4: var(--ui-accent);
+  --r-heading-5: var(--ui-fg-light);
+  --r-heading-6: var(--ui-fg-dark);
   --r-link: var(--ui-magenta-bright);
   --r-link-hover: var(--ui-fg-bright);
   --r-focus: var(--ui-fg-bright);
@@ -47,6 +54,11 @@
   --r-hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
   --r-font-brand: Enterprsr, Audiowide, Rajdhani, sans-serif;
   --r-font-heading: Audiowide, Rajdhani, sans-serif;
+  /* Heading fonts by tier, so an app can switch Audiowide off where it wants:
+     h1 uses --r-font-heading, h2-h3 --r-font-sub, h4-h6 --r-font-minor.
+     All headings in Rajdhani: --r-font-heading: var(--r-font-text). Only h2-h3: --r-font-sub: var(--r-font-text). */
+  --r-font-sub: var(--r-font-heading);
+  --r-font-minor: var(--r-font-text);
   --r-font-text: Rajdhani, "Segoe UI", sans-serif;
   --r-font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
@@ -65,20 +77,31 @@
 ::selection { background-color: var(--ui-border); color: var(--ui-fg-bright); }
 
 /* Text */
-:where(h1, h2, h3, h4) {
-  margin: 0 0 1rem;
-  color: var(--r-heading);
-  font-family: var(--r-font-heading);
+:where(h1, h2, h3, h4, h5, h6) {
+  margin: 0 0 0.6em;
   font-weight: 400;
   line-height: 1.15;
-  letter-spacing: 0.04em;
 }
-:where(h1) { font-size: 2rem; }
-:where(h2) { font-size: 1.6rem; }
-:where(h3) { font-size: 1.25rem; }
-:where(h4) { font-size: 1.05rem; }
-:where(p, ul, ol, dl, blockquote, pre, table) { margin: 0 0 1rem; }
+:where(h1, h2, h3) { letter-spacing: 0.04em; }
+:where(h1) { font-family: var(--r-font-heading); }
+:where(h2, h3) { font-family: var(--r-font-sub); }
+:where(h4, h5, h6) { font-family: var(--r-font-minor); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+:where(h1) { font-size: 2rem; color: var(--r-heading); }
+:where(h2) { font-size: 1.6rem; color: var(--r-heading-2); }
+:where(h3) { font-size: 1.3rem; color: var(--r-heading-3); }
+:where(h4) { font-size: 1.05rem; color: var(--r-heading-4); }
+:where(h5) { font-size: 0.95rem; color: var(--r-heading-5); }
+:where(h6) { font-size: 0.85rem; color: var(--r-heading-6); }
+:where(p, ul, ol, dl, blockquote, pre, table, figure, details) { margin: 0 0 1rem; }
 :where(small) { color: var(--r-text-small); }
+:where(mark) { padding: 0 0.15em; color: inherit; background: rgb(from var(--ui-accent) r g b / 0.3); border-radius: 0.2em; }
+:where(blockquote) { padding: 0.2rem 0 0.2rem 1rem; color: var(--r-text-small); border-left: 4px solid var(--ui-border); }
+:where(dt) { color: var(--r-text-small); font-weight: 600; }
+:where(dd) { margin: 0 0 0.5rem 1rem; }
+:where(figcaption) { margin-top: 0.4rem; color: var(--r-text-small); font-size: 0.95rem; }
+:where(details) { padding: 0.5rem 0.8rem; border: 1px solid var(--ui-border); border-radius: 0.6rem; }
+:where(summary) { cursor: pointer; color: var(--r-text-small); font-weight: 600; }
+:where(details[open] > summary) { margin-bottom: 0.5rem; }
 
 :where(a) { color: var(--r-link); }
 :where(a:hover) { color: var(--r-link-hover); }
@@ -103,6 +126,33 @@
   border-radius: 0.6rem;
 }
 :where(pre code) { font-size: inherit; }
+:where(kbd) {
+  padding: 0.05em 0.4em;
+  background: var(--ui-bg-lighter);
+  border: 1px solid var(--ui-border);
+  border-bottom-width: 2px;
+  border-radius: 0.3rem;
+}
+
+/* Tables: a rounded outline, a header row on the Border fill, a divider between rows, a soft hover.
+   Rounded corners need border-collapse: separate, so the lines are drawn per cell, not shared. */
+:where(table) {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: 0.6rem;
+}
+:where(caption) { padding: 0 0 0.4rem; color: var(--r-text-small); font-size: 0.95rem; text-align: left; }
+:where(th, td) { padding: 0.45rem 0.8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--ui-border); }
+:where(th) { color: var(--r-text-small); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; }
+:where(thead th) { background: var(--ui-border); }
+:where(table > :last-child > tr:last-child > *, table > tr:last-child > *) { border-bottom: 0; }
+:where(tbody tr:hover > *) { background: var(--ui-bg-lighter); }
+/* The corner cells round with the outline, so a filled header or a hovered row stays inside it. */
+:where(table > :first-child > tr:first-child > :first-child) { border-top-left-radius: calc(0.6rem - 1px); }
+:where(table > :first-child > tr:first-child > :last-child) { border-top-right-radius: calc(0.6rem - 1px); }
+:where(table > :last-child > tr:last-child > :first-child) { border-bottom-left-radius: calc(0.6rem - 1px); }
+:where(table > :last-child > tr:last-child > :last-child) { border-bottom-right-radius: calc(0.6rem - 1px); }
 
 /* Form fields */
 :where(label) { color: var(--r-text-small); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; }

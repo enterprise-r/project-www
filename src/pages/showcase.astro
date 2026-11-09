@@ -133,15 +133,40 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     <section class="sc-section">
       <h2 class="sc-label">Type</h2>
       <div class="sc-type">
-        <span class="sc-cap"><b>h2</b> Audiowide</span><h2 class="sc-h2">A quiet view from orbit</h2>
-        <span class="sc-cap"><b>h3</b> Audiowide</span><h3 class="sc-h3">Engineering log</h3>
-        <span class="sc-cap"><b>h4</b> label caps</span><h4 class="sc-h4">Surfaces</h4>
+        <span class="sc-cap"><b>h1</b> Audiowide, Green</span><h1>Mission control</h1>
+        <span class="sc-cap"><b>h2</b> Audiowide, Bright</span><h2>A quiet view from orbit</h2>
+        <span class="sc-cap"><b>h3</b> Audiowide, Magenta</span><h3>Engineering log</h3>
+        <span class="sc-cap"><b>h4</b> label caps, Amber</span><h4>Surfaces</h4>
+        <span class="sc-cap"><b>h5</b> label caps, Light</span><h5>Instruments</h5>
+        <span class="sc-cap"><b>h6</b> label caps, Dark</span><h6>Footnotes</h6>
         <span class="sc-cap"><b>Body</b> Rajdhani 1.2rem</span><p>We build small, careful things and send them a long way. This is how body text reads on our dark background.</p>
         <span class="sc-cap"><b>Small</b></span><small>info<span class="at">@</span>enterprise-r.com · small print and captions</small>
         <span class="sc-cap"><b>Link</b></span><p>Read the <a href="#">mission notes</a> before you start.</p>
+        <span class="sc-cap"><b>Mark</b></span><p>The <mark>launch window</mark> opens at dawn.</p>
+        <span class="sc-cap"><b>Keys</b></span><p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to search.</p>
         <span class="sc-cap"><b>Prompt</b></span><p><span class="sc-prompt">Click or press</span></p>
         <span class="sc-cap"><b>Code</b></span><p><code>--r-text</code></p>
+        <span class="sc-cap"><b>Quote</b></span><blockquote>Make it so, but make it small.</blockquote>
+        <span class="sc-cap"><b>List</b></span><ul><li>Plain lists keep the body text.</li><li>Nested items indent.</li></ul>
+        <span class="sc-cap"><b>Definitions</b></span><dl><dt>Orbit</dt><dd>The path around a body.</dd><dt>Root</dt><dd>The lone R, <span class="sc-brand">®</span>.</dd></dl>
+        <span class="sc-cap"><b>Details</b></span><details><summary>Show the checklist</summary>Fuel, comms, crew.</details>
       </div>
+      <p class="sc-note">Headings use Audiowide down to h3, then Rajdhani label caps. One variable per tier switches the font: <code>--r-font-heading</code> (h1, and h2 to h3 unless set apart), <code>--r-font-sub</code> (h2 to h3) and <code>--r-font-minor</code> (h4 to h6). Set one to <code>var(--r-font-text)</code> to turn Audiowide off there, or <code>--r-font-minor</code> to <code>var(--r-font-heading)</code> for more Audiowide.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section">
+      <h2 class="sc-label">Tables</h2>
+      <table>
+        <caption>Assets in the Drive export</caption>
+        <thead><tr><th>Asset</th><th>Format</th><th>Use</th><th class="r-num">Size</th></tr></thead>
+        <tbody>
+          <tr><td>logo-square</td><td>SVG</td><td>Avatars and icons</td><td class="r-num">4.2 kB</td></tr>
+          <tr><td>banner-3x1</td><td>PNG</td><td>Social cards</td><td class="r-num">312 kB</td></tr>
+          <tr><td>wallpaper</td><td>JPG</td><td>Desktops</td><td class="r-num">1.8 MB</td></tr>
+        </tbody>
+      </table>
+      <p class="sc-note">A plain table: rounded outline in Border, the header row on the Border fill, a divider between rows, Lighter background on hover. .r-num right-aligns a number column with figures of equal width.</p>
     </section>
 
     <hr>
