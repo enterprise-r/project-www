@@ -186,7 +186,8 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 .r-crumbs li > .r-btn:focus-visible,
 .r-crumbs li > .r-menu > summary:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 2px var(--r-focus);
+  /* Dual inset ring: dark against the fill, bright against the dark, so it holds on orange/green/magenta. */
+  box-shadow: inset 0 0 0 2px var(--ui-bg), inset 0 0 0 4px var(--ui-fg-bright);
 }
 
 /* Separators. A plain <hr> is already the separator (base.css); .r-sep is the same rule on any element.
@@ -202,8 +203,8 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    background. .r-active is the item in focus (Active border); .r-selected a chosen card
    (Border fill, Active outline).
    <section class="r-panel">…</section>  <div class="r-card r-active">…</div> */
-.r-panel { padding: 1.25rem 1.4rem; background: var(--ui-bg); border: 1px solid var(--ui-border); border-radius: 1rem; --r-glow-r: 1rem; }
-.r-card { padding: 1.2rem 1.3rem; background: var(--ui-bg-lighter); border: 1px solid var(--ui-border); border-radius: 1rem; --r-glow-r: 1rem; }
+.r-panel { padding: 1.25rem 1.4rem; background: var(--ui-bg); border: 1px solid var(--ui-fg-dark); border-radius: 1rem; --r-glow-r: 1rem; }
+.r-card { padding: 1.2rem 1.3rem; background: var(--ui-bg-lighter); border: 1px solid var(--ui-fg-dark); border-radius: 1rem; --r-glow-r: 1rem; }
 .r-card.r-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
 .r-card.r-selected { background: var(--ui-border); border-color: var(--ui-border-active); }
 :is(.r-panel, .r-card) > :last-child { margin-bottom: 0; }
@@ -359,10 +360,29 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   100% { --r-glow-a: 360deg; opacity: 0; }
 }
 
-/* Without motion, both are a plain fade of the whole border. */
+/* Without motion, both are a plain fade of the whole border. Menu caret does not spin. */
 @media (prefers-reduced-motion: reduce) {
   .r-glow-run::before, .r-glow-run::after {
     background-image: var(--ui-striped);
     animation-name: r-glow-flash;
+  }
+  .r-menu > summary::before { transition: none; }
+}
+
+/* Windows high contrast / forced colours: keep control edges, focus and glow visible. */
+@media (forced-colors: active) {
+  .r-btn:focus-visible { outline-color: Highlight; }
+  .r-crumbs li > .r-btn:focus-visible,
+  .r-crumbs li > .r-menu > summary:focus-visible {
+    box-shadow: inset 0 0 0 2px Canvas, inset 0 0 0 4px Highlight;
+  }
+  .r-panel, .r-card { border-color: CanvasText; }
+  .r-card.r-active, .r-card.r-selected { border-color: Highlight; }
+  .r-glow::before, .r-glow::after,
+  .r-glow-run::before, .r-glow-run::after {
+    background: Highlight;
+    filter: none;
+    opacity: 1;
+    animation: none;
   }
 }
