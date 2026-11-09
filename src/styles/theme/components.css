@@ -1,0 +1,194 @@
+/* Dark-® components, on palette.css and base.css (link those first). Every class starts with r-.
+   Buttons are flat fills with dark labels; only the fill changes on hover. */
+:root {
+  /* Button height and the semicircle end of a pill. */
+  --r-btn-h: 2rem;
+  --r-pill-r: calc(var(--r-btn-h) / 2);
+  --r-btn-text: var(--ui-bg);
+  /* Generic action and other pages: Orange, Amber on hover. */
+  --r-btn: var(--ui-orange);
+  --r-btn-hover: var(--ui-accent);
+  /* Primary action and the current page: Green (sage), Bright green on hover. */
+  --r-primary: var(--ui-green);
+  --r-primary-hover: var(--ui-green-bright);
+  /* Clear (reset the fields): Bright blue, the mirrored R of the logo, Bright cyan on hover. */
+  --r-clear: var(--ui-blue-bright);
+  --r-clear-hover: var(--ui-cyan-bright);
+  /* Cancel (abort, leave without saving): Red, Bright red on hover. */
+  --r-cancel: var(--ui-red);
+  --r-cancel-hover: var(--ui-red-bright);
+  --r-disabled: var(--ui-border);
+  --r-disabled-text: var(--ui-fg-dark);
+  /* Breadcrumb parents are links, so they take the link family: Magenta, Bright magenta on hover. */
+  --r-crumb: var(--ui-magenta);
+  --r-crumb-hover: var(--ui-magenta-bright);
+  --r-gap: 0.3rem;
+}
+
+/* Button: <a class="r-btn"> or <button class="r-btn">. No role class is generic.
+   aria-current="page" marks the current page; .r-primary, .r-clear (also any reset button) and .r-cancel are form roles. */
+.r-btn {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-width: 6.5rem;
+  height: var(--r-btn-h);
+  padding: 0 0.75rem 0.2rem;
+  color: var(--r-btn-text);
+  background-color: var(--r-btn);
+  border: 0;
+  border-radius: 0.25rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+  cursor: pointer;
+}
+.r-btn:hover { color: var(--r-btn-text); background-color: var(--r-btn-hover); }
+.r-btn:focus-visible { outline: 2px solid var(--r-focus); outline-offset: 3px; }
+.r-btn[aria-current="page"],
+.r-btn.r-primary { background-color: var(--r-primary); }
+.r-btn[aria-current="page"]:hover,
+.r-btn.r-primary:hover { background-color: var(--r-primary-hover); }
+.r-btn.r-clear,
+button.r-btn[type="reset"] { background-color: var(--r-clear); }
+.r-btn.r-clear:hover,
+button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
+.r-btn.r-cancel { background-color: var(--r-cancel); }
+.r-btn.r-cancel:hover { background-color: var(--r-cancel-hover); }
+.r-btn[aria-disabled="true"],
+.r-btn:disabled {
+  color: var(--r-disabled-text);
+  background-color: var(--r-disabled);
+  cursor: not-allowed;
+}
+
+/* Group: buttons side by side, joined into one pill. <span class="r-group">r-btn…</span> */
+.r-group { display: flex; gap: var(--r-gap); }
+.r-group > .r-btn:first-child,
+.r-group > .r-menu:first-child > summary { border-top-left-radius: var(--r-pill-r); border-bottom-left-radius: var(--r-pill-r); }
+.r-group > .r-btn:last-child,
+.r-group > .r-menu:last-child > summary { border-top-right-radius: var(--r-pill-r); border-bottom-right-radius: var(--r-pill-r); }
+
+/* Menu: a dropdown on a button, for a menu in a nav or the siblings of a breadcrumb.
+   <details class="r-menu"><summary class="r-btn">Docs</summary><div class="r-menu-list">r-btn links</div></details>
+   The button gets a caret on the left, away from the label, and takes its hover colour while open.
+   The list is a stack of the same squared buttons on the Inactive border colour. It opens under the button,
+   right-aligned; add .r-to-right to open it from the left edge. Closing on outside click or Esc is up to the page. */
+.r-menu { position: relative; display: flex; }
+.r-menu > summary { list-style: none; gap: 0.45rem; }
+.r-menu > summary::-webkit-details-marker { display: none; }
+.r-menu > summary::before {
+  content: "";
+  margin-right: auto;
+  margin-bottom: 0.3rem;
+  border-left: 0.28rem solid transparent;
+  border-right: 0.28rem solid transparent;
+  border-top: 0.32rem solid currentColor;
+  transition: transform 0.15s;
+}
+.r-menu[open] > summary::before { transform: rotate(180deg); }
+.r-menu[open] > summary { background-color: var(--r-btn-hover); }
+.r-menu[open] > summary[aria-current="page"] { background-color: var(--r-primary-hover); }
+.r-menu-list {
+  position: absolute;
+  top: calc(100% + var(--r-gap));
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--r-gap);
+  min-width: 100%;
+  padding: var(--r-gap);
+  background-color: var(--ui-border);
+  border-radius: 0.45rem;
+}
+.r-menu.r-to-right > .r-menu-list { right: auto; left: 0; }
+.r-menu-list > .r-btn { white-space: nowrap; }
+
+/* Breadcrumbs: the same buttons, one per level, joined on a diagonal ("/", like the striped gradient):
+   squared on the left, only the last rounded on the right.
+   Parents are links, so they are Magenta, Bright magenta on hover; the page you are on is Green (sage), aria-current="page".
+   A crumb can be an .r-menu to switch to a sibling.
+   The slant is a clip-path; the next crumb tucks under it, leaving the button gap on the diagonal.
+   The clip would cut the focus outline, so a crumb shows focus as an inner ring.
+   The root is the lone R, ®, in Enterprsr (.r-crumb-root): the mark for the root of the content. Give it aria-label="Home".
+   <nav class="r-crumbs" aria-label="Breadcrumb"><ol><li><a class="r-btn r-crumb-root" href="/" aria-label="Home">®</a></li>…</ol></nav> */
+.r-crumbs {
+  /* Slant per unit of height, so the angle holds when the buttons grow. */
+  --r-k: 0.3;
+  --r-slant: calc(var(--r-btn-h) * var(--r-k));
+  /* Corner radius of the slanted shape, the same as the buttons. */
+  --r-c: 0.25rem;
+}
+.r-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.r-crumbs li { display: flex; }
+.r-crumbs li + li { margin-left: calc(var(--r-gap) - var(--r-slant)); }
+/* --r-l and --r-r are the slants of the left and right edges, --r-kl and --r-kr their slope (0 when the edge is straight). */
+.r-crumbs li > .r-btn,
+.r-crumbs li > .r-menu > summary {
+  --r-l: var(--r-slant);
+  --r-r: var(--r-slant);
+  --r-kl: var(--r-k);
+  --r-kr: var(--r-k);
+  min-width: 0;
+  padding-left: calc(0.75rem + var(--r-l));
+  padding-right: calc(0.75rem + var(--r-r));
+  border-radius: 0;
+  clip-path: polygon(var(--r-l) 0, 100% 0, calc(100% - var(--r-r)) 100%, 0 100%);
+}
+/* Slant first, then round: the same shape with every corner rounded, slanted ones included.
+   Browsers without shape() keep the polygon above. */
+@supports (clip-path: shape(from 0 0, line to 1px 1px)) {
+  .r-crumbs li > .r-btn,
+  .r-crumbs li > .r-menu > summary {
+    clip-path: shape(from calc(var(--r-l) + var(--r-c)) 0,
+      line to calc(100% - var(--r-c)) 0,
+      curve to calc(100% - var(--r-c) * var(--r-kr)) var(--r-c) with 100% 0,
+      line to calc(100% - var(--r-r) + var(--r-c) * var(--r-kr)) calc(100% - var(--r-c)),
+      curve to calc(100% - var(--r-r) - var(--r-c)) 100% with calc(100% - var(--r-r)) 100%,
+      line to var(--r-c) 100%,
+      curve to calc(var(--r-c) * var(--r-kl)) calc(100% - var(--r-c)) with 0 100%,
+      line to calc(var(--r-l) - var(--r-c) * var(--r-kl)) var(--r-c),
+      curve to calc(var(--r-l) + var(--r-c)) 0 with var(--r-l) 0,
+      close);
+  }
+}
+.r-crumbs li:first-child > .r-btn,
+.r-crumbs li:first-child > .r-menu > summary { --r-l: 0px; --r-kl: 0; }
+.r-crumbs li:last-child > .r-btn,
+.r-crumbs li:last-child > .r-menu > summary {
+  --r-r: 0px;
+  --r-kr: 0;
+  border-top-right-radius: var(--r-pill-r);
+  border-bottom-right-radius: var(--r-pill-r);
+}
+.r-crumbs .r-crumb-root {
+  align-items: center;
+  font-family: var(--r-font-brand);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.r-crumbs .r-btn:not([aria-current="page"]) { background-color: var(--r-crumb); }
+.r-crumbs .r-btn:not([aria-current="page"]):hover,
+.r-crumbs .r-menu[open] > summary:not([aria-current="page"]) { background-color: var(--r-crumb-hover); }
+.r-crumbs li > .r-btn:focus-visible,
+.r-crumbs li > .r-menu > summary:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--r-focus);
+}
+
+/* Separators. A plain <hr> is already the separator (base.css); .r-sep is the same rule on any element.
+   .r-striped is a thin bar of the striped gradient. */
+.r-sep { height: 2px; margin: 1.2rem 0; border: 0; background: var(--ui-separator); }
+.r-striped { height: 4px; margin: 1.2rem 0; border: 0; border-radius: 2px; background: var(--ui-striped); }

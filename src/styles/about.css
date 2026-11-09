@@ -1,4 +1,5 @@
-/* About is a text page: a column, a heading, and paragraphs. Links use the theme. */
+/* Text pages: a column. Type, links and paragraphs come from the theme.
+   The email sits centred in a bubble with the Inactive border. The @ is Orange. */
 
 main {
   max-width: 40rem;
@@ -6,18 +7,6 @@ main {
   padding: 2.5rem 1.25rem 4rem;
 }
 
-h1 {
-  margin: 0 0 1rem;
-  font-family: Audiowide, Rajdhani, sans-serif;
-  font-weight: 400;
-  font-size: 2rem;
-  letter-spacing: 0.04em;
-  line-height: 1.15;
-}
-
-p { margin: 0 0 1rem; }
-
-/* The email: centred in a bubble with the Inactive border. The @ is Orange. */
 .email { margin-top: 2rem; text-align: center; }
 
 .email a {

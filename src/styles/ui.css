@@ -1,65 +1,92 @@
-/* UI showcase / style guide (/showcase/ only). Base theme: the Enterprise-R palette
-   (--ui-* in palette.css). Nav buttons and page text use --nav-* and --text-* from base.css. */
+/* Style guide (/showcase/ only). Type, fields and components come from the Dark-® theme.
+   What remains is the guide's layout, and static samples of hover and focus. */
 
 html:has(.showcase) { height: auto; }
-html:has(.showcase) body { height: auto; background: var(--ui-bg); color: var(--text-body); }
+html:has(.showcase) body { height: auto; }
 
 main.showcase {
   display: block;
   max-width: 76rem;
   min-height: 0;
   margin: 0 auto;
-  padding: 3rem 2.5rem 5rem;     /* no site header on the style guide */
+  padding: 3rem 2.5rem 5rem;
   text-align: left;
 }
 
 .showcase h2, .showcase h3, .showcase h4 { margin: 0; font-weight: 400; }
-/* Showcase title, set in Enterprsr (@font-face in base.css). */
-.sc-title { background: none; filter: none; margin: 0 0 0.25rem; font-family: Audiowide, Rajdhani, sans-serif; font-weight: 400; font-size: 2.2rem; line-height: 1.15; letter-spacing: 0.06em; }
-.sc-title-brand { font-family: Enterprsr, Audiowide, Rajdhani, sans-serif; letter-spacing: 0; margin: 0; }
-.sc-subtitle { margin: 0.1rem 0 0.6rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--ui-fg-light); }
+
+.sc-title { margin: 0 0 0.75rem; line-height: 0; }
+.sc-title img { display: block; width: min(24.68rem, 100%); height: auto; }
+.sc-aw { font-family: var(--r-font-heading); }
+.sc-brand { font-family: var(--r-font-brand); letter-spacing: 0; }
+.sc-subtitle {
+  margin: 0.1rem 0 0.6rem;
+  font-family: var(--r-font-heading);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--ui-fg-light);
+}
 .sc-lede { margin: 0 0 1.5rem; color: var(--ui-fg-light); font-size: 1.05rem; max-width: 52rem; }
 
-/* Section labels: Amber (Accent), uppercase, like the palette sheet. */
-.sc-section { margin-top: 3rem; }
+.sc-section { margin-top: 0; }
 .sc-section > h2.sc-label {
-  display: flex; align-items: center; gap: 0.75rem;
   margin-bottom: 1.1rem;
-  font-family: Rajdhani, sans-serif; font-size: 0.95rem; font-weight: 700;
+  font-family: var(--r-font-text); font-size: 0.95rem; font-weight: 700;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent);
 }
-.sc-section > h2.sc-label::after { content: ""; flex: 1; height: 2px; border-radius: 1px; background: var(--ui-border); }
 
-/* panels and cards */
 .sc-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg); }
 .sc-grid { display: grid; gap: 1rem; }
 .sc-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .sc-card { padding: 1.2rem 1.3rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-lighter); }
 .sc-card.is-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
 .sc-card.is-selected { background: var(--ui-border); border-color: var(--ui-border-active); }
-.sc-card h3 { margin-bottom: 0.4rem; font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.15rem; letter-spacing: 0.05em; }
+.sc-card h3 { margin-bottom: 0.4rem; font-family: var(--r-font-heading); font-size: 1.15rem; letter-spacing: 0.05em; }
 .sc-card p { margin: 0; color: var(--ui-fg-light); }
-.sc-pill { display: inline-block; margin-top: 0.8rem; padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--nav-current); color: var(--nav-text); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
-.sc-pill.other { background: var(--nav-other); }
+.sc-pill { display: inline-block; margin-top: 0.8rem; padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--r-primary); color: var(--r-btn-text); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.sc-pill.other { background: var(--r-btn); }
 
-/* buttons */
-.sc-states { display: grid; grid-template-columns: repeat(7, auto); gap: 0.9rem 1.2rem; justify-content: start; align-items: end; }
+.sc-states { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; align-items: flex-end; }
 .sc-states figure { margin: 0; display: grid; gap: 0.45rem; justify-items: start; }
 .sc-cap { color: var(--ui-fg-dark); font-size: 0.85rem; letter-spacing: 0.04em; }
 .sc-cap b { color: var(--ui-fg-light); font-weight: 600; }
+.sc-note { margin: 0.4rem 0 0; color: var(--ui-fg-dark); font-size: 0.95rem; }
+.sc-row { display: flex; flex-wrap: wrap; gap: 2rem 3rem; align-items: flex-start; }
+.sc-row > * { min-width: min(100%, 16rem); max-width: 100%; }
+.sc-row > :first-child { flex: 0 1 auto; }
+.sc-row > :last-child { flex: 1 1 20rem; }
+/* A menu is a block flex box, so in a wide column it would stretch and the
+   list (min-width: 100%) would become a full-width bar. Stay as wide as the label. */
+.showcase .r-menu { width: max-content; max-width: 100%; }
+/* The menu list is taken out of flow, so reserve its height. A closed list still
+   occupies that box in Chromium and would steal clicks from whatever sits under it. */
+.sc-drop { min-height: calc(3 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem); }
+.showcase .r-menu:not([open]) > .r-menu-list { display: none; }
 
-/* navigation samples: a strip in the title bar colour */
-.sc-nav-samples { display: grid; gap: 0.6rem; }
-.sc-bar { display: flex; align-items: center; min-height: calc(var(--nav-h) + 2 * var(--nav-pad)); padding: var(--nav-pad) 1rem; border-radius: 1rem; background-color: var(--ui-border); }
-.sc-bar.end { justify-content: flex-end; }
-.sc-bar.on-page { background-color: var(--ui-bg); border: 1px solid var(--ui-border); }
+/* Static samples of states the theme only paints on a real hover or focus. */
+.showcase .r-btn.is-hover { color: var(--r-btn-text); background-color: var(--r-btn-hover); }
+.showcase .r-btn[aria-current="page"].is-hover,
+.showcase .r-btn.r-primary.is-hover { background-color: var(--r-primary-hover); }
+.showcase .r-btn.r-clear.is-hover,
+.showcase button.r-btn[type="reset"].is-hover { background-color: var(--r-clear-hover); }
+.showcase .r-btn.r-cancel.is-hover { background-color: var(--r-cancel-hover); }
+.showcase .r-btn.is-focus { outline: 2px solid var(--r-focus); outline-offset: 3px; }
+.showcase .r-crumbs .r-btn.is-hover:not([aria-current="page"]) { background-color: var(--r-crumb-hover); }
+.showcase .r-crumbs li > .r-btn.is-focus,
+.showcase .r-crumbs li > .r-menu > summary.is-focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--r-focus);
+}
+.showcase :is(input, textarea, select).is-focus {
+  outline: none;
+  border-color: var(--r-hl-line);
+  box-shadow: 0 0 0 var(--r-hl-ring-w) var(--r-hl-ring);
+}
 
 /* separators */
 .sc-sep { height: 2px; margin: 1.2rem 0 0.5rem; border: 0; background: var(--ui-separator); }
 .sc-striped { height: 3.4rem; border-radius: 0.8rem; background: var(--ui-striped); }
 .sc-striped-thin { height: 4px; margin: 1.2rem 0 0.5rem; border-radius: 2px; background: var(--ui-striped); }
-
-/* swatches */
 .sc-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: 0.7rem; }
 .sc-swatch { border: 1px solid var(--ui-border); border-radius: 0.8rem; overflow: hidden; background: var(--ui-bg); }
 .sc-swatch i { display: block; height: 3.4rem; }
@@ -67,24 +94,20 @@ main.showcase {
 .sc-swatch b { display: block; color: var(--ui-fg); font-weight: 600; font-size: 0.95rem; }
 .sc-swatch code { color: var(--ui-fg-dark); font-size: 0.8rem; }
 .sc-swatch small { display: block; color: var(--ui-fg-dark); font-size: 0.78rem; }
-.sc-subhead { margin: 1.8rem 0 0.7rem; color: var(--ui-magenta); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-.sc-note { margin: 0.4rem 0 0; color: var(--ui-fg-dark); font-size: 0.95rem; }
+.sc-subhead { margin: 1.8rem 0 0.7rem; color: var(--ui-magenta); font-family: var(--r-font-text); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .sc-brand-box { padding: 1rem 1.2rem 1.2rem; border: 1px dashed var(--ui-fg-dark); border-radius: 1rem; }
 
-/* type scale */
 .sc-type { display: grid; grid-template-columns: 11rem 1fr; gap: 0.9rem 1.5rem; align-items: baseline; }
+.sc-type > * { margin: 0; }
+.sc-h2 { font-family: var(--r-font-heading); font-size: 2rem; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
+.sc-h3 { font-family: var(--r-font-heading); font-size: 1.45rem; letter-spacing: 0.05em; color: var(--ui-magenta); }
+.sc-h4 { font-family: var(--r-font-text); font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent); }
 .sc-type > .sc-cap { text-align: right; }
-.sc-h2 { font-family: Audiowide, Rajdhani, sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--ui-fg-bright); }
-.sc-h3 { font-family: Audiowide, Rajdhani, sans-serif; font-size: 1.45rem; letter-spacing: 0.05em; color: var(--ui-magenta); }
-.sc-h4 { font-size: 1rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ui-accent); }
-.sc-body { margin: 0; font-size: 1.2rem; color: var(--text-body); max-width: 42rem; }
-.sc-small { margin: 0; font-size: 0.95rem; color: var(--text-small); }
-.showcase a.sc-link, .sc-link { color: var(--text-link); text-decoration: underline; text-decoration-color: var(--ui-fg-dark); text-underline-offset: 0.2em; }
-.sc-link:hover { color: var(--ui-fg-bright); text-decoration-color: var(--ui-magenta-bright); }
+.sc-type p { max-width: 42rem; }
 .sc-prompt {
   display: inline-block;
-  color: var(--text-prompt);
-  font-family: Audiowide, Rajdhani, sans-serif;
+  color: var(--ui-green-bright);
+  font-family: var(--r-font-heading);
   font-size: 0.95rem;
   font-weight: 400;
   letter-spacing: 0.18em;
@@ -93,48 +116,26 @@ main.showcase {
 }
 .at { color: var(--ui-accent); }
 
-/* forms */
 .sc-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.2rem; }
+.sc-span-2 { grid-column: span 2; }
 .sc-field { display: grid; gap: 0.35rem; }
-.sc-field label, .sc-field .sc-cap { color: var(--ui-fg-light); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; }
-.sc-input {
-  width: 100%; height: auto; padding: 0.55rem 0.8rem;
-  font: inherit; font-size: 1.05rem; line-height: 1.3; color: var(--ui-fg);
-  background: var(--ui-bg-lighter); border: 1px solid var(--ui-border); border-radius: 0.6rem;
-}
-.sc-input::placeholder { color: var(--ui-fg-dark); }
-.sc-input:hover { border-color: var(--ui-fg-dark); }
-/* focus: the shared focus-field highlight (--hl-* in base.css) */
-.sc-input:focus, .sc-input.is-focus { outline: none; border-color: var(--hl-line); box-shadow: 0 0 0 var(--hl-ring-w) var(--hl-ring); }
-.sc-input:disabled { color: var(--ui-fg-dark); background: var(--ui-bg); border-style: dashed; }
-textarea.sc-input { min-height: 5.5rem; resize: vertical; }
-select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); background-image: linear-gradient(45deg, transparent 50%, var(--ui-fg-dark) 50%), linear-gradient(135deg, var(--ui-fg-dark) 50%, transparent 50%); background-position: right 1.1rem center, right 0.75rem center; background-size: 0.35rem 0.35rem; background-repeat: no-repeat; }
-.sc-checks { display: flex; gap: 1.4rem; flex-wrap: wrap; color: var(--ui-fg); }
+.sc-checks { display: flex; gap: 1.4rem; flex-wrap: wrap; }
 .sc-checks label { display: inline-flex; align-items: center; gap: 0.45rem; }
-.sc-checks input { accent-color: var(--nav-current); width: 1.1rem; height: 1.1rem; }
 .sc-help { color: var(--ui-fg-dark); font-size: 0.85rem; }
 /* Form actions sit on their own row, at the right edge of the form. */
 .sc-actions { grid-column: 1 / -1; display: grid; gap: 0.35rem; justify-items: end; }
 
-/* code */
-.sc-code {
-  margin: 0; padding: 1rem 1.2rem; overflow-x: auto;
-  font: 0.95rem/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  color: var(--ui-fg); background: var(--ui-bg);
-  border: 1px solid var(--ui-border); border-left: 4px solid var(--ui-magenta); border-radius: 0.6rem;
-}
-.sc-code .k { color: var(--ui-magenta); }
-.sc-code .v { color: var(--ui-accent); }
-.sc-code .c { color: var(--ui-fg-dark); }
-.sc-code .s { color: var(--ui-cyan); }
-.showcase :not(pre) > code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; }
+.showcase pre .k { color: var(--ui-magenta); }
+.showcase pre .v { color: var(--ui-accent); }
+.showcase pre .c { color: var(--ui-fg-dark); }
+.showcase pre .s { color: var(--ui-cyan); }
 
 /* Terminal panel sample: a picture in the card, not a page backdrop. */
 .about-heading {
-  background: var(--text-about-heading);
+  background: linear-gradient(var(--ui-green), var(--ui-green));
   -webkit-background-clip: text;
   background-clip: text;
-  filter: drop-shadow(0 0 16px var(--text-about-heading-glow));
+  filter: drop-shadow(0 0 16px rgb(from var(--ui-green) r g b / 0.3));
 }
 .term {
   width: fit-content;
@@ -150,12 +151,12 @@ select.sc-input { appearance: none; height: calc(1.3em + 1.1rem + 2px); backgrou
 .sc-term-sample { margin: 1.25rem 0 0; }
 .sc-term-stack { position: absolute; left: 1.4rem; right: 1.4rem; top: 50%; transform: translateY(-50%); z-index: 2; }
 .sc-term-stack .term { max-width: 34rem; }
-.sc-term-stack .about-heading { margin: 0; font-family: Audiowide, Rajdhani, sans-serif; font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
+.sc-term-stack .about-heading { margin: 0; font-family: var(--r-font-heading); font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
 
 @media (max-width: 900px) {
   main.showcase { padding: 2rem 1rem 4rem; }
   .sc-grid.cols-3, .sc-form { grid-template-columns: 1fr; }
-  .sc-states { grid-template-columns: repeat(2, auto); }
+  .sc-span-2 { grid-column: auto; }
   .sc-type { grid-template-columns: 1fr; }
   .sc-type > .sc-cap { text-align: left; }
 }

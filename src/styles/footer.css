@@ -1,0 +1,16 @@
+/* Footer: the same stripe as the title bar, slim, with the social links in the middle.
+   Icons are bare Background. Amber (Accent) on hover. */
+footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
+  background-color: var(--ui-border);
+}
+
+.social { display: flex; gap: 1rem; }
+
+footer a { display: flex; color: var(--ui-bg); }
+
+footer a:hover { color: var(--ui-accent); }
+
+footer svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
