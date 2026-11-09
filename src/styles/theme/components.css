@@ -78,8 +78,9 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    The button gets a caret on the left, away from the label, and takes its hover colour while open.
    The list is a stack of the same squared buttons on the Inactive border colour. It opens under the button,
    right-aligned; add .r-to-right to open it from the left edge. Closing on outside click or Esc is up to the page. */
-.r-menu { position: relative; display: flex; }
-.r-menu > summary { list-style: none; gap: 0.45rem; }
+/* A menu is a details element: drop the plain details box of base.css. */
+.r-menu { position: relative; display: flex; margin: 0; padding: 0; border: 0; border-radius: 0; }
+.r-menu > summary { margin: 0; list-style: none; gap: 0.45rem; }
 .r-menu > summary::-webkit-details-marker { display: none; }
 .r-menu > summary::before {
   content: "";

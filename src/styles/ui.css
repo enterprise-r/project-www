@@ -36,7 +36,7 @@ main.showcase {
 .sc-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg); }
 .sc-grid { display: grid; gap: 1rem; }
 .sc-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.sc-card { padding: 1.2rem 1.3rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-lighter); }
+.sc-card { --r-glow-r: 1rem; padding: 1.2rem 1.3rem; border: 1px solid var(--ui-border); border-radius: 1rem; background: var(--ui-bg-lighter); }
 .sc-card.is-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
 .sc-card.is-selected { background: var(--ui-border); border-color: var(--ui-border-active); }
 .sc-card h3 { margin-bottom: 0.4rem; font-family: var(--r-font-heading); font-size: 1.15rem; letter-spacing: 0.05em; }
@@ -54,6 +54,10 @@ main.showcase {
 .sc-row > * { min-width: min(100%, 16rem); max-width: 100%; }
 .sc-row > :first-child { flex: 0 1 auto; }
 .sc-row > :last-child { flex: 1 1 20rem; }
+/* Split row: the first block on the left, the last pushed to the right edge. */
+.sc-split { justify-content: space-between; }
+.sc-split > :first-child { flex: 1 1 20rem; max-width: 36rem; }
+.sc-split > :last-child { flex: 0 1 auto; display: grid; justify-items: end; }
 /* A menu is a block flex box, so in a wide column it would stretch and the
    list (min-width: 100%) would become a full-width bar. Stay as wide as the label. */
 .showcase .r-menu { width: max-content; max-width: 100%; }

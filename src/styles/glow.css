@@ -6,7 +6,7 @@
    .r-glow-run  a band of the stripe travels once around the border, corner to corner.
 
    The effect plays when the class is added. To play it again, remove the class, force a reflow and
-   add it back (see rGlow() in the showcase). The box keeps its own border and radius; the glow sits
+   add it back (see rGlow() in the showcase). The box keeps its own border; set --r-glow-r to its radius so the corners match. The glow sits
    just outside it: a thin crisp line (::after) and a soft halo (::before). */
 
 @property --r-glow-a {
@@ -16,6 +16,7 @@
 }
 
 :root {
+  --r-glow-r: 0.6rem;     /* the radius of the glowing box; set it to match (the theme's boxes use 0.6rem) */
   --r-glow-w: 2px;        /* the crisp line */
   --r-glow-halo: 14px;    /* how far the soft halo reaches */
   --r-glow-time: 1.6s;    /* .r-glow */
@@ -29,7 +30,6 @@
   content: "";
   position: absolute;
   pointer-events: none;
-  border-radius: inherit;
   opacity: 0;
   /* Keep only the ring outside the box: the padding area of the pseudo-element. */
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -39,12 +39,14 @@
 .r-glow::after, .r-glow-run::after {
   inset: calc(-1 * var(--r-glow-w));
   padding: var(--r-glow-w);
+  border-radius: calc(var(--r-glow-r) + var(--r-glow-w));
 }
 /* The halo: the gradient fills only the box (inside a transparent border as wide as the halo),
    is blurred so it bleeds outward and fades, and the box itself is masked away. */
 .r-glow::before, .r-glow-run::before {
   inset: calc(-1 * var(--r-glow-halo));
   border: var(--r-glow-halo) solid transparent;
+  border-radius: calc(var(--r-glow-r) + var(--r-glow-halo));
   background-clip: padding-box;
   filter: blur(calc(var(--r-glow-halo) / 2));
   -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);

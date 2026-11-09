@@ -55,28 +55,7 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     <hr>
     <section class="sc-section">
       <h2 class="sc-label">Menus and breadcrumbs</h2>
-      <div class="sc-row">
-        <div>
-          <h3 class="sc-subhead" style="margin-top:0">Menu</h3>
-          <div class="sc-drop">
-            <details class="r-menu" open>
-              <summary class="r-btn">Docs</summary>
-              <div class="r-menu-list">
-                <a class="r-btn" href="#">Guide</a>
-                <a class="r-btn" href="#">Reference</a>
-              </div>
-            </details>
-          </div>
-          <div class="sc-drop">
-            <details class="r-menu r-to-right">
-              <summary class="r-btn">More</summary>
-              <div class="r-menu-list">
-                <a class="r-btn" href="#">Notes</a>
-                <a class="r-btn" href="#">Log</a>
-              </div>
-            </details>
-          </div>
-        </div>
+      <div class="sc-row sc-split">
         <div>
           <h3 class="sc-subhead" style="margin-top:0">Breadcrumbs</h3>
           <div class="sc-drop">
@@ -97,6 +76,28 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
             </nav>
           </div>
           <p class="sc-note">Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is an inner ring, because the slant would clip an outline.</p>
+        </div>
+        <div>
+          <h3 class="sc-subhead" style="margin-top:0">Menus</h3>
+          <div class="sc-drop">
+            <span class="r-group">
+              <details class="r-menu" open>
+                <summary class="r-btn">Docs</summary>
+                <div class="r-menu-list">
+                  <a class="r-btn" href="#">Guide</a>
+                  <a class="r-btn" href="#">Reference</a>
+                </div>
+              </details>
+              <details class="r-menu">
+                <summary class="r-btn">More</summary>
+                <div class="r-menu-list">
+                  <a class="r-btn" href="#">Notes</a>
+                  <a class="r-btn" href="#">Log</a>
+                </div>
+              </details>
+            </span>
+          </div>
+          <p class="sc-note">Two menus joined in a group.</p>
         </div>
       </div>
     </section>
