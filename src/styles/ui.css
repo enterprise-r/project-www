@@ -42,6 +42,7 @@ main.showcase {
 .sc-card h3 { margin-bottom: 0.4rem; font-family: var(--r-font-heading); font-size: 1.15rem; letter-spacing: 0.05em; }
 .sc-card p { margin: 0; color: var(--ui-fg-light); }
 .sc-pill { display: inline-block; margin-top: 0.8rem; padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--r-primary); color: var(--r-btn-text); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.sc-glow-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
 .sc-pill.other { background: var(--r-btn); }
 
 .sc-states { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; align-items: flex-end; }

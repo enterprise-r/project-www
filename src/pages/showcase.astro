@@ -186,6 +186,21 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
 
     <hr>
     <section class="sc-section">
+      <h2 class="sc-label">Update glow</h2>
+      <div class="sc-grid cols-3">
+        <div class="sc-card" id="glow-a"><h3>Notification</h3><p>Docking is complete. All crew aboard.</p></div>
+        <div class="sc-card" id="glow-b"><h3>Warning</h3><p>Shield power dropped to 40%.</p></div>
+        <div class="sc-card" id="glow-c"><h3>Live value</h3><p>Speed <b id="glow-v">0.72</b> c</p></div>
+      </div>
+      <div class="sc-glow-actions">
+        <button class="r-btn" type="button" data-glow="r-glow">Glow at once</button>
+        <button class="r-btn" type="button" data-glow="r-glow-run">Glow around</button>
+      </div>
+      <p class="sc-note">Prototype. .r-glow lights the whole border in the striped gradient and fades. .r-glow-run sends a band of the stripe once around the border. Add the class to play it; with reduced motion both are a plain fade.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section">
       <h2 class="sc-label">Form</h2>
       <form class="sc-panel" onsubmit="return false">
         <div class="sc-form">
@@ -248,5 +263,18 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
         `Body text on the page background ${ratio(v("--r-text"), v("--ui-bg"))}:1.`;
       probe.remove();
     })();
+  </script>
+  <script>
+    // Replay an update glow on a box: remove the class, force a reflow, add it back.
+    function rGlow(el, kind) {
+      el.classList.remove("r-glow", "r-glow-run");
+      void el.offsetWidth;
+      el.classList.add(kind);
+    }
+    document.querySelectorAll("[data-glow]").forEach((b) => b.addEventListener("click", () => {
+      const v = document.getElementById("glow-v");
+      v.textContent = (0.5 + Math.random() * 0.49).toFixed(2);
+      ["glow-a", "glow-b", "glow-c"].forEach((id) => rGlow(document.getElementById(id), b.dataset.glow));
+    }));
   </script>
 </Base>
