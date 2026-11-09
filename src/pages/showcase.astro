@@ -20,6 +20,7 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     </h1>
     <p class="sc-subtitle">UI showcase</p>
     <p class="sc-lede"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span>, the <span class="sc-brand">Enterprise-R</span> theme. Plain elements and the r- components, on the palette.</p>
+    <p class="sc-lede"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
 
     <hr>
     <section class="sc-section">
@@ -54,28 +55,7 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     <hr>
     <section class="sc-section">
       <h2 class="sc-label">Menus and breadcrumbs</h2>
-      <div class="sc-row">
-        <div>
-          <h3 class="sc-subhead" style="margin-top:0">Menu</h3>
-          <div class="sc-drop">
-            <details class="r-menu" open>
-              <summary class="r-btn">Docs</summary>
-              <div class="r-menu-list">
-                <a class="r-btn" href="#">Guide</a>
-                <a class="r-btn" href="#">Reference</a>
-              </div>
-            </details>
-          </div>
-          <div class="sc-drop">
-            <details class="r-menu r-to-right">
-              <summary class="r-btn">More</summary>
-              <div class="r-menu-list">
-                <a class="r-btn" href="#">Notes</a>
-                <a class="r-btn" href="#">Log</a>
-              </div>
-            </details>
-          </div>
-        </div>
+      <div class="sc-row sc-split">
         <div>
           <h3 class="sc-subhead" style="margin-top:0">Breadcrumbs</h3>
           <div class="sc-drop">
@@ -96,6 +76,28 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
             </nav>
           </div>
           <p class="sc-note">Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is an inner ring, because the slant would clip an outline.</p>
+        </div>
+        <div>
+          <h3 class="sc-subhead" style="margin-top:0">Menus</h3>
+          <div class="sc-drop">
+            <span class="r-group">
+              <details class="r-menu" open>
+                <summary class="r-btn">Docs</summary>
+                <div class="r-menu-list">
+                  <a class="r-btn" href="#">Guide</a>
+                  <a class="r-btn" href="#">Reference</a>
+                </div>
+              </details>
+              <details class="r-menu">
+                <summary class="r-btn">More</summary>
+                <div class="r-menu-list">
+                  <a class="r-btn" href="#">Notes</a>
+                  <a class="r-btn" href="#">Log</a>
+                </div>
+              </details>
+            </span>
+          </div>
+          <p class="sc-note">Two menus joined in a group.</p>
         </div>
       </div>
     </section>
@@ -133,35 +135,82 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
     <section class="sc-section">
       <h2 class="sc-label">Type</h2>
       <div class="sc-type">
-        <span class="sc-cap"><b>h2</b> Audiowide</span><h2 class="sc-h2">A quiet view from orbit</h2>
-        <span class="sc-cap"><b>h3</b> Audiowide</span><h3 class="sc-h3">Engineering log</h3>
-        <span class="sc-cap"><b>h4</b> label caps</span><h4 class="sc-h4">Surfaces</h4>
+        <span class="sc-cap"><b>h1</b> Audiowide, Green</span><h1>Mission control</h1>
+        <span class="sc-cap"><b>h2</b> Audiowide, Bright</span><h2>A quiet view from orbit</h2>
+        <span class="sc-cap"><b>h3</b> Audiowide, Magenta</span><h3>Engineering log</h3>
+        <span class="sc-cap"><b>h4</b> label caps, Amber</span><h4>Surfaces</h4>
+        <span class="sc-cap"><b>h5</b> label caps, Light</span><h5>Instruments</h5>
+        <span class="sc-cap"><b>h6</b> label caps, Dark</span><h6>Footnotes</h6>
         <span class="sc-cap"><b>Body</b> Rajdhani 1.2rem</span><p>We build small, careful things and send them a long way. This is how body text reads on our dark background.</p>
         <span class="sc-cap"><b>Small</b></span><small>info<span class="at">@</span>enterprise-r.com · small print and captions</small>
         <span class="sc-cap"><b>Link</b></span><p>Read the <a href="#">mission notes</a> before you start.</p>
-        <span class="sc-cap"><b>Prompt</b></span><p><span class="sc-prompt">Click or press</span></p>
+        <span class="sc-cap"><b>Mark</b></span><p>The <mark>launch window</mark> opens at dawn.</p>
+        <span class="sc-cap"><b>Keys</b></span><p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to search.</p>
+        <span class="sc-cap"><b>Prompt</b></span><p><span class="r-prompt">Click or press</span></p>
         <span class="sc-cap"><b>Code</b></span><p><code>--r-text</code></p>
+        <span class="sc-cap"><b>Quote</b></span><blockquote>Make it so, but make it small.</blockquote>
+        <span class="sc-cap"><b>List</b></span><ul><li>Plain lists keep the body text.</li><li>Nested items indent.</li></ul>
+        <span class="sc-cap"><b>Definitions</b></span><dl><dt>Orbit</dt><dd>The path around a body.</dd><dt>Root</dt><dd>The lone R, <span class="sc-brand">®</span>.</dd></dl>
+        <span class="sc-cap"><b>Details</b></span><details><summary>Show the checklist</summary>Fuel, comms, crew.</details>
       </div>
+      <p class="sc-note">Headings use Audiowide down to h3, then Rajdhani label caps. One variable per tier switches the font: <code>--r-font-heading</code> (h1, and h2 to h3 unless set apart), <code>--r-font-sub</code> (h2 to h3) and <code>--r-font-minor</code> (h4 to h6). Set one to <code>var(--r-font-text)</code> to turn Audiowide off there, or <code>--r-font-minor</code> to <code>var(--r-font-heading)</code> for more Audiowide.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section">
+      <h2 class="sc-label">Tables</h2>
+      <table>
+        <caption>Assets in the Drive export</caption>
+        <thead><tr><th>Asset</th><th>Format</th><th>Use</th><th class="r-num">Size</th></tr></thead>
+        <tbody>
+          <tr><td>logo-square</td><td>SVG</td><td>Avatars and icons</td><td class="r-num">4.2 kB</td></tr>
+          <tr><td>banner-3x1</td><td>PNG</td><td>Social cards</td><td class="r-num">312 kB</td></tr>
+          <tr><td>wallpaper</td><td>JPG</td><td>Desktops</td><td class="r-num">1.8 MB</td></tr>
+        </tbody>
+      </table>
+      <p class="sc-note">A plain table: rounded outline in Border, the header row on the Border fill, a divider between rows, Lighter background on hover. .r-num right-aligns a number column with figures of equal width.</p>
     </section>
 
     <hr>
     <section class="sc-section">
       <h2 class="sc-label">Cards and panels</h2>
       <div class="sc-grid cols-3">
-        <div class="sc-card"><h3>Panel</h3><p>Lighter background with an inactive border. The default container.</p><span class="sc-pill">Online</span></div>
-        <div class="sc-card is-active"><h3>Active</h3><p>Active border for the item in focus or selected by the user.</p><span class="sc-pill other">Standby</span></div>
-        <div class="sc-card is-selected"><h3>Selection</h3><p>Selection, for a highlighted row or a chosen card: Inactive border fill with a Magenta outline.</p></div>
+        <div class="r-card"><h3>Card</h3><p>Lighter background with an inactive border. The default container.</p><span class="r-pill r-primary">Online</span></div>
+        <div class="r-card r-active"><h3>Active</h3><p>.r-active: Active border for the item in focus or selected by the user.</p><span class="r-pill">Standby</span></div>
+        <div class="r-card r-selected"><h3>Selection</h3><p>Selection, for a highlighted row or a chosen card (.r-selected): Border fill with an Active outline.</p></div>
       </div>
+      <p class="sc-note">.r-panel is the plain box on the page background, as around the form below.</p>
+      <h3 class="sc-subhead">Status pills</h3>
+      <div class="sc-states">
+        <span class="r-pill">Standby</span><span class="r-pill r-primary">Online</span><span class="r-pill r-clear">Draft</span><span class="r-pill r-cancel">Offline</span>
+      </div>
+      <p class="sc-note">.r-pill takes the button roles: generic Orange, .r-primary Green, .r-clear Bright blue, .r-cancel Red.</p>
       <figure class="sc-term-sample">
-        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="term term-head"><div class="about-heading">Heading</div></div><div class="term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
+        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
         <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
       </figure>
     </section>
 
     <hr>
     <section class="sc-section">
+      <h2 class="sc-label">Notifications and update glow</h2>
+      <div class="sc-grid cols-2">
+        <div class="r-notice" id="glow-a" role="status"><strong>Notification</strong> Docking is complete. All crew aboard.</div>
+        <div class="r-notice r-ok" id="glow-b" role="status"><strong>Saved</strong> Your changes are on board.</div>
+        <div class="r-notice r-warn" id="glow-c" role="status"><strong>Warning</strong> Shield power dropped to 40%.</div>
+        <div class="r-notice r-error" id="glow-d" role="alert"><strong>Live value</strong> Speed <b id="glow-v">0.72</b> c, over the limit.</div>
+      </div>
+      <div class="sc-glow-actions">
+        <button class="r-btn" type="button" data-glow="r-glow">Glow at once</button>
+        <button class="r-btn" type="button" data-glow="r-glow-run">Glow around</button>
+      </div>
+      <p class="sc-note">.r-notice is information (Blue); .r-ok Green, .r-warn Amber, .r-error Red. .r-glow lights the whole border in the striped gradient and fades. .r-glow-run sends a band of the stripe once around the border. Add the class to play it; with reduced motion both are a plain fade.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section">
       <h2 class="sc-label">Form</h2>
-      <form class="sc-panel" onsubmit="return false">
+      <form class="r-panel" onsubmit="return false">
         <div class="sc-form">
           <div class="sc-field"><label for="f-name">Name</label><input id="f-name" placeholder="Jean-Luc"></div>
           <div class="sc-field"><label for="f-mail">E-mail (focus)</label><input class="is-focus" id="f-mail" type="email" value="crew@enterprise-r.com"></div>
@@ -173,6 +222,30 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
           <div class="sc-actions"><span class="r-group"><button class="r-btn r-primary" type="submit">Send</button><button class="r-btn" type="button">Save</button><button class="r-btn" type="reset">Clear</button><button class="r-btn r-cancel" type="button">Cancel</button></span><span class="sc-help">Primary Green (sage), generic Orange, clear Bright blue, cancel Red.</span></div>
         </div>
       </form>
+    </section>
+
+    <hr>
+    <section class="sc-section">
+      <h2 class="sc-label">Groups, progress and dialog</h2>
+      <div class="sc-grid cols-2">
+        <fieldset>
+          <legend>Crew</legend>
+          <div class="sc-checks"><label><input type="checkbox" checked> Captain</label><label><input type="checkbox"> Pilot</label><label><input type="radio" name="sc-r" checked> Day</label><label><input type="radio" name="sc-r"> Night</label></div>
+        </fieldset>
+        <div class="sc-meters">
+          <span class="sc-cap"><b>Progress</b></span><progress value="62" max="100">62%</progress>
+          <span class="sc-cap"><b>Meter</b> good</span><meter value="0.8" low="0.3" high="0.6" optimum="1">80%</meter>
+          <span class="sc-cap"><b>Meter</b> fair</span><meter value="0.5" low="0.3" high="0.6" optimum="1">50%</meter>
+          <span class="sc-cap"><b>Meter</b> poor</span><meter value="0.2" low="0.3" high="0.6" optimum="1">20%</meter>
+        </div>
+      </div>
+      <p><button class="r-btn" type="button" onclick="document.getElementById('sc-dialog').showModal()">Open dialog</button></p>
+      <dialog id="sc-dialog">
+        <h3>Leave orbit?</h3>
+        <p>A dialog is a card over the dimmed page.</p>
+        <form method="dialog" class="sc-dialog-actions"><button class="r-btn r-cancel">Cancel</button><button class="r-btn r-primary">Leave</button></form>
+      </dialog>
+      <p class="sc-note">Plain fieldset, legend, progress (striped gradient), meter (Green, Yellow, Red by its low and high marks) and dialog. Pictures scale down to their container.</p>
     </section>
 
     <hr>
@@ -222,5 +295,18 @@ const accent = colours.filter((c) => c.var === "--ui-accent");
         `Body text on the page background ${ratio(v("--r-text"), v("--ui-bg"))}:1.`;
       probe.remove();
     })();
+  </script>
+  <script>
+    // Replay an update glow on a box: remove the class, force a reflow, add it back.
+    function rGlow(el, kind) {
+      el.classList.remove("r-glow", "r-glow-run");
+      void el.offsetWidth;
+      el.classList.add(kind);
+    }
+    document.querySelectorAll("[data-glow]").forEach((b) => b.addEventListener("click", () => {
+      const v = document.getElementById("glow-v");
+      v.textContent = (0.5 + Math.random() * 0.49).toFixed(2);
+      ["glow-a", "glow-b", "glow-c", "glow-d"].forEach((id) => rGlow(document.getElementById(id), b.dataset.glow));
+    }));
   </script>
 </Base>

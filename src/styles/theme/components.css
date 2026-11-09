@@ -78,8 +78,9 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    The button gets a caret on the left, away from the label, and takes its hover colour while open.
    The list is a stack of the same squared buttons on the Inactive border colour. It opens under the button,
    right-aligned; add .r-to-right to open it from the left edge. Closing on outside click or Esc is up to the page. */
-.r-menu { position: relative; display: flex; }
-.r-menu > summary { list-style: none; gap: 0.45rem; }
+/* A menu is a details element: drop the plain details box of base.css. */
+.r-menu { position: relative; display: flex; margin: 0; padding: 0; border: 0; border-radius: 0; }
+.r-menu > summary { margin: 0; list-style: none; gap: 0.45rem; }
 .r-menu > summary::-webkit-details-marker { display: none; }
 .r-menu > summary::before {
   content: "";
@@ -192,3 +193,176 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    .r-striped is a thin bar of the striped gradient. */
 .r-sep { height: 2px; margin: 1.2rem 0; border: 0; background: var(--ui-separator); }
 .r-striped { height: 4px; margin: 1.2rem 0; border: 0; border-radius: 2px; background: var(--ui-striped); }
+
+/* Number columns in a table: right-aligned, figures of equal width.
+   <th class="r-num">Price</th> ... <td class="r-num">12.50</td> */
+.r-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Panels and cards. A panel is a page-background box with a Border line; a card sits on Lighter
+   background. .r-active is the item in focus (Active border); .r-selected a chosen card
+   (Border fill, Active outline).
+   <section class="r-panel">…</section>  <div class="r-card r-active">…</div> */
+.r-panel { padding: 1.25rem 1.4rem; background: var(--ui-bg); border: 1px solid var(--ui-border); border-radius: 1rem; --r-glow-r: 1rem; }
+.r-card { padding: 1.2rem 1.3rem; background: var(--ui-bg-lighter); border: 1px solid var(--ui-border); border-radius: 1rem; --r-glow-r: 1rem; }
+.r-card.r-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
+.r-card.r-selected { background: var(--ui-border); border-color: var(--ui-border-active); }
+:is(.r-panel, .r-card) > :last-child { margin-bottom: 0; }
+
+/* Status pills: a small uppercase label, in the button roles. No role class is generic (Orange);
+   .r-primary Green, .r-clear Bright blue, .r-cancel Red.
+   <span class="r-pill r-primary">Online</span> */
+.r-pill {
+  display: inline-block;
+  padding: 0.1rem 0.7rem;
+  color: var(--r-btn-text);
+  background: var(--r-btn);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.r-pill.r-primary { background: var(--r-primary); }
+.r-pill.r-clear { background: var(--r-clear); }
+.r-pill.r-cancel { background: var(--r-cancel); }
+
+/* Notification boxes: a message on Lighter background with a role stripe on the left.
+   No role class is information (Blue); .r-ok Green, .r-warn Amber, .r-error Red.
+   Add .r-glow or .r-glow-run when one appears or changes.
+   <div class="r-notice r-warn" role="status"><strong>Title</strong> Text</div> */
+.r-notice {
+  --r-notice: var(--ui-blue);
+  --r-glow-r: 0.6rem;
+  padding: 0.7rem 1rem;
+  color: var(--r-text);
+  background: var(--ui-bg-lighter);
+  border: 1px solid var(--ui-border);
+  border-left: 4px solid var(--r-notice);
+  border-radius: 0.6rem;
+}
+.r-notice > strong:first-child { display: block; color: var(--r-notice); font-weight: 600; letter-spacing: 0.04em; }
+.r-notice > :last-child { margin-bottom: 0; }
+.r-notice.r-ok { --r-notice: var(--ui-green); }
+.r-notice.r-warn { --r-notice: var(--ui-accent); }
+.r-notice.r-error { --r-notice: var(--ui-red); }
+
+/* Terminal panel: a small dark backing that hugs a block of text over a picture.
+   <div class="r-term">…</div> */
+.r-term {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.5rem 0.9rem;
+  background-color: rgb(from var(--ui-bg) r g b / 0.72);
+  border: 1px solid var(--ui-border);
+  border-radius: 0.6rem;
+  backdrop-filter: blur(3px);
+  --r-glow-r: 0.6rem;
+}
+
+/* Prompt: a call to act, in Bright green caps ("Click or press"). <span class="r-prompt">…</span> */
+.r-prompt {
+  display: inline-block;
+  color: var(--ui-green-bright);
+  font-family: var(--r-font-heading);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* Update glow: a brief iridescent border, in the striped gradient, that tells the user a box has just
+   changed (a notification, a warning, a live value).
+   .r-glow      the whole border lights up at once, then fades.
+   .r-glow-run  a band of the stripe travels once around the border, corner to corner.
+   <div class="r-glow">…</div>. The effect plays when the class is added. To play it again, remove the
+   class, force a reflow (el.offsetWidth) and add it back. The box keeps its own border; set --r-glow-r
+   to its radius so the corners match. The glow sits just outside it: a thin crisp line (::after) and a
+   soft halo (::before), so the box must not use those pseudo-elements itself. */
+@property --r-glow-a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+:root {
+  --r-glow-r: 0.6rem;     /* the radius of the glowing box; set it to match (the theme's boxes use 0.6rem) */
+  --r-glow-w: 2px;        /* the crisp line */
+  --r-glow-halo: 14px;    /* how far the soft halo reaches */
+  --r-glow-time: 1.6s;    /* .r-glow */
+  --r-glow-run-time: 2s;  /* .r-glow-run, one lap */
+}
+
+:where(.r-glow, .r-glow-run) { position: relative; }
+
+.r-glow::before, .r-glow::after,
+.r-glow-run::before, .r-glow-run::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  /* Keep only the ring outside the box: the padding area of the pseudo-element. */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.r-glow::after, .r-glow-run::after {
+  inset: calc(-1 * var(--r-glow-w));
+  padding: var(--r-glow-w);
+  border-radius: calc(var(--r-glow-r) + var(--r-glow-w));
+}
+/* The halo: the gradient fills only the box (inside a transparent border as wide as the halo),
+   is blurred so it bleeds outward and fades, and the box itself is masked away. */
+.r-glow::before, .r-glow-run::before {
+  inset: calc(-1 * var(--r-glow-halo));
+  border: var(--r-glow-halo) solid transparent;
+  border-radius: calc(var(--r-glow-r) + var(--r-glow-halo));
+  background-clip: padding-box;
+  filter: blur(calc(var(--r-glow-halo) / 2));
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) padding-box exclude, linear-gradient(#000 0 0);
+}
+
+.r-glow::before, .r-glow::after {
+  background-image: var(--ui-striped);
+  animation: r-glow-flash var(--r-glow-time) ease-out;
+}
+.r-glow::before { animation-name: r-glow-flash-halo; }
+
+.r-glow-run::before, .r-glow-run::after {
+  /* The band is set here, not as a :root variable, so it reads the animated angle of this element. */
+  background-image: conic-gradient(from var(--r-glow-a),
+    transparent 0 55%,
+    var(--ui-orange) 70%,
+    var(--ui-magenta) 83%,
+    var(--ui-green) 95%,
+    transparent 100%);
+  animation: r-glow-run var(--r-glow-run-time) linear;
+}
+
+@keyframes r-glow-flash {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes r-glow-flash-halo {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes r-glow-run {
+  0% { --r-glow-a: 0deg; opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { --r-glow-a: 360deg; opacity: 0; }
+}
+
+/* Without motion, both are a plain fade of the whole border. */
+@media (prefers-reduced-motion: reduce) {
+  .r-glow-run::before, .r-glow-run::after {
+    background-image: var(--ui-striped);
+    animation-name: r-glow-flash;
+  }
+}
