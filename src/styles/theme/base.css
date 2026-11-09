@@ -92,9 +92,9 @@
 :where(h4) { font-size: 1.05rem; color: var(--r-heading-4); }
 :where(h5) { font-size: 0.95rem; color: var(--r-heading-5); }
 :where(h6) { font-size: 0.85rem; color: var(--r-heading-6); }
-:where(p, ul, ol, dl, blockquote, pre, table, figure, details) { margin: 0 0 1rem; }
+:where(p, ul, ol, dl, blockquote, pre, table, figure, details, fieldset) { margin: 0 0 1rem; }
 :where(small) { color: var(--r-text-small); }
-:where(mark) { padding: 0 0.15em; color: inherit; background: rgb(from var(--ui-accent) r g b / 0.3); border-radius: 0.2em; }
+:where(mark) { padding: 0 0.15em; color: var(--ui-bg); background: var(--ui-blue); border-radius: 0.2em; }
 :where(blockquote) { padding: 0.2rem 0 0.2rem 1rem; color: var(--r-text-small); border-left: 4px solid var(--ui-border); }
 :where(dt) { color: var(--r-text-small); font-weight: 600; }
 :where(dd) { margin: 0 0 0.5rem 1rem; }
@@ -187,3 +187,45 @@
   background-repeat: no-repeat;
 }
 :where(input[type="checkbox"], input[type="radio"]) { accent-color: var(--ui-green); width: 1.1rem; height: 1.1rem; }
+
+/* Field groups */
+:where(fieldset) { min-width: 0; padding: 0.8rem 1rem 1rem; border: 1px solid var(--ui-border); border-radius: 0.6rem; }
+:where(legend) { padding: 0 0.4rem; color: var(--r-text-small); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; }
+
+/* Progress and meter: a slim rounded track on Lighter background. Progress fills with the striped
+   gradient; a meter is Green when good, Yellow when fair, Red when poor. */
+:where(progress, meter) {
+  appearance: none;
+  display: inline-block;
+  width: 100%;
+  height: 0.6rem;
+  vertical-align: middle;
+  background: var(--ui-bg-lighter);
+  border: 0;
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+:where(progress)::-webkit-progress-bar { background: var(--ui-bg-lighter); }
+:where(progress)::-webkit-progress-value { background: var(--ui-striped); border-radius: 0.3rem; }
+:where(progress)::-moz-progress-bar { background: var(--ui-striped); border-radius: 0.3rem; }
+:where(meter)::-webkit-meter-bar { height: 0.6rem; background: var(--ui-bg-lighter); border: 0; border-radius: 0.3rem; }
+:where(meter)::-webkit-meter-optimum-value { background: var(--ui-green); border-radius: 0.3rem; }
+:where(meter)::-webkit-meter-suboptimum-value { background: var(--ui-yellow); border-radius: 0.3rem; }
+:where(meter)::-webkit-meter-even-less-good-value { background: var(--ui-red); border-radius: 0.3rem; }
+:where(meter):-moz-meter-optimum::-moz-meter-bar { background: var(--ui-green); }
+:where(meter):-moz-meter-sub-optimum::-moz-meter-bar { background: var(--ui-yellow); }
+:where(meter):-moz-meter-sub-sub-optimum::-moz-meter-bar { background: var(--ui-red); }
+
+/* Dialog: a panel over a dimmed page. */
+:where(dialog) {
+  max-width: min(36rem, calc(100vw - 2rem));
+  padding: 1.2rem 1.4rem;
+  color: var(--r-text);
+  background: var(--ui-bg-lighter);
+  border: 1px solid var(--ui-border);
+  border-radius: 1rem;
+}
+:where(dialog)::backdrop { background: rgb(from var(--ui-bg) r g b / 0.7); backdrop-filter: blur(2px); }
+
+/* Media scale down to their container. */
+:where(img, video) { max-width: 100%; height: auto; }

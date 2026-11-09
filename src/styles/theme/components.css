@@ -198,6 +198,80 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    <th class="r-num">Price</th> ... <td class="r-num">12.50</td> */
 .r-num { text-align: right; font-variant-numeric: tabular-nums; }
 
+/* Panels and cards. A panel is a page-background box with a Border line; a card sits on Lighter
+   background. .r-active is the item in focus (Active border); .r-selected a chosen card
+   (Border fill, Active outline).
+   <section class="r-panel">…</section>  <div class="r-card r-active">…</div> */
+.r-panel { padding: 1.25rem 1.4rem; background: var(--ui-bg); border: 1px solid var(--ui-border); border-radius: 1rem; --r-glow-r: 1rem; }
+.r-card { padding: 1.2rem 1.3rem; background: var(--ui-bg-lighter); border: 1px solid var(--ui-border); border-radius: 1rem; --r-glow-r: 1rem; }
+.r-card.r-active { border-color: var(--ui-border-active); box-shadow: 0 0 0 1px var(--ui-border-active) inset; }
+.r-card.r-selected { background: var(--ui-border); border-color: var(--ui-border-active); }
+:is(.r-panel, .r-card) > :last-child { margin-bottom: 0; }
+
+/* Status pills: a small uppercase label, in the button roles. No role class is generic (Orange);
+   .r-primary Green, .r-clear Bright blue, .r-cancel Red.
+   <span class="r-pill r-primary">Online</span> */
+.r-pill {
+  display: inline-block;
+  padding: 0.1rem 0.7rem;
+  color: var(--r-btn-text);
+  background: var(--r-btn);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.r-pill.r-primary { background: var(--r-primary); }
+.r-pill.r-clear { background: var(--r-clear); }
+.r-pill.r-cancel { background: var(--r-cancel); }
+
+/* Notification boxes: a message on Lighter background with a role stripe on the left.
+   No role class is information (Blue); .r-ok Green, .r-warn Amber, .r-error Red.
+   Add .r-glow or .r-glow-run when one appears or changes.
+   <div class="r-notice r-warn" role="status"><strong>Title</strong> Text</div> */
+.r-notice {
+  --r-notice: var(--ui-blue);
+  --r-glow-r: 0.6rem;
+  padding: 0.7rem 1rem;
+  color: var(--r-text);
+  background: var(--ui-bg-lighter);
+  border: 1px solid var(--ui-border);
+  border-left: 4px solid var(--r-notice);
+  border-radius: 0.6rem;
+}
+.r-notice > strong:first-child { display: block; color: var(--r-notice); font-weight: 600; letter-spacing: 0.04em; }
+.r-notice > :last-child { margin-bottom: 0; }
+.r-notice.r-ok { --r-notice: var(--ui-green); }
+.r-notice.r-warn { --r-notice: var(--ui-accent); }
+.r-notice.r-error { --r-notice: var(--ui-red); }
+
+/* Terminal panel: a small dark backing that hugs a block of text over a picture.
+   <div class="r-term">…</div> */
+.r-term {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.5rem 0.9rem;
+  background-color: rgb(from var(--ui-bg) r g b / 0.72);
+  border: 1px solid var(--ui-border);
+  border-radius: 0.6rem;
+  backdrop-filter: blur(3px);
+  --r-glow-r: 0.6rem;
+}
+
+/* Prompt: a call to act, in Bright green caps ("Click or press"). <span class="r-prompt">…</span> */
+.r-prompt {
+  display: inline-block;
+  color: var(--ui-green-bright);
+  font-family: var(--r-font-heading);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
 /* Update glow: a brief iridescent border, in the striped gradient, that tells the user a box has just
    changed (a notification, a warning, a live value).
    .r-glow      the whole border lights up at once, then fades.
