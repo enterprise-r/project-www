@@ -26,7 +26,7 @@ const contrast = (a, b) => {
 const wcagLevel = (ratio, kind) => {
   if (kind === "nontext") return ratio >= 3 ? "3:1" : "fail";
   if (ratio >= 7) return "AAA";
-  if (ratio >= 4.5) return "AA";
+  if (ratio >= 4.5) return `AA (−${(7 - ratio).toFixed(2)})`;
   if (ratio >= 3) return "AA large";
   return "fail";
 };
@@ -73,8 +73,72 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <p class="sc-lede"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
 
     <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Buttons</h2>
+    <section class="sc-section" id="navigation">
+      <h2 class="sc-label">Navigation</h2>
+      <div class="sc-nav-bar">
+        <nav class="r-crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a class="r-btn r-crumb-root" href="/" aria-label="Home">®</a></li>
+            <li>
+              <details class="r-menu">
+                <summary class="r-btn">Docs</summary>
+                <div class="r-menu-list">
+                  <a class="r-btn" href="#">Guide</a>
+                  <a class="r-btn" href="#">Reference</a>
+                </div>
+              </details>
+            </li>
+            <li><a class="r-btn" href="#" aria-current="page">Guide</a></li>
+          </ol>
+        </nav>
+        <span class="r-group">
+          <details class="r-menu">
+            <summary class="r-btn">Docs</summary>
+            <div class="r-menu-list">
+              <a class="r-btn" href="#">Guide</a>
+              <a class="r-btn" href="#">Reference</a>
+            </div>
+          </details>
+          <details class="r-menu">
+            <summary class="r-btn">More</summary>
+            <div class="r-menu-list">
+              <a class="r-btn" href="#">Notes</a>
+              <a class="r-btn" href="#">Log</a>
+            </div>
+          </details>
+        </span>
+      </div>
+      <p class="sc-note">Breadcrumbs sit on the left, the Docs and More menus on the right, in one bar. On a narrow screen the menus sit on top, slotted right, and the breadcrumbs on the row below, slotted left. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. The two menus are joined in a group.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="type">
+      <h2 class="sc-label">Type</h2>
+      <div class="sc-type">
+        <span class="sc-cap"><b>h1</b> Audiowide, Green</span><h1>Mission control</h1>
+        <span class="sc-cap"><b>h2</b> Audiowide, Bright</span><h2>A quiet view from orbit</h2>
+        <span class="sc-cap"><b>h3</b> Audiowide, Magenta</span><h3>Engineering log</h3>
+        <span class="sc-cap"><b>h4</b> label caps, Amber</span><h4>Surfaces</h4>
+        <span class="sc-cap"><b>h5</b> label caps, Light</span><h5>Instruments</h5>
+        <span class="sc-cap"><b>h6</b> label caps, Dark</span><h6>Footnotes</h6>
+        <span class="sc-cap"><b>Body</b> Rajdhani 1.2rem</span><p>We build small, careful things and send them a long way. This is how body text reads on our dark background.</p>
+        <span class="sc-cap"><b>Small</b></span><small>info<span class="at">@</span>enterprise-r.com · small print and captions</small>
+        <span class="sc-cap"><b>Link</b></span><p>Read the <a href="#">mission notes</a> before you start.</p>
+        <span class="sc-cap"><b>Mark</b></span><p>The <mark>launch window</mark> opens at dawn.</p>
+        <span class="sc-cap"><b>Keys</b></span><p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to search.</p>
+        <span class="sc-cap"><b>Prompt</b></span><p><span class="r-prompt">Click or press</span></p>
+        <span class="sc-cap"><b>Code</b></span><p><code>--r-text</code></p>
+        <span class="sc-cap"><b>Quote</b></span><blockquote>Make it so, but make it small.</blockquote>
+        <span class="sc-cap"><b>List</b></span><ul><li>Plain lists keep the body text.</li><li>Nested items indent.</li></ul>
+        <span class="sc-cap"><b>Definitions</b></span><dl><dt>Orbit</dt><dd>The path around a body.</dd><dt>Root</dt><dd>The lone R, <span class="sc-brand">®</span>.</dd></dl>
+        <span class="sc-cap"><b>Details</b></span><details><summary>Show the checklist</summary>Fuel, comms, crew.</details>
+      </div>
+      <p class="sc-note">Headings use Audiowide down to h3, then Rajdhani label caps. One variable per tier switches the font: <code>--r-font-heading</code> (h1, and h2 to h3 unless set apart), <code>--r-font-sub</code> (h2 to h3) and <code>--r-font-minor</code> (h4 to h6). Set one to <code>var(--r-font-text)</code> to turn Audiowide off there, or <code>--r-font-minor</code> to <code>var(--r-font-heading)</code> for more Audiowide.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="buttons">
+      <h2 class="sc-label">Buttons and pills</h2>
       <div class="sc-states">
         <figure><a class="r-btn" href="#">Other</a><figcaption class="sc-cap">Generic</figcaption></figure>
         <figure><a class="r-btn is-hover" href="#">Other</a><figcaption class="sc-cap">Generic, hover</figcaption></figure>
@@ -91,7 +155,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <figure><a class="r-btn" aria-disabled="true">Off</a><figcaption class="sc-cap">Disabled</figcaption></figure>
         <figure><button class="r-btn" type="button" disabled>Off</button><figcaption class="sc-cap">Disabled button</figcaption></figure>
       </div>
-      <p class="sc-note">No role class is generic: Orange, Amber (Accent) on hover. The current page and .r-primary are Green (sage), Bright green on hover. .r-clear, and any reset button, is Bright blue. .r-cancel is Red. Keyboard focus is a 2 px Bright foreground outline (--r-focus, 3 px off).</p>
+      <p class="sc-note">No role class is Generic: Orange, Amber (Accent) on hover. The current page and <code>.r-primary</code> are Green (sage), Bright green on hover. <code>.r-clear</code>, and any reset button, is Bright blue. <code>.r-cancel</code> is Red. Keyboard focus is a 2px Bright foreground outline (<code>--r-focus</code>, 3px off).</p>
       <p class="sc-note" id="contrast">Label contrast: …</p>
       <h3 class="sc-subhead">Group</h3>
       <p class="sc-note">Joined into one pill. The first and last ends are semicircles.</p>
@@ -100,60 +164,159 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <a class="r-btn" href="#" aria-current="page">About</a>
         <a class="r-btn" href="#">Log</a>
       </span>
+      <h3 class="sc-subhead">Status pills</h3>
+      <div class="sc-states">
+        <span class="r-pill">Standby</span><span class="r-pill r-primary">Online</span><span class="r-pill r-clear">Draft</span><span class="r-pill r-cancel">Offline</span>
+      </div>
+      <p class="sc-note"><code>.r-pill</code> takes the button roles: Generic Orange, <code>.r-primary</code> Green, <code>.r-clear</code> Bright blue, <code>.r-cancel</code> Red.</p>
     </section>
 
     <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Menus and breadcrumbs</h2>
-      <div class="sc-row sc-split">
-        <div>
-          <h3 class="sc-subhead" style="margin-top:0">Breadcrumbs</h3>
-          <div class="sc-drop">
-            <nav class="r-crumbs" aria-label="Breadcrumb">
-              <ol>
-                <li><a class="r-btn r-crumb-root" href="/" aria-label="Home">®</a></li>
-                <li>
-                  <details class="r-menu">
-                    <summary class="r-btn">Docs</summary>
-                    <div class="r-menu-list">
-                      <a class="r-btn" href="#">Guide</a>
-                      <a class="r-btn" href="#">Reference</a>
-                    </div>
-                  </details>
-                </li>
-                <li><a class="r-btn" href="#" aria-current="page">Guide</a></li>
-              </ol>
-            </nav>
-          </div>
-          <p class="sc-note">Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline.</p>
+    <section class="sc-section" id="cards">
+      <h2 class="sc-label">Cards and panels</h2>
+      <div class="sc-grid cols-3">
+        <div class="r-card"><h3>Card</h3><p>Lighter background with an inactive border. The default container.</p><span class="r-pill r-primary">Online</span></div>
+        <div class="r-card r-active"><h3>Active</h3><p><code>.r-active</code>: an Active border for the item in focus, or selected by the user.</p><span class="r-pill">Standby</span></div>
+        <div class="r-card r-selected"><h3>Selection</h3><p><code>.r-selected</code>, for a highlighted row or a chosen card: Border fill with an Active outline.</p></div>
+      </div>
+      <p class="sc-note"><code>.r-panel</code> is the plain box on the page background, as around the form below.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="notifications">
+      <h2 class="sc-label">Notifications and update glow</h2>
+      <div class="sc-grid cols-2">
+        <div class="r-notice" id="glow-a" role="status"><strong>Notification</strong> Docking is complete. All crew aboard.</div>
+        <div class="r-notice r-ok" id="glow-b" role="status"><strong>Saved</strong> Your changes are on board.</div>
+        <div class="r-notice r-warn" id="glow-c" role="status"><strong>Warning</strong> Shield power dropped to 40%.</div>
+        <div class="r-notice r-error" id="glow-d" role="alert"><strong>Live value</strong> Speed <b id="glow-v">0.72</b> c, over the limit.</div>
+      </div>
+      <div class="sc-glow-actions">
+        <span class="r-group">
+          <button class="r-btn" type="button" data-glow="r-glow">Glow at once</button>
+          <button class="r-btn" type="button" data-glow="r-glow-run">Glow around</button>
+        </span>
+      </div>
+      <p class="sc-note"><code>.r-notice</code> is information (Blue); <code>.r-ok</code> Green, <code>.r-warn</code> Amber, <code>.r-error</code> Red. <code>.r-glow</code> lights the whole border in the striped gradient and fades. <code>.r-glow-run</code> sends a band of the stripe once around the border. Add the class to play it; with reduced motion both are a plain fade.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="form">
+      <h2 class="sc-label">Form</h2>
+      <form class="r-panel" onsubmit="return false">
+        <div class="sc-form">
+          <div class="sc-field"><label for="f-name">Name</label><input id="f-name" placeholder="Jean-Luc"></div>
+          <div class="sc-field"><label for="f-mail">E-mail (focus)</label><input class="is-focus" id="f-mail" type="email" value="crew@enterprise-r.com"></div>
+          <div class="sc-field"><label for="f-dis">Ship ID (disabled)</label><input id="f-dis" value="NCC-1701-R" disabled></div>
+          <div class="sc-field"><label for="f-sel">Department</label><select id="f-sel"><option>Engineering</option><option>Science</option><option>Command</option></select></div>
+          <div class="sc-field sc-span-2"><label for="f-msg">Message</label><textarea id="f-msg" placeholder="Your message"></textarea></div>
+          <div class="sc-field"><span class="sc-cap">Options</span><div class="sc-checks"><label><input type="checkbox" checked> Updates</label><label><input type="checkbox"> Newsletter</label></div></div>
+          <div class="sc-field"><span class="sc-cap">Channel</span><div class="sc-checks"><label><input type="radio" name="ch" checked> E-mail</label><label><input type="radio" name="ch"> Subspace</label></div></div>
+          <fieldset class="r-rows">
+            <legend>Team members</legend>
+            <div class="r-rows-head" aria-hidden="true"><span></span><span>Name</span><span>Role</span></div>
+            <div class="r-rows-list">
+              <div class="r-row">
+                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 1" data-tip="Remove row 1"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+                <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[0][name]" value="Beverly Crusher" placeholder="Name" autocomplete="off">
+                <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[0][role]" value="Chief medical officer" placeholder="Role" autocomplete="off">
+              </div>
+              <div class="r-row">
+                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 2" data-tip="Remove row 2"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+                <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[1][name]" value="Geordi La Forge" placeholder="Name" autocomplete="off">
+                <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[1][role]" value="Chief engineer" placeholder="Role" autocomplete="off">
+              </div>
+            </div>
+            <div class="r-rows-foot">
+              <span class="r-row-bubble"><button type="button" class="r-row-add" aria-label="Add row" data-tip="Add row"><span class="r-row-glyph" aria-hidden="true">+</span></button></span>
+              <div class="r-row-ghost" aria-hidden="true">
+                <input placeholder="Name" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
+                <input placeholder="Role" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
+              </div>
+            </div>
+            <p class="r-rows-live r-vh" aria-live="polite"></p>
+          </fieldset>
+          <div class="sc-actions"><span class="r-group"><button class="r-btn r-primary" type="submit">Send</button><button class="r-btn" type="button">Save</button><button class="r-btn" type="reset">Clear</button><button class="r-btn r-cancel" type="button">Cancel</button></span><span class="sc-help">Primary Green (sage), Generic Orange, Clear Bright blue, Cancel Red.</span></div>
         </div>
-        <div>
-          <h3 class="sc-subhead" style="margin-top:0">Menus</h3>
-          <div class="sc-drop">
-            <span class="r-group">
-              <details class="r-menu" open>
-                <summary class="r-btn">Docs</summary>
-                <div class="r-menu-list">
-                  <a class="r-btn" href="#">Guide</a>
-                  <a class="r-btn" href="#">Reference</a>
-                </div>
-              </details>
-              <details class="r-menu">
-                <summary class="r-btn">More</summary>
-                <div class="r-menu-list">
-                  <a class="r-btn" href="#">Notes</a>
-                  <a class="r-btn" href="#">Log</a>
-                </div>
-              </details>
-            </span>
-          </div>
-          <p class="sc-note">Two menus joined in a group.</p>
+      </form>
+      <p class="sc-note">A dynamic list in the form: add or remove rows of name and role. The control is quiet until you need it. <code>.r-rows</code> in the theme, with <code>theme/rows.js</code>.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="tables">
+      <h2 class="sc-label">Tables</h2>
+      <table>
+        <caption>Crew on this watch</caption>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th class="r-num">Watch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Beverly Crusher</td>
+            <td>Chief medical officer</td>
+            <td class="r-num">1</td>
+          </tr>
+          <tr>
+            <td>Geordi La Forge</td>
+            <td>Chief engineer</td>
+            <td class="r-num">2</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="sc-note">A plain table: rounded outline, header row on the Border fill, dividers between rows, Lighter background on hover. <code>.r-num</code> right-aligns the number column.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="groups">
+      <h2 class="sc-label">Groups, progress and dialog</h2>
+      <div class="sc-grid cols-2">
+        <fieldset>
+          <legend>Crew</legend>
+          <div class="sc-checks"><label><input type="checkbox" checked> Captain</label><label><input type="checkbox"> Pilot</label><label><input type="radio" name="sc-r" checked> Day</label><label><input type="radio" name="sc-r"> Night</label></div>
+        </fieldset>
+        <div class="sc-meters">
+          <span class="sc-cap"><b>Progress</b></span><progress value="62" max="100">62%</progress>
+          <span class="sc-cap"><b>Meter</b> good</span><meter value="0.8" low="0.3" high="0.6" optimum="1">80%</meter>
+          <span class="sc-cap"><b>Meter</b> fair</span><meter value="0.5" low="0.3" high="0.6" optimum="1">50%</meter>
+          <span class="sc-cap"><b>Meter</b> poor</span><meter value="0.2" low="0.3" high="0.6" optimum="1">20%</meter>
         </div>
       </div>
+      <p class="sc-dialog-open"><span class="r-group"><button class="r-btn" type="button" onclick="document.getElementById('sc-dialog').showModal()">Open dialog</button></span></p>
+      <dialog id="sc-dialog">
+        <h3>Leave orbit?</h3>
+        <p>A dialog is a card over the dimmed page.</p>
+        <form method="dialog" class="sc-dialog-actions"><span class="r-group"><button class="r-btn r-clear">Stay</button><button class="r-btn r-primary">Leave</button></span></form>
+      </dialog>
+      <p class="sc-note">A plain fieldset, legend, progress (striped gradient), meter (Green, Yellow, Red by its low and high marks) and dialog. Pictures scale down to their container.</p>
     </section>
 
     <hr>
-    <section class="sc-section">
+    <section class="sc-section" id="terminal">
+      <h2 class="sc-label">Terminal</h2>
+      <figure class="sc-term-sample">
+        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
+        <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
+      </figure>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="code">
+      <h2 class="sc-label">Code</h2>
+      <pre><code><span class="k">:root</span> {"{"}
+  <span class="k">--r-primary</span>: <span class="v">var(--ui-green)</span>;         <span class="c">/* Green (sage) {hex("--ui-green")} */</span>
+  <span class="k">--r-primary-hover</span>: <span class="v">var(--ui-green-bright)</span>; <span class="c">/* Bright green {hex("--ui-green-bright")} */</span>
+  <span class="k">--r-btn</span>: <span class="v">var(--ui-orange)</span>;              <span class="c">/* Orange {hex("--ui-orange")} */</span>
+  <span class="k">--r-btn-hover</span>: <span class="v">var(--ui-accent)</span>;        <span class="c">/* Amber (Accent) {hex("--ui-accent")} */</span>
+  <span class="k">--r-text</span>: <span class="v">var(--ui-fg)</span>;                <span class="c">/* {hex("--ui-fg")} */</span>
+{"}"}</code></pre>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="separators">
       <h2 class="sc-label">Separators</h2>
       <hr class="sc-sep">
       <span class="sc-cap">Separator (--ui-separator): Green (sage) at the faded edges, through Magenta, to Orange in the centre</span>
@@ -163,8 +326,9 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       <span class="sc-cap">Striped gradient: the badge ring and the words of the wide and compact logos</span>
     </section>
 
-    <section class="sc-section">
-      <h2 class="sc-label">Colours</h2>
+    <hr>
+    <section class="sc-section" id="palette">
+      <h2 class="sc-label">Palette</h2>
       <div class="sc-brand-box">
         <h3 class="sc-subhead" style="margin-top:0">Amber (Accent)</h3>
         <div class="sc-swatches">
@@ -181,11 +345,11 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       </>))}
     </section>
 
-
     <hr>
     <section class="sc-section" id="accessibility">
       <h2 class="sc-label">Accessibility</h2>
-      <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> meets WCAG 2.2 AA. Every text colour clears 4.5:1 on its background, most clear AAA, and borders and focus rings clear 3:1. Links are underlined, targets are at least 24px, motion stops when you ask for less, and high-contrast mode keeps every edge visible.</p>
+      <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> meets WCAG 2.2 AA throughout and is effectively AAA most of the time. The few exceptions are intentional and only used when visibility is not the priority. <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is meant to be easy on the eyes and optimized for fast use.</p>
+      <p>Borders and focus rings clear 3:1. Links are underlined, targets are at least 24px, motion stops when you ask for less, and high-contrast mode keeps every edge visible.</p>
       <table>
         <caption>Contrast scores for Dark-®</caption>
         <thead>
@@ -211,124 +375,16 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
           ))}
         </tbody>
       </table>
-      <p class="sc-note">A plain table: rounded outline, header row on the Border fill, dividers between rows, Lighter background on hover. .r-num right-aligns the ratio column. Ratios are computed from the palette hex values.</p>
+      <p class="sc-note">Ratios are computed from the palette hex values. <code>.r-num</code> right-aligns the ratio column.</p>
     </section>
 
-    <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Type</h2>
-      <div class="sc-type">
-        <span class="sc-cap"><b>h1</b> Audiowide, Green</span><h1>Mission control</h1>
-        <span class="sc-cap"><b>h2</b> Audiowide, Bright</span><h2>A quiet view from orbit</h2>
-        <span class="sc-cap"><b>h3</b> Audiowide, Magenta</span><h3>Engineering log</h3>
-        <span class="sc-cap"><b>h4</b> label caps, Amber</span><h4>Surfaces</h4>
-        <span class="sc-cap"><b>h5</b> label caps, Light</span><h5>Instruments</h5>
-        <span class="sc-cap"><b>h6</b> label caps, Dark</span><h6>Footnotes</h6>
-        <span class="sc-cap"><b>Body</b> Rajdhani 1.2rem</span><p>We build small, careful things and send them a long way. This is how body text reads on our dark background.</p>
-        <span class="sc-cap"><b>Small</b></span><small>info<span class="at">@</span>enterprise-r.com · small print and captions</small>
-        <span class="sc-cap"><b>Link</b></span><p>Read the <a href="#">mission notes</a> before you start.</p>
-        <span class="sc-cap"><b>Mark</b></span><p>The <mark>launch window</mark> opens at dawn.</p>
-        <span class="sc-cap"><b>Keys</b></span><p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to search.</p>
-        <span class="sc-cap"><b>Prompt</b></span><p><span class="r-prompt">Click or press</span></p>
-        <span class="sc-cap"><b>Code</b></span><p><code>--r-text</code></p>
-        <span class="sc-cap"><b>Quote</b></span><blockquote>Make it so, but make it small.</blockquote>
-        <span class="sc-cap"><b>List</b></span><ul><li>Plain lists keep the body text.</li><li>Nested items indent.</li></ul>
-        <span class="sc-cap"><b>Definitions</b></span><dl><dt>Orbit</dt><dd>The path around a body.</dd><dt>Root</dt><dd>The lone R, <span class="sc-brand">®</span>.</dd></dl>
-        <span class="sc-cap"><b>Details</b></span><details><summary>Show the checklist</summary>Fuel, comms, crew.</details>
-      </div>
-      <p class="sc-note">Headings use Audiowide down to h3, then Rajdhani label caps. One variable per tier switches the font: <code>--r-font-heading</code> (h1, and h2 to h3 unless set apart), <code>--r-font-sub</code> (h2 to h3) and <code>--r-font-minor</code> (h4 to h6). Set one to <code>var(--r-font-text)</code> to turn Audiowide off there, or <code>--r-font-minor</code> to <code>var(--r-font-heading)</code> for more Audiowide.</p>
-    </section>
+    <p class="sc-closer" aria-hidden="true"><span class="sc-closer-fill"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span></span></p>
 
-
-    <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Cards and panels</h2>
-      <div class="sc-grid cols-3">
-        <div class="r-card"><h3>Card</h3><p>Lighter background with an inactive border. The default container.</p><span class="r-pill r-primary">Online</span></div>
-        <div class="r-card r-active"><h3>Active</h3><p>.r-active: Active border for the item in focus or selected by the user.</p><span class="r-pill">Standby</span></div>
-        <div class="r-card r-selected"><h3>Selection</h3><p>Selection, for a highlighted row or a chosen card (.r-selected): Border fill with an Active outline.</p></div>
-      </div>
-      <p class="sc-note">.r-panel is the plain box on the page background, as around the form below.</p>
-      <h3 class="sc-subhead">Status pills</h3>
-      <div class="sc-states">
-        <span class="r-pill">Standby</span><span class="r-pill r-primary">Online</span><span class="r-pill r-clear">Draft</span><span class="r-pill r-cancel">Offline</span>
-      </div>
-      <p class="sc-note">.r-pill takes the button roles: generic Orange, .r-primary Green, .r-clear Bright blue, .r-cancel Red.</p>
-      <figure class="sc-term-sample">
-        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
-        <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
-      </figure>
-    </section>
-
-    <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Notifications and update glow</h2>
-      <div class="sc-grid cols-2">
-        <div class="r-notice" id="glow-a" role="status"><strong>Notification</strong> Docking is complete. All crew aboard.</div>
-        <div class="r-notice r-ok" id="glow-b" role="status"><strong>Saved</strong> Your changes are on board.</div>
-        <div class="r-notice r-warn" id="glow-c" role="status"><strong>Warning</strong> Shield power dropped to 40%.</div>
-        <div class="r-notice r-error" id="glow-d" role="alert"><strong>Live value</strong> Speed <b id="glow-v">0.72</b> c, over the limit.</div>
-      </div>
-      <div class="sc-glow-actions">
-        <button class="r-btn" type="button" data-glow="r-glow">Glow at once</button>
-        <button class="r-btn" type="button" data-glow="r-glow-run">Glow around</button>
-      </div>
-      <p class="sc-note">.r-notice is information (Blue); .r-ok Green, .r-warn Amber, .r-error Red. .r-glow lights the whole border in the striped gradient and fades. .r-glow-run sends a band of the stripe once around the border. Add the class to play it; with reduced motion both are a plain fade.</p>
-    </section>
-
-    <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Form</h2>
-      <form class="r-panel" onsubmit="return false">
-        <div class="sc-form">
-          <div class="sc-field"><label for="f-name">Name</label><input id="f-name" placeholder="Jean-Luc"></div>
-          <div class="sc-field"><label for="f-mail">E-mail (focus)</label><input class="is-focus" id="f-mail" type="email" value="crew@enterprise-r.com"></div>
-          <div class="sc-field"><label for="f-dis">Ship ID (disabled)</label><input id="f-dis" value="NCC-1701-R" disabled></div>
-          <div class="sc-field"><label for="f-sel">Department</label><select id="f-sel"><option>Engineering</option><option>Science</option><option>Command</option></select></div>
-          <div class="sc-field sc-span-2"><label for="f-msg">Message</label><textarea id="f-msg" placeholder="Your message"></textarea></div>
-          <div class="sc-field"><span class="sc-cap">Options</span><div class="sc-checks"><label><input type="checkbox" checked> Updates</label><label><input type="checkbox"> Newsletter</label></div></div>
-          <div class="sc-field"><span class="sc-cap">Channel</span><div class="sc-checks"><label><input type="radio" name="ch" checked> E-mail</label><label><input type="radio" name="ch"> Subspace</label></div></div>
-          <div class="sc-actions"><span class="r-group"><button class="r-btn r-primary" type="submit">Send</button><button class="r-btn" type="button">Save</button><button class="r-btn" type="reset">Clear</button><button class="r-btn r-cancel" type="button">Cancel</button></span><span class="sc-help">Primary Green (sage), generic Orange, clear Bright blue, cancel Red.</span></div>
-        </div>
-      </form>
-    </section>
-
-    <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Groups, progress and dialog</h2>
-      <div class="sc-grid cols-2">
-        <fieldset>
-          <legend>Crew</legend>
-          <div class="sc-checks"><label><input type="checkbox" checked> Captain</label><label><input type="checkbox"> Pilot</label><label><input type="radio" name="sc-r" checked> Day</label><label><input type="radio" name="sc-r"> Night</label></div>
-        </fieldset>
-        <div class="sc-meters">
-          <span class="sc-cap"><b>Progress</b></span><progress value="62" max="100">62%</progress>
-          <span class="sc-cap"><b>Meter</b> good</span><meter value="0.8" low="0.3" high="0.6" optimum="1">80%</meter>
-          <span class="sc-cap"><b>Meter</b> fair</span><meter value="0.5" low="0.3" high="0.6" optimum="1">50%</meter>
-          <span class="sc-cap"><b>Meter</b> poor</span><meter value="0.2" low="0.3" high="0.6" optimum="1">20%</meter>
-        </div>
-      </div>
-      <p><button class="r-btn" type="button" onclick="document.getElementById('sc-dialog').showModal()">Open dialog</button></p>
-      <dialog id="sc-dialog">
-        <h3>Leave orbit?</h3>
-        <p>A dialog is a card over the dimmed page.</p>
-        <form method="dialog" class="sc-dialog-actions"><button class="r-btn r-cancel">Cancel</button><button class="r-btn r-primary">Leave</button></form>
-      </dialog>
-      <p class="sc-note">Plain fieldset, legend, progress (striped gradient), meter (Green, Yellow, Red by its low and high marks) and dialog. Pictures scale down to their container.</p>
-    </section>
-
-    <hr>
-    <section class="sc-section">
-      <h2 class="sc-label">Code</h2>
-      <pre><code><span class="k">:root</span> {"{"}
-  <span class="k">--r-primary</span>: <span class="v">var(--ui-green)</span>;         <span class="c">/* Green (sage) {hex("--ui-green")} */</span>
-  <span class="k">--r-primary-hover</span>: <span class="v">var(--ui-green-bright)</span>; <span class="c">/* Bright green {hex("--ui-green-bright")} */</span>
-  <span class="k">--r-btn</span>: <span class="v">var(--ui-orange)</span>;              <span class="c">/* Orange {hex("--ui-orange")} */</span>
-  <span class="k">--r-btn-hover</span>: <span class="v">var(--ui-accent)</span>;        <span class="c">/* Amber (Accent) {hex("--ui-accent")} */</span>
-  <span class="k">--r-text</span>: <span class="v">var(--ui-fg)</span>;                <span class="c">/* {hex("--ui-fg")} */</span>
-{"}"}</code></pre>
-    </section>
   </main>
+  <footer><p class="sc-brand">Enterprise-R</p></footer>
+  <script>
+    import "../styles/theme/rows.js";
+  </script>
   <script is:inline slot="scripts">
     // Menus: one open at a time; click outside or Esc closes them. The theme leaves that to the page.
     (() => {
@@ -377,5 +433,6 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       v.textContent = (0.5 + Math.random() * 0.49).toFixed(2);
       ["glow-a", "glow-b", "glow-c", "glow-d"].forEach((id) => rGlow(document.getElementById(id), b.dataset.glow));
     }));
+
   </script>
 </Base>

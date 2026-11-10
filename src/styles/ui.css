@@ -17,6 +17,13 @@ main.showcase {
 .sc-title img { display: block; width: min(24.68rem, 100%); height: auto; }
 .sc-aw { font-family: var(--r-font-heading); }
 .sc-brand { font-family: var(--r-font-brand); letter-spacing: 0; }
+main.showcase + footer p {
+  margin: 0;
+  color: var(--ui-bg);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
 .sc-subtitle {
   margin: 0.1rem 0 0.6rem;
   font-family: var(--r-font-heading);
@@ -41,6 +48,8 @@ main.showcase {
 .r-card .r-pill { margin-top: 0.8rem; }
 .sc-meters { display: grid; grid-template-columns: 7rem 1fr; gap: 0.7rem 1rem; align-items: center; }
 .sc-dialog-actions { display: flex; justify-content: flex-end; gap: var(--r-gap); margin: 0; }
+.sc-dialog-open { display: flex; justify-content: center; margin-top: 1rem; }
+#accessibility table { margin-inline: auto; }
 .sc-glow-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
 
 .sc-states { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; align-items: flex-end; }
@@ -62,6 +71,31 @@ main.showcase {
 .sc-row > * { min-width: min(100%, 16rem); max-width: 100%; }
 .sc-row > :first-child { flex: 0 1 auto; }
 .sc-row > :last-child { flex: 1 1 20rem; }
+/* One nav bar: breadcrumbs on the left, joined menus on the right. Wraps on a narrow screen. */
+.sc-nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r-gap) 1.2rem;
+  padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
+  background-color: var(--ui-border);
+  overflow: visible;
+}
+.sc-nav-bar .r-crumbs { min-width: 0; }
+/* Narrow: menus on top, slotted right; breadcrumbs on the row below, slotted left.
+   DOM order stays crumbs then menus, so keyboard and screen-reader order is unchanged.
+   Row gap stays --r-gap, so the wrap is still a slim two-row stripe.
+   Dropdowns overlay what is below; they do not reserve height. */
+@media (max-width: 40rem) {
+  .sc-nav-bar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .sc-nav-bar .r-group { align-self: end; }
+  .sc-nav-bar .r-crumbs { align-self: start; }
+}
+
 /* Split row: the first block on the left, the last pushed to the right edge. */
 .sc-split { justify-content: space-between; }
 .sc-split > :first-child { flex: 1 1 20rem; max-width: 36rem; }
@@ -69,9 +103,8 @@ main.showcase {
 /* A menu is a block flex box, so in a wide column it would stretch and the
    list (min-width: 100%) would become a full-width bar. Stay as wide as the label. */
 .showcase .r-menu { width: max-content; max-width: 100%; }
-/* The menu list is taken out of flow, so reserve its height. A closed list still
-   occupies that box in Chromium and would steal clicks from whatever sits under it. */
-.sc-drop { min-height: calc(3 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem); }
+/* A closed list would still occupy its absolutely positioned box in Chromium
+   and steal clicks from whatever sits under it, so hide it. Open lists overlay. */
 .showcase .r-menu:not([open]) > .r-menu-list { display: none; }
 
 /* Static samples of states the theme only paints on a real hover or focus. */
@@ -124,6 +157,9 @@ main.showcase {
 /* Form actions sit on their own row, at the right edge of the form. */
 .sc-actions { grid-column: 1 / -1; display: grid; gap: 0.35rem; justify-items: end; }
 
+/* The list is a theme component; the form grid still needs it to span both columns. */
+.sc-form .r-rows { grid-column: 1 / -1; min-width: 0; }
+
 .showcase pre .k { color: var(--ui-magenta); }
 .showcase pre .v { color: var(--ui-accent); }
 .showcase pre .c { color: var(--ui-fg-dark); }
@@ -144,10 +180,42 @@ main.showcase {
 .sc-term-stack .r-term { max-width: 34rem; }
 .sc-term-stack .about-heading { margin: 0; font-family: var(--r-font-heading); font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
 
+/* Decorative closer: Dark-® at h2 size, filled with the striped logo gradient. */
+.sc-closer {
+  margin: 4rem 0 0;
+  text-align: center;
+  font-family: var(--r-font-heading);
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+.sc-closer-fill {
+  display: inline-block;
+  color: transparent;
+  background: var(--ui-striped);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@media (forced-colors: active) {
+  .sc-closer-fill,
+  .sc-closer-fill * {
+    color: CanvasText;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+  }
+}
+
 @media (max-width: 900px) {
   main.showcase { padding: 2rem 1rem 4rem; }
   .sc-grid.cols-2, .sc-grid.cols-3, .sc-form { grid-template-columns: 1fr; }
   .sc-span-2 { grid-column: auto; }
   .sc-type { grid-template-columns: 1fr; }
   .sc-type > .sc-cap { text-align: left; }
+}
+
+/* Roomier buttons need a little of the panel's side padding back at phone widths. */
+@media (max-width: 40rem) {
+  .showcase form.r-panel { padding-inline: 0.2rem; }
 }
