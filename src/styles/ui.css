@@ -184,6 +184,7 @@ main.showcase + footer p {
 .sc-type ul { padding-left: 1.2rem; }
 .sc-type > .sc-cap { text-align: right; }
 .sc-type p { max-width: 42rem; }
+.sc-scales .sc-cap { margin: 0 0 0.8rem; }
 .at { color: var(--ui-accent); }
 
 .sc-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.2rem; }

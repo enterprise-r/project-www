@@ -1,7 +1,8 @@
 /* Dark-® base. Fonts and plain HTML elements, on the --ui-* variables of palette.css (link that first).
    Element selectors sit inside :where(), so they weigh nothing and an app's own rules always win.
    Enterprsr is the brand font (the ® root mark). Audiowide for the top headings (h1-h3), Rajdhani for text
-   and minor headings (h4-h6). Three font variables pick the heading font per tier (see :root).
+   and minor headings (h4-h6), Monaspace Neon for code. Three font variables pick the heading font per tier (see :root).
+   This is the web scale; doc.css adds the document scale for long text.
    Fonts load from ../fonts/woff2/, the fonts/ folder that ships next to theme/ in the assets. */
 @font-face {
   font-family: "Enterprsr";
@@ -30,6 +31,13 @@
   font-weight: 600;
   font-display: swap;
   src: url(../fonts/woff2/Rajdhani-SemiBold.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Monaspace Neon";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url(../fonts/woff2/MonaspaceNeon.woff2) format("woff2");
 }
 
 /* Roles on top of the palette. Components use these too. */
@@ -68,7 +76,7 @@
   --r-font-sub: var(--r-font-heading);
   --r-font-minor: var(--r-font-text);
   --r-font-text: Rajdhani, "Segoe UI", sans-serif;
-  --r-font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --r-font-mono: "Monaspace Neon", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
 :where(*, *::before, *::after) { box-sizing: border-box; }
@@ -127,11 +135,11 @@
 :where(hr) { height: 2px; margin: 1.2rem 0; border: 0; background: var(--ui-separator); }
 
 /* Code */
-:where(code, kbd, samp) { font-family: var(--r-font-code); font-size: 0.9em; }
+:where(code, kbd, samp) { font-family: var(--r-font-mono); font-size: 0.9em; }
 :where(pre) {
   padding: 1rem 1.2rem;
   overflow-x: auto;
-  font: 0.95rem/1.5 var(--r-font-code);
+  font: 0.95rem/1.5 var(--r-font-mono);
   color: var(--ui-fg);
   background: var(--ui-bg);
   border: 1px solid var(--ui-border);

@@ -1,6 +1,7 @@
 ---
 // UI showcase and style guide. Not in the nav, not indexed: open /showcase/ directly.
 import Base from "../layouts/Base.astro";
+import "../styles/theme/doc.css";
 import "../styles/ui.css";
 import palette from "../styles/palette.json";
 
@@ -138,6 +139,40 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <span class="sc-cap"><b>Details</b></span><details><summary>Show the checklist</summary>Fuel, comms, crew.</details>
       </div>
       <p class="sc-note">Headings use Audiowide down to h3, then Rajdhani label caps. One variable per tier switches the font: <code>--r-font-heading</code> (h1, and h2 to h3 unless set apart), <code>--r-font-sub</code> (h2 to h3) and <code>--r-font-minor</code> (h4 to h6). Set one to <code>var(--r-font-text)</code> to turn Audiowide off there, or <code>--r-font-minor</code> to <code>var(--r-font-heading)</code> for more Audiowide.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="scales">
+      <h2 class="sc-label">Web and document</h2>
+      <div class="sc-grid cols-2 sc-scales">
+        <div>
+          <p class="sc-cap"><b>Web</b> <code>base.css</code></p>
+          <div>
+            <h1>Mission control</h1>
+            <h2>A quiet view from orbit</h2>
+            <h3>Engineering log</h3>
+            <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
+            <p><code>--r-text</code></p>
+            <pre><code>:root {"{"}
+  --r-text: var(--ui-fg);
+{"}"}</code></pre>
+          </div>
+        </div>
+        <div>
+          <p class="sc-cap"><b>Document</b> <code>.r-doc</code> in <code>doc.css</code></p>
+          <div class="r-doc">
+            <h1>Mission control</h1>
+            <h2>A quiet view from orbit</h2>
+            <h3>Engineering log</h3>
+            <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
+            <p><code>--r-text</code></p>
+            <pre><code>:root {"{"}
+  --r-text: var(--ui-fg);
+{"}"}</code></pre>
+          </div>
+        </div>
+      </div>
+      <p class="sc-note">The web scale is the default. The document scale is for long text: Audiowide for h1 only, Rajdhani for h2 and h3, Saira for the body. Code is Monaspace Neon in both, <code>--r-font-mono</code>.</p>
     </section>
 
     <hr>
@@ -355,7 +390,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> meets WCAG 2.2 AA throughout and is effectively AAA most of the time. The few exceptions are intentional and only used when visibility is not the priority. <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is meant to be easy on the eyes and optimized for fast use.</p>
       <p>Borders and focus rings clear 3:1. Links are underlined, targets are at least 24px, motion stops when you ask for less, and high-contrast mode keeps every edge visible.</p>
       <table>
-        <caption>Contrast scores for Dark-®</caption>
+        <caption>Contrast scores for <span class="sc-aw">Dark-</span><span class="sc-brand">®</span></caption>
         <thead>
           <tr>
             <th>Pair</th>
