@@ -73,8 +73,11 @@ header nav {
 .home-btn:hover { color: var(--ui-green-bright); }
 
 @media (max-width: 640px) {
-  /* Title row (wide logo, 6rem tall), then the nav row. Buttons grow with the row. */
-  :root { --r-btn-h: 2.75rem; --bar-h: calc(6rem + var(--r-btn-h) + 2 * var(--bar-pad)); }
+  /* Title row (wide logo, 6rem tall), then the nav row. Taller tap targets stay on
+     the bar only — do not retune --r-btn-h on :root, or every theme button grows. */
+  :root { --bar-h: calc(6rem + 2.75rem + 2 * var(--bar-pad)); }
+  header nav .r-btn,
+  .home-btn { --r-btn-h: 2.75rem; height: var(--r-btn-h); }
   /* Two rows: the title row takes the page background, the nav row keeps the stripe. */
   header { grid-template-columns: 1fr; background-color: var(--ui-bg); }
   .brand { grid-column: 1; justify-self: center; display: flex; align-items: center; height: 6rem; }

@@ -52,6 +52,14 @@
   --r-hl-line: var(--ui-border-active);
   --r-hl-ring-w: 3px;
   --r-hl-ring: rgb(from var(--ui-border-active) r g b / 0.25);
+  /* Radios and checkboxes: same size and field look, shared with other circular controls. */
+  --r-choice-size: 1.5rem;
+  --r-choice-bg: var(--ui-bg-lighter);
+  --r-choice-border: var(--ui-fg-dark);
+  --r-choice-checked: var(--ui-green);
+  --r-choice-mark: var(--ui-bg);
+  --r-choice-radius: 0.3rem;
+  --r-choice-dot: 0.7rem;
   --r-font-brand: Enterprsr, Audiowide, Rajdhani, sans-serif;
   --r-font-heading: Audiowide, Rajdhani, sans-serif;
   /* Heading fonts by tier, so an app can switch Audiowide off where it wants:
@@ -140,7 +148,9 @@
 }
 
 /* Tables: a rounded outline, a header row on the Border fill, a divider between rows, a soft hover.
-   Rounded corners need border-collapse: separate, so the lines are drawn per cell, not shared. */
+   Rounded corners need border-collapse: separate, so the lines are drawn per cell, not shared.
+   Corner radii go on the first/last row cells (not table > :first-child, which is often the caption),
+   inset by the 1px outline so a filled header or a hovered last row stays inside the curve. */
 :where(table) {
   border-collapse: separate;
   border-spacing: 0;
@@ -148,16 +158,35 @@
   border-radius: 0.6rem;
 }
 :where(caption) { padding: 0 0 0.4rem; color: var(--r-text-small); font-size: 0.95rem; text-align: left; }
-:where(th, td) { padding: 0.45rem 0.8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--ui-border); }
+:where(th, td) {
+  padding: 0.45rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--ui-border);
+  background-clip: padding-box;
+}
 :where(th) { color: var(--r-text-small); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; }
 :where(thead th) { background: var(--ui-border); }
 :where(table > :last-child > tr:last-child > *, table > tr:last-child > *) { border-bottom: 0; }
 :where(tbody tr:hover > *) { background: var(--ui-bg-lighter); }
-/* The corner cells round with the outline, so a filled header or a hovered row stays inside it. */
-:where(table > :first-child > tr:first-child > :first-child) { border-top-left-radius: calc(0.6rem - 1px); }
-:where(table > :first-child > tr:first-child > :last-child) { border-top-right-radius: calc(0.6rem - 1px); }
-:where(table > :last-child > tr:last-child > :first-child) { border-bottom-left-radius: calc(0.6rem - 1px); }
-:where(table > :last-child > tr:last-child > :last-child) { border-bottom-right-radius: calc(0.6rem - 1px); }
+:where(
+  table > thead:first-of-type > tr:first-child > :first-child,
+  table > caption + tbody > tr:first-child > :first-child,
+  table > tbody:first-child > tr:first-child > :first-child,
+  table > tr:first-child > :first-child
+) { border-top-left-radius: calc(0.6rem - 1px); }
+:where(
+  table > thead:first-of-type > tr:first-child > :last-child,
+  table > caption + tbody > tr:first-child > :last-child,
+  table > tbody:first-child > tr:first-child > :last-child,
+  table > tr:first-child > :last-child
+) { border-top-right-radius: calc(0.6rem - 1px); }
+:where(table > :last-child > tr:last-child > :first-child, table > tr:last-child > :first-child) {
+  border-bottom-left-radius: calc(0.6rem - 1px);
+}
+:where(table > :last-child > tr:last-child > :last-child, table > tr:last-child > :last-child) {
+  border-bottom-right-radius: calc(0.6rem - 1px);
+}
 
 /* Form fields */
 :where(label) { color: var(--r-text-small); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; }
@@ -191,7 +220,64 @@
   background-size: 0.35rem 0.35rem;
   background-repeat: no-repeat;
 }
-:where(input[type="checkbox"], input[type="radio"]) { accent-color: var(--ui-green); width: 1.5rem; height: 1.5rem; }
+/* Radios and checkboxes: Dark-R field look, not the native widget.
+   Checked marks are drawn with backgrounds (::before is not reliable on inputs). */
+:where(input[type="checkbox"], input[type="radio"]) {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: var(--r-choice-size);
+  height: var(--r-choice-size);
+  margin: 0;
+  flex-shrink: 0;
+  vertical-align: middle;
+  accent-color: var(--r-choice-checked);
+  background-color: var(--r-choice-bg);
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid var(--r-choice-border);
+  color: var(--r-choice-mark);
+  cursor: pointer;
+}
+:where(input[type="radio"]) { border-radius: 50%; }
+:where(input[type="checkbox"]) { border-radius: var(--r-choice-radius); }
+:where(input[type="radio"]:checked) {
+  border-color: var(--r-choice-checked);
+  background-image: radial-gradient(
+    circle at center,
+    var(--r-choice-checked) 0 calc(var(--r-choice-dot) / 2),
+    var(--r-choice-bg) calc(var(--r-choice-dot) / 2 + 1px)
+  );
+}
+:where(input[type="checkbox"]:checked) {
+  /* Check stroke is --ui-bg (#0C040F), same as --r-choice-mark; a data-URI SVG cannot read the variable. */
+  border-color: var(--r-choice-checked);
+  background-color: var(--r-choice-checked);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath stroke='%230C040F' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M3.4 8.2 6.6 11.4 12.6 4.6'/%3E%3C/svg%3E");
+  background-size: 0.85rem 0.85rem;
+}
+:where(input[type="checkbox"]:indeterminate) {
+  border-color: var(--r-choice-checked);
+  background-color: var(--r-choice-bg);
+  background-image: linear-gradient(var(--r-choice-checked), var(--r-choice-checked));
+  background-size: 0.7rem 0.15rem;
+}
+:where(input[type="checkbox"], input[type="radio"]):where(:hover):where(:not(:disabled)) {
+  border-color: var(--ui-border-active);
+}
+:where(input[type="checkbox"], input[type="radio"]):where(:focus) {
+  outline: none;
+  border-color: var(--r-hl-line);
+  box-shadow: 0 0 0 var(--r-hl-ring-w) var(--r-hl-ring);
+}
+:where(input[type="checkbox"], input[type="radio"]):where(:disabled) {
+  cursor: not-allowed;
+  opacity: 0.45;
+  border-style: solid;
+}
+:where(input[type="checkbox"], input[type="radio"]):where(:disabled):not(:checked, :indeterminate) {
+  background-color: var(--r-choice-bg);
+}
 
 /* Field groups */
 :where(fieldset) { min-width: 0; padding: 0.8rem 1rem 1rem; border: 1px solid var(--ui-border); border-radius: 0.6rem; }
@@ -246,6 +332,14 @@
   :where(input, textarea, select):where(:focus) {
     border-color: Highlight;
     box-shadow: none;
+  }
+  :where(input[type="checkbox"], input[type="radio"]) {
+    appearance: auto;
+    -webkit-appearance: auto;
+    background: none;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+    opacity: 1;
   }
   :where(fieldset), :where(details), :where(table), :where(pre), :where(kbd), :where(dialog) {
     border-color: CanvasText;

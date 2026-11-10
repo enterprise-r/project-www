@@ -23,6 +23,14 @@
   --r-crumb: var(--ui-magenta);
   --r-crumb-hover: var(--ui-magenta-bright);
   --r-gap: 0.3rem;
+  /* Button width: a roomy min width and side padding, label tucked to the right. */
+  --r-btn-min: 7rem;
+  --r-btn-pad-x: 0.75rem;
+  --r-btn-pad-b: 0.2rem;
+  --r-btn-tracking: 0.1em;
+  /* Group ends are a semicircle: more padding on the curve, the same as the sides until a narrow screen. */
+  --r-btn-pad-flat: var(--r-btn-pad-x);
+  --r-btn-pad-curve: var(--r-btn-pad-x);
 }
 
 /* Button: <a class="r-btn"> or <button class="r-btn">. No role class is generic.
@@ -31,9 +39,9 @@
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  min-width: 6.5rem;
+  min-width: var(--r-btn-min);
   height: var(--r-btn-h);
-  padding: 0 0.75rem 0.2rem;
+  padding: 0 var(--r-btn-pad-x) var(--r-btn-pad-b);
   color: var(--r-btn-text);
   background-color: var(--r-btn);
   border: 0;
@@ -41,7 +49,7 @@
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--r-btn-tracking);
   text-transform: uppercase;
   text-decoration: none;
   line-height: 1;
@@ -67,11 +75,38 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 }
 
 /* Group: buttons side by side, joined into one pill. <span class="r-group">r-btn…</span> */
-.r-group { display: flex; gap: var(--r-gap); }
+.r-group { display: flex; flex-wrap: wrap; gap: var(--r-gap); }
 .r-group > .r-btn:first-child,
-.r-group > .r-menu:first-child > summary { border-top-left-radius: var(--r-pill-r); border-bottom-left-radius: var(--r-pill-r); }
+.r-group > .r-menu:first-child > summary {
+  border-start-start-radius: var(--r-pill-r);
+  border-end-start-radius: var(--r-pill-r);
+  padding-inline-start: var(--r-btn-pad-curve);
+  padding-inline-end: var(--r-btn-pad-flat);
+}
 .r-group > .r-btn:last-child,
-.r-group > .r-menu:last-child > summary { border-top-right-radius: var(--r-pill-r); border-bottom-right-radius: var(--r-pill-r); }
+.r-group > .r-menu:last-child > summary {
+  border-start-end-radius: var(--r-pill-r);
+  border-end-end-radius: var(--r-pill-r);
+  padding-inline-start: var(--r-btn-pad-flat);
+  padding-inline-end: var(--r-btn-pad-curve);
+}
+.r-group > .r-btn:only-child,
+.r-group > .r-menu:only-child > summary { padding-inline: var(--r-btn-pad-curve); }
+
+/* On a narrow screen keep the desktop shape, scaled down: the label stays
+   tucked to the end (flex-end), min-width leaves spare on the start side, and
+   padding on a curved end is enough to clear the semicircle (tied to --r-pill-r).
+   Height stays --r-btn-h (2rem). Apps can retune the variables.
+   Breadcrumbs size to their label (min-width: 0 below); nav and action buttons keep the min. */
+@media (max-width: 40rem) {
+  :root {
+    --r-btn-min: 4.75rem;
+    --r-btn-pad-x: 0.6rem;
+    --r-btn-pad-flat: 0.5rem;
+    --r-btn-pad-curve: max(var(--r-btn-pad-x), calc(var(--r-pill-r) * 0.7));
+    --r-btn-tracking: 0.08em;
+  }
+}
 
 /* Menu: a dropdown on a button, for a menu in a nav or the siblings of a breadcrumb.
    <details class="r-menu"><summary class="r-btn">Docs</summary><div class="r-menu-list">r-btn links</div></details>
@@ -142,8 +177,8 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   --r-kl: var(--r-k);
   --r-kr: var(--r-k);
   min-width: 0;
-  padding-left: calc(0.75rem + var(--r-l));
-  padding-right: calc(0.75rem + var(--r-r));
+  padding-left: calc(var(--r-btn-pad-x) + var(--r-l));
+  padding-right: calc(var(--r-btn-pad-x) + var(--r-r));
   border-radius: 0;
   clip-path: polygon(var(--r-l) 0, 100% 0, calc(100% - var(--r-r)) 100%, 0 100%);
 }
