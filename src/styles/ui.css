@@ -253,7 +253,3 @@ main.showcase + footer p {
   .sc-type > .sc-cap { text-align: left; }
 }
 
-/* Roomier buttons need a little of the panel's side padding back at phone widths. */
-@media (max-width: 40rem) {
-  .showcase form.r-panel { padding-inline: 0.2rem; }
-}
