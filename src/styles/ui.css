@@ -48,6 +48,8 @@ main.showcase + footer p {
 .r-card .r-pill { margin-top: 0.8rem; }
 .sc-meters { display: grid; grid-template-columns: 7rem 1fr; gap: 0.7rem 1rem; align-items: center; }
 .sc-dialog-actions { display: flex; justify-content: flex-end; gap: var(--r-gap); margin: 0; }
+.sc-dialog-open { display: flex; justify-content: center; margin-top: 1rem; }
+#accessibility table { margin-inline: auto; }
 .sc-glow-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
 
 .sc-states { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; align-items: flex-end; }
