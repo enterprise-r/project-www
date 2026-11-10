@@ -62,6 +62,34 @@ main.showcase {
 .sc-row > * { min-width: min(100%, 16rem); max-width: 100%; }
 .sc-row > :first-child { flex: 0 1 auto; }
 .sc-row > :last-child { flex: 1 1 20rem; }
+/* One nav bar: breadcrumbs on the left, joined menus on the right. Wraps on a narrow screen. */
+.sc-nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem 1.2rem;
+}
+.sc-nav-bar .r-crumbs { min-width: 0; }
+/* Narrow: menus on top, slotted right; breadcrumbs on the row below, slotted left.
+   DOM order stays crumbs then menus, so keyboard and screen-reader order is unchanged. */
+@media (max-width: 40rem) {
+  .sc-nav-bar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .sc-nav-bar .r-group { align-self: end; }
+  .sc-nav-bar .r-crumbs { align-self: start; }
+  /* sc-drop reserves list height; on two rows, put it under the open menu, not under the whole bar. */
+  .sc-nav-bar.sc-drop { min-height: 0; }
+  .sc-nav-bar.sc-drop:has(.r-group > .r-menu[open]) {
+    row-gap: calc(2 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem);
+  }
+  .sc-nav-bar.sc-drop:has(.r-crumbs .r-menu[open]) {
+    padding-bottom: calc(2 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem);
+  }
+}
+
 /* Split row: the first block on the left, the last pushed to the right edge. */
 .sc-split { justify-content: space-between; }
 .sc-split > :first-child { flex: 1 1 20rem; max-width: 36rem; }
@@ -124,6 +152,183 @@ main.showcase {
 /* Form actions sit on their own row, at the right edge of the form. */
 .sc-actions { grid-column: 1 / -1; display: grid; gap: 0.35rem; justify-items: end; }
 
+/* Dynamic list (showcase prototype). When this lands in the theme, the proposed name is .r-rows. */
+.sc-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.sc-rows {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.sc-rows > legend {
+  padding: 0;
+  margin: 0 0 0.5rem;
+  color: var(--r-text-small);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.sc-rows-head,
+.sc-rows .sc-row,
+.sc-rows-foot {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: center;
+}
+.sc-rows-foot { margin-top: 0.55rem; }
+.sc-rows-head {
+  margin-bottom: 0.3rem;
+  color: var(--ui-fg-dark);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+.sc-rows-list { display: grid; gap: 0.45rem; }
+/* Row controls share the choice tokens so they stay in step with radios. */
+.sc-row-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--r-choice-size);
+  height: var(--r-choice-size);
+}
+.sc-rows-foot .sc-row-bubble { grid-column: 1; justify-self: center; }
+.sc-row-remove,
+.sc-row-add {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--r-choice-size);
+  height: var(--r-choice-size);
+  margin: 0;
+  padding: 0;
+  color: var(--r-clear);
+  background: var(--r-choice-bg);
+  border: 1px solid var(--r-choice-border);
+  border-radius: 50%;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+.sc-row-glyph {
+  font-family: var(--r-font-heading);
+  font-weight: 400;
+  font-size: calc(var(--r-choice-size) * 0.6);
+  line-height: 1;
+}
+.sc-row-remove:hover:not(:disabled),
+.sc-row-remove:focus-visible:not(:disabled) { color: var(--ui-red); }
+.sc-row-remove:hover:not(:disabled) { border-color: var(--ui-red); }
+.sc-row-add:hover,
+.sc-row-add:focus-visible { color: var(--ui-green); }
+.sc-row-add:hover { border-color: var(--ui-green); }
+.sc-row-remove:focus-visible:not(:disabled),
+.sc-row-add:focus-visible {
+  outline: none;
+  border-color: var(--r-hl-line);
+  box-shadow: 0 0 0 var(--r-hl-ring-w) var(--r-hl-ring);
+}
+.sc-row-remove:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Delete preview: the row's fields turn dark red. */
+.sc-rows .sc-row:has(.sc-row-remove:focus-visible:not(:disabled)) :is(input, textarea, select) {
+  border-color: var(--ui-red);
+}
+
+/* Add preview: a disabled ghost row sits in the foot's input columns, reserved so the + never moves. */
+.sc-row-ghost {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0s linear 0.15s;
+}
+.sc-row-ghost input {
+  border-color: var(--r-clear);
+}
+.sc-rows-foot:has(.sc-row-add:focus-visible) .sc-row-ghost {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.15s ease, visibility 0s;
+}
+@media (hover: hover) {
+  .sc-rows .sc-row:has(.sc-row-remove:hover:not(:disabled)) :is(input, textarea, select) {
+    border-color: var(--ui-red);
+  }
+  .sc-rows-foot:has(.sc-row-add:hover) .sc-row-ghost {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.15s ease, visibility 0s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-row-ghost,
+  .sc-rows-foot:has(.sc-row-add:focus-visible) .sc-row-ghost,
+  .sc-rows-foot:has(.sc-row-add:hover) .sc-row-ghost {
+    transition: none;
+  }
+}
+
+/* CSS tooltips (no native title). Grow inward so they stay on a 360px screen. */
+.sc-rows [data-tip] { position: relative; }
+.sc-rows [data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  z-index: 30;
+  padding: 0.2rem 0.45rem;
+  color: var(--ui-fg);
+  background: var(--ui-bg-lighter);
+  border: 1px solid var(--ui-border-active);
+  border-radius: 0.3rem;
+  font-family: var(--r-font-text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease 0.35s;
+}
+.sc-rows [data-tip]:hover::after,
+.sc-rows [data-tip]:focus-visible::after { opacity: 1; }
+.sc-row-remove[data-tip]::after,
+.sc-row-add[data-tip]::after {
+  top: calc(100% + 0.3rem);
+  left: 0;
+  right: auto;
+}
+.sc-row-remove:disabled::after { content: none; }
+@media (prefers-reduced-motion: reduce) {
+  .sc-rows [data-tip]::after { transition: none; }
+}
+@keyframes sc-row-in {
+  from { opacity: 0; transform: translateY(-0.25rem); }
+  to { opacity: 1; transform: none; }
+}
+.sc-row.is-new { animation: sc-row-in 0.18s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .sc-row.is-new { animation: none; }
+}
+
 .showcase pre .k { color: var(--ui-magenta); }
 .showcase pre .v { color: var(--ui-accent); }
 .showcase pre .c { color: var(--ui-fg-dark); }
@@ -144,10 +349,42 @@ main.showcase {
 .sc-term-stack .r-term { max-width: 34rem; }
 .sc-term-stack .about-heading { margin: 0; font-family: var(--r-font-heading); font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
 
+/* Decorative closer: Dark-® at h2 size, filled with the striped logo gradient. */
+.sc-closer {
+  margin: 4rem 0 0;
+  text-align: center;
+  font-family: var(--r-font-heading);
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+.sc-closer-fill {
+  display: inline-block;
+  color: transparent;
+  background: var(--ui-striped);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@media (forced-colors: active) {
+  .sc-closer-fill,
+  .sc-closer-fill * {
+    color: CanvasText;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+  }
+}
+
 @media (max-width: 900px) {
   main.showcase { padding: 2rem 1rem 4rem; }
   .sc-grid.cols-2, .sc-grid.cols-3, .sc-form { grid-template-columns: 1fr; }
   .sc-span-2 { grid-column: auto; }
   .sc-type { grid-template-columns: 1fr; }
   .sc-type > .sc-cap { text-align: left; }
+}
+
+/* Roomier buttons need a little of the panel's side padding back at phone widths. */
+@media (max-width: 40rem) {
+  .showcase form.r-panel { padding-inline: 0.2rem; }
 }
