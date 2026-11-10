@@ -76,6 +76,10 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <section class="sc-section" id="navigation">
       <h2 class="sc-label">Navigation</h2>
       <div class="sc-nav-bar">
+        <a class="sc-nav-logo" href="/" aria-label="Enterprise-R home">
+          <img class="sc-nav-logo-wide" src="/assets/logo-wide.svg" width="320" height="61" alt="">
+          <img class="sc-nav-logo-compact" src="/assets/logo-compact.svg" width="320" height="128" alt="">
+        </a>
         <nav class="r-crumbs" aria-label="Breadcrumb">
           <ol>
             <li><a class="r-btn r-crumb-root" href="/" aria-label="Home">®</a></li>
@@ -108,7 +112,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
           </details>
         </span>
       </div>
-      <p class="sc-note">Breadcrumbs sit on the left, the Docs and More menus on the right, in one bar. On a narrow screen the menus sit on top, slotted right, and the breadcrumbs on the row below, slotted left. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. The two menus are joined in a group.</p>
+      <p class="sc-note">The company logo sits in the middle of the bar: the wide lockup on a desktop, the compact lockup as the bar shrinks, still centred while everything fits on one row. When the bar wraps, the compact logo sits on the left of the top row, above the breadcrumbs, and the menus stay on the top right, with the breadcrumbs on the row below, slotted left. The logo is a link to Home. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. The two menus are joined in a group.</p>
     </section>
 
     <hr>
