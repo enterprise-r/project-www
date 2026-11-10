@@ -72,28 +72,66 @@ main.showcase + footer p {
 .sc-row > :first-child { flex: 0 1 auto; }
 .sc-row > :last-child { flex: 1 1 20rem; }
 /* One nav bar: breadcrumbs on the left, joined menus on the right. Wraps on a narrow screen. */
+/* The bar is a container so the logo swap and the wrap follow its width, not the viewport. */
+.sc-section:has(.sc-nav-bar) { container-type: inline-size; }
+
 .sc-nav-bar {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr minmax(max-content, auto) 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--r-gap) 1.2rem;
+  column-gap: 1.2rem;
+  row-gap: var(--r-gap);
   padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
   background-color: var(--ui-border);
   overflow: visible;
 }
-.sc-nav-bar .r-crumbs { min-width: 0; }
-/* Narrow: menus on top, slotted right; breadcrumbs on the row below, slotted left.
-   DOM order stays crumbs then menus, so keyboard and screen-reader order is unchanged.
+.sc-nav-logo {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  min-width: max-content;
+  flex-shrink: 0;
+  line-height: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.sc-nav-logo img {
+  display: block;
+  height: var(--r-btn-h);
+  width: auto;
+  max-width: none;
+  flex-shrink: 0;
+}
+.sc-nav-logo img.sc-nav-logo-wide { min-width: calc(var(--r-btn-h) * 320 / 61); }
+.sc-nav-logo img.sc-nav-logo-compact { display: none; min-width: calc(var(--r-btn-h) * 320 / 128); }
+.sc-nav-bar .r-crumbs {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  min-width: 0;
+}
+.sc-nav-bar .r-group {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  min-width: 0;
+}
+/* Compact logo, still centred, while the single row still fits. */
+@container (max-width: 52rem) {
+  .sc-nav-logo img.sc-nav-logo-wide { display: none; }
+  .sc-nav-logo img.sc-nav-logo-compact { display: block; }
+}
+/* Wrapped: compact logo left on the top row, menus top right, breadcrumbs below left.
+   DOM order is logo, crumbs, menus (Home, then the trail, then the menus).
    Row gap stays --r-gap, so the wrap is still a slim two-row stripe.
    Dropdowns overlay what is below; they do not reserve height. */
-@media (max-width: 40rem) {
-  .sc-nav-bar {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-  .sc-nav-bar .r-group { align-self: end; }
-  .sc-nav-bar .r-crumbs { align-self: start; }
+@container (max-width: 40rem) {
+  .sc-nav-bar { grid-template-columns: minmax(max-content, auto) 1fr; }
+  .sc-nav-logo { grid-column: 1; justify-self: start; }
+  .sc-nav-logo img.sc-nav-logo-wide { display: none; }
+  .sc-nav-logo img.sc-nav-logo-compact { display: block; }
+  .sc-nav-bar .r-group { grid-column: 2; }
+  .sc-nav-bar .r-crumbs { grid-column: 1 / -1; grid-row: 2; }
 }
 
 /* Split row: the first block on the left, the last pushed to the right edge. */
