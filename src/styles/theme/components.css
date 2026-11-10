@@ -246,10 +246,12 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 
 /* Status pills: a small uppercase label, in the button roles. No role class is generic (Orange);
    .r-primary Green, .r-clear Bright blue, .r-cancel Red.
+   Rajdhani caps sit 0.03em above the middle of the line box, so the padding moves them down by that.
+   Where text-box trim is supported the box is trimmed to the caps and padded evenly to the same height.
    <span class="r-pill r-primary">Online</span> */
 .r-pill {
   display: inline-block;
-  padding: 0.1rem 0.7rem;
+  padding: calc(0.1rem + 0.03em) 0.7rem calc(0.1rem - 0.03em);
   color: var(--r-btn-text);
   background: var(--r-btn);
   border-radius: 999px;
@@ -262,6 +264,9 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 .r-pill.r-primary { background: var(--r-primary); }
 .r-pill.r-clear { background: var(--r-clear); }
 .r-pill.r-cancel { background: var(--r-cancel); }
+@supports (text-box: trim-both cap alphabetic) {
+  .r-pill { padding-block: calc((1.4em + 0.2rem - 1cap) / 2); text-box: trim-both cap alphabetic; }
+}
 
 /* Notification boxes: a message on Lighter background with a role stripe on the left.
    No role class is information (Blue); .r-ok Green, .r-warn Amber, .r-error Red.
