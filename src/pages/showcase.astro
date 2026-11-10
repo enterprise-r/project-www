@@ -75,7 +75,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <hr>
     <section class="sc-section" id="navigation">
       <h2 class="sc-label">Navigation</h2>
-      <div class="sc-nav-bar sc-drop">
+      <div class="sc-nav-bar">
         <nav class="r-crumbs" aria-label="Breadcrumb">
           <ol>
             <li><a class="r-btn r-crumb-root" href="/" aria-label="Home">®</a></li>
@@ -381,6 +381,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <p class="sc-closer" aria-hidden="true"><span class="sc-closer-fill"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span></span></p>
 
   </main>
+  <footer><p class="sc-brand">Enterprise-R</p></footer>
   <script is:inline slot="scripts">
     // Menus: one open at a time; click outside or Esc closes them. The theme leaves that to the page.
     (() => {

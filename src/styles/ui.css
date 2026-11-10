@@ -17,6 +17,13 @@ main.showcase {
 .sc-title img { display: block; width: min(24.68rem, 100%); height: auto; }
 .sc-aw { font-family: var(--r-font-heading); }
 .sc-brand { font-family: var(--r-font-brand); letter-spacing: 0; }
+main.showcase + footer p {
+  margin: 0;
+  color: var(--ui-bg);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
 .sc-subtitle {
   margin: 0.1rem 0 0.6rem;
   font-family: var(--r-font-heading);
@@ -68,11 +75,16 @@ main.showcase {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.7rem 1.2rem;
+  gap: var(--r-gap) 1.2rem;
+  padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
+  background-color: var(--ui-border);
+  overflow: visible;
 }
 .sc-nav-bar .r-crumbs { min-width: 0; }
 /* Narrow: menus on top, slotted right; breadcrumbs on the row below, slotted left.
-   DOM order stays crumbs then menus, so keyboard and screen-reader order is unchanged. */
+   DOM order stays crumbs then menus, so keyboard and screen-reader order is unchanged.
+   Row gap stays --r-gap, so the wrap is still a slim two-row stripe.
+   Dropdowns overlay what is below; they do not reserve height. */
 @media (max-width: 40rem) {
   .sc-nav-bar {
     flex-direction: column-reverse;
@@ -80,14 +92,6 @@ main.showcase {
   }
   .sc-nav-bar .r-group { align-self: end; }
   .sc-nav-bar .r-crumbs { align-self: start; }
-  /* sc-drop reserves list height; on two rows, put it under the open menu, not under the whole bar. */
-  .sc-nav-bar.sc-drop { min-height: 0; }
-  .sc-nav-bar.sc-drop:has(.r-group > .r-menu[open]) {
-    row-gap: calc(2 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem);
-  }
-  .sc-nav-bar.sc-drop:has(.r-crumbs .r-menu[open]) {
-    padding-bottom: calc(2 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem);
-  }
 }
 
 /* Split row: the first block on the left, the last pushed to the right edge. */
@@ -97,9 +101,8 @@ main.showcase {
 /* A menu is a block flex box, so in a wide column it would stretch and the
    list (min-width: 100%) would become a full-width bar. Stay as wide as the label. */
 .showcase .r-menu { width: max-content; max-width: 100%; }
-/* The menu list is taken out of flow, so reserve its height. A closed list still
-   occupies that box in Chromium and would steal clicks from whatever sits under it. */
-.sc-drop { min-height: calc(3 * var(--r-btn-h) + 4 * var(--r-gap) + 0.45rem); }
+/* A closed list would still occupy its absolutely positioned box in Chromium
+   and steal clicks from whatever sits under it, so hide it. Open lists overlay. */
 .showcase .r-menu:not([open]) > .r-menu-list { display: none; }
 
 /* Static samples of states the theme only paints on a real hover or focus. */
