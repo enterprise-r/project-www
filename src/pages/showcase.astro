@@ -212,34 +212,34 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
           <div class="sc-field sc-span-2"><label for="f-msg">Message</label><textarea id="f-msg" placeholder="Your message"></textarea></div>
           <div class="sc-field"><span class="sc-cap">Options</span><div class="sc-checks"><label><input type="checkbox" checked> Updates</label><label><input type="checkbox"> Newsletter</label></div></div>
           <div class="sc-field"><span class="sc-cap">Channel</span><div class="sc-checks"><label><input type="radio" name="ch" checked> E-mail</label><label><input type="radio" name="ch"> Subspace</label></div></div>
-          <fieldset class="sc-rows" id="sc-rows">
+          <fieldset class="r-rows">
             <legend>Team members</legend>
-            <div class="sc-rows-head" aria-hidden="true"><span></span><span>Name</span><span>Role</span></div>
-            <div class="sc-rows-list">
-              <div class="sc-row">
-                <span class="sc-row-bubble"><button type="button" class="sc-row-remove" aria-label="Remove row 1" data-tip="Remove row 1"><span class="sc-row-glyph" aria-hidden="true">×</span></button></span>
-                <input data-field="name" name="team[0][name]" value="Beverly Crusher" placeholder="Name" autocomplete="off">
-                <input data-field="role" name="team[0][role]" value="Chief medical officer" placeholder="Role" autocomplete="off">
+            <div class="r-rows-head" aria-hidden="true"><span></span><span>Name</span><span>Role</span></div>
+            <div class="r-rows-list">
+              <div class="r-row">
+                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 1" data-tip="Remove row 1"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+                <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[0][name]" value="Beverly Crusher" placeholder="Name" autocomplete="off">
+                <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[0][role]" value="Chief medical officer" placeholder="Role" autocomplete="off">
               </div>
-              <div class="sc-row">
-                <span class="sc-row-bubble"><button type="button" class="sc-row-remove" aria-label="Remove row 2" data-tip="Remove row 2"><span class="sc-row-glyph" aria-hidden="true">×</span></button></span>
-                <input data-field="name" name="team[1][name]" value="Geordi La Forge" placeholder="Name" autocomplete="off">
-                <input data-field="role" name="team[1][role]" value="Chief engineer" placeholder="Role" autocomplete="off">
+              <div class="r-row">
+                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 2" data-tip="Remove row 2"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+                <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[1][name]" value="Geordi La Forge" placeholder="Name" autocomplete="off">
+                <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[1][role]" value="Chief engineer" placeholder="Role" autocomplete="off">
               </div>
             </div>
-            <div class="sc-rows-foot">
-              <span class="sc-row-bubble"><button type="button" class="sc-row-add" aria-label="Add row" data-tip="Add row"><span class="sc-row-glyph" aria-hidden="true">+</span></button></span>
-              <div class="sc-row-ghost" aria-hidden="true">
+            <div class="r-rows-foot">
+              <span class="r-row-bubble"><button type="button" class="r-row-add" aria-label="Add row" data-tip="Add row"><span class="r-row-glyph" aria-hidden="true">+</span></button></span>
+              <div class="r-row-ghost" aria-hidden="true">
                 <input placeholder="Name" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
                 <input placeholder="Role" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
               </div>
             </div>
-            <p class="sc-rows-live sc-vh" aria-live="polite"></p>
+            <p class="r-rows-live r-vh" aria-live="polite"></p>
           </fieldset>
           <div class="sc-actions"><span class="r-group"><button class="r-btn r-primary" type="submit">Send</button><button class="r-btn" type="button">Save</button><button class="r-btn" type="reset">Clear</button><button class="r-btn r-cancel" type="button">Cancel</button></span><span class="sc-help">Primary Green (sage), Generic Orange, Clear Bright blue, Cancel Red.</span></div>
         </div>
       </form>
-      <p class="sc-note">A dynamic list in the form: add or remove rows of name and role. The control is quiet until you need it. This is a site prototype (<code>.sc-rows</code>); the proposed theme name is <code>.r-rows</code>.</p>
+      <p class="sc-note">A dynamic list in the form: add or remove rows of name and role. The control is quiet until you need it. <code>.r-rows</code> in the theme, with <code>theme/rows.js</code>.</p>
     </section>
 
     <hr>
@@ -382,6 +382,9 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
 
   </main>
   <footer><p class="sc-brand">Enterprise-R</p></footer>
+  <script>
+    import "../styles/theme/rows.js";
+  </script>
   <script is:inline slot="scripts">
     // Menus: one open at a time; click outside or Esc closes them. The theme leaves that to the page.
     (() => {
@@ -431,95 +434,5 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       ["glow-a", "glow-b", "glow-c", "glow-d"].forEach((id) => rGlow(document.getElementById(id), b.dataset.glow));
     }));
 
-    // Dynamic list: add and remove rows. Site prototype (.sc-rows); proposed theme name .r-rows.
-    function scRows(root) {
-      const list = root.querySelector(".sc-rows-list");
-      const addBtn = root.querySelector(".sc-row-add");
-      const live = root.querySelector(".sc-rows-live");
-      const announce = (msg) => { live.textContent = ""; requestAnimationFrame(() => { live.textContent = msg; }); };
-      const rows = () => [...list.querySelectorAll(":scope > .sc-row")];
-
-      const reindex = () => {
-        rows().forEach((row, i) => {
-          const n = i + 1;
-          row.querySelectorAll("input").forEach((inp) => {
-            const field = inp.dataset.field;
-            inp.name = `team[${i}][${field}]`;
-            inp.id = `team-${i}-${field}`;
-            inp.setAttribute("aria-label", `${field === "name" ? "Name" : "Role"}, row ${n}`);
-          });
-          const rm = row.querySelector(".sc-row-remove");
-          rm.setAttribute("aria-label", `Remove row ${n}`);
-          rm.setAttribute("data-tip", `Remove row ${n}`);
-          rm.disabled = rows().length === 1;
-        });
-      };
-
-      const makeRow = () => {
-        const row = document.createElement("div");
-        row.className = "sc-row is-new";
-        row.innerHTML =
-          `<span class="sc-row-bubble"><button type="button" class="sc-row-remove"><span class="sc-row-glyph" aria-hidden="true">×</span></button></span>` +
-          `<input data-field="name" placeholder="Name" autocomplete="off">` +
-          `<input data-field="role" placeholder="Role" autocomplete="off">`;
-        return row;
-      };
-
-      const add = () => {
-        const row = makeRow();
-        list.append(row);
-        reindex();
-        announce("Row added");
-        row.querySelector("input").focus();
-      };
-
-      const remove = (row) => {
-        const all = rows();
-        if (all.length === 1) return;
-        const i = all.indexOf(row);
-        const target = all[i + 1] || all[i - 1];
-        row.remove();
-        reindex();
-        announce("Row removed");
-        if (target) target.querySelector("input").focus();
-        else addBtn.focus();
-      };
-
-      addBtn.addEventListener("click", add);
-      list.addEventListener("click", (e) => {
-        const btn = e.target.closest(".sc-row-remove");
-        if (btn && !btn.disabled) remove(btn.closest(".sc-row"));
-      });
-      list.addEventListener("keydown", (e) => {
-        const input = e.target.closest("input");
-        if (!input) return;
-        const row = input.closest(".sc-row");
-        const all = rows();
-        if (e.key === "Enter" && row === all[all.length - 1]) {
-          e.preventDefault();
-          add();
-        }
-        if (e.key === "Backspace" && input.selectionStart === 0 && input.selectionEnd === 0
-            && all.length > 1 && [...row.querySelectorAll("input")].every((el) => el.value === "")) {
-          e.preventDefault();
-          const i = all.indexOf(row);
-          const prev = all[i - 1];
-          row.remove();
-          reindex();
-          announce("Row removed");
-          if (prev) {
-            const fields = [...prev.querySelectorAll("input")];
-            const last = fields[fields.length - 1];
-            last.focus();
-            const end = last.value.length;
-            last.setSelectionRange(end, end);
-          } else {
-            rows()[0].querySelector("input").focus();
-          }
-        }
-      });
-      reindex();
-    }
-    document.querySelectorAll(".sc-rows").forEach(scRows);
   </script>
 </Base>
