@@ -20,7 +20,7 @@
           "name": "Inactive border",
           "var": "--ui-border",
           "hex": "#3F2C53",
-          "use": "title bar and footer stripes, email bubble border, logo grounds (square, badge, favicon, wide and compact plate) and the people badge disc"
+          "use": "title bar and footer stripes, logo grounds (square, badge, favicon, wide and compact plate) and the people badge disc"
         },
         {
           "name": "Active border",
@@ -97,13 +97,13 @@
           "name": "Green (sage)",
           "var": "--ui-green",
           "hex": "#77AF8A",
-          "use": "logo R, current-page button, headings, striped gradient end, separator edges"
+          "use": "logo R, current-page button, headings, email bubble, striped gradient end, separator edges"
         },
         {
           "name": "Bright green",
           "var": "--ui-green-bright",
           "hex": "#9ADD6D",
-          "use": "Home mark (®), current-page button hover, prompt text"
+          "use": "Home mark (®), current-page button hover, email bubble hover, prompt text"
         },
         {
           "name": "Cyan",

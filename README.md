@@ -21,7 +21,7 @@ Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showc
 | Style guide's sample picture | the `banner` hotlink at the top of `src/pages/showcase.astro` |
 | Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
 
-A new page = a new file in `src/pages/` using the `Base` layout. A text page also imports `src/styles/about.css`.
+A new page = a new file in `src/pages/` using the `Base` layout. About imports `src/styles/about.css`.
 
 ## Deploy
 
@@ -62,7 +62,7 @@ A lockup is the wordmark and the mark together (wide and compact). The plate is 
 
 ## Design
 
-The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`). Where a colour is used is the `use` line in `src/styles/palette.json`. Dark-® is the theme: `theme/base.css` (type and plain elements) and `theme/components.css` (buttons, menus, breadcrumbs, separators). It uses only `--ui-*` variables and adds `--r-*` roles. What the theme does not cover stays in its own file: `bar.css` (title bar and Home button), `footer.css`, `about.css` (text pages) and `ui.css` (style guide).
+The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`). Where a colour is used is the `use` line in `src/styles/palette.json`. Dark-® is the theme: `theme/base.css` (type and plain elements) and `theme/components.css` (buttons, menus, breadcrumbs, separators). It uses only `--ui-*` variables and adds `--r-*` roles. What the theme does not cover stays in its own file: `bar.css` (title bar and Home button), `footer.css`, `about.css` (About) and `ui.css` (style guide).
 
 The title bar is one full-width stripe with the logo in the middle: the wide lockup on every screen; at 640 px and below the title has its own row on the page background and the buttons go below it. On Home the logo is the page heading (`h1`).
 
@@ -74,4 +74,4 @@ Form buttons are the same button with a role: generic (no class) Orange, `.r-pri
 
 The footer is a slim stripe with the LinkedIn and GitHub icons in the middle. The icons are inline paths from Simple Icons (CC0). On short pages it sits at the bottom of the window.
 
-On About, the email sits centred in a bubble.
+On About, hyper-j fills the viewport (cover), and the header and footer stripes are open, as on Home. The heading sits in one terminal and the paragraphs plus the email bubble in another. On a wide screen the heading plate and the paragraph plate share one width and one right edge, shifted left under the green arm and clear of the green circle. The heading sits a fixed lead above the paragraph plate, in the sky above the arm, so the two move together. Below 60rem they sit together in the middle. The page is at least 768px tall, so a shorter window scrolls that layout. The email stays centred in its bubble.
