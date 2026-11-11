@@ -39,6 +39,22 @@ html.is-home .r-crumb-root[aria-current="page"]:active {
   cursor: default;
 }
 
+/* Home only: when the compact logo docks left, it already marks the root,
+   so the ® crumb and the slant that follows it can go. */
+@container (max-width: 40rem) {
+  html.is-home .sc-nav-bar .r-crumbs li:first-child {
+    display: none;
+  }
+  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) {
+    margin-left: 0;
+  }
+  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) > .r-btn,
+  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) > .r-menu > summary {
+    --r-l: 0px;
+    --r-kl: 0;
+  }
+}
+
 main.home {
   display: flex;
   align-items: center;
