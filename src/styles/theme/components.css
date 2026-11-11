@@ -151,7 +151,7 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
    A crumb can be an .r-menu to switch to a sibling.
    The slant is a clip-path; the next crumb tucks under it, leaving the button gap on the diagonal.
    The clip would cut the focus outline, so a crumb shows focus as an inner ring.
-   The root is the lone R, ®, in Enterprsr (.r-crumb-root). Its fill is the inactive border (dark purple). The letter is Green (sage), Bright green on hover and while pressed. Give it aria-label="Home".
+   The root is the lone R, ®, in Enterprsr (.r-crumb-root). Its fill is the striped gradient. The letter is the button ink, and it stays that colour. Hover and press turn the fill Bright green. The ® hangs below the other crumbs. Extra bottom padding, Enterprsr's descent (321/2048 em) plus a pixel, lifts its foot onto their line. Give it aria-label="Home".
    <nav class="r-crumbs" aria-label="Breadcrumb"><ol><li><a class="r-btn r-crumb-root" href="/" aria-label="Home">®</a></li>…</ol></nav> */
 .r-crumbs {
   /* Slant per unit of height, so the angle holds when the buttons grow. */
@@ -209,11 +209,12 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   border-bottom-right-radius: var(--r-pill-r);
 }
 .r-crumbs .r-crumb-root {
-  align-items: center;
   font-family: var(--r-font-brand);
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
+  /* Enterprsr's ® descends 321/2048 em, and at this size the painted foot still sits a pixel below the other crumbs. */
+  padding-bottom: calc(var(--r-btn-pad-b) + 321 / 2048 * 1em + 1px);
 }
 .r-crumbs .r-btn:not([aria-current="page"]) { background-color: var(--r-crumb); }
 .r-crumbs .r-btn:not([aria-current="page"]):hover,
@@ -225,10 +226,11 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   color: var(--r-btn-text);
   background-color: var(--r-clear-hover);
 }
-/* Root fill is the inactive border on every page. The letter is sage, Bright green on hover and while pressed. */
-.r-crumbs .r-btn.r-crumb-root { color: var(--ui-green); background-color: var(--ui-border); }
-.r-crumbs .r-btn.r-crumb-root:hover { color: var(--ui-green-bright); background-color: var(--ui-border); }
-.r-crumbs .r-btn.r-crumb-root:active { color: var(--ui-green-bright); background-color: var(--ui-border); }
+/* Root fill is the striped gradient on every page. The letter is the button ink.
+   Hover and press turn the fill Bright green and leave the letter. */
+.r-crumbs .r-btn.r-crumb-root { color: var(--r-btn-text); background: var(--ui-striped); }
+.r-crumbs .r-btn.r-crumb-root:hover,
+.r-crumbs .r-btn.r-crumb-root:active { color: var(--r-btn-text); background: var(--ui-green-bright); }
 .r-crumbs li > .r-btn:focus-visible,
 .r-crumbs li > .r-menu > summary:focus-visible {
   outline: none;

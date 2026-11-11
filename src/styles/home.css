@@ -79,11 +79,13 @@ html.is-home footer a {
 }
 
 /* Home only: the root R is already here, so the pointer and press do nothing.
-   Hover still lights the letter Bright green. */
-html.is-home .r-crumb-root[aria-current="page"],
-html.is-home .r-crumb-root[aria-current="page"]:active {
-  color: var(--ui-green);
+   Hover still turns the fill Bright green. The letter stays the button ink. */
+html.is-home .r-crumb-root[aria-current="page"] {
   cursor: default;
+}
+html.is-home .r-crumb-root[aria-current="page"]:active {
+  color: var(--r-btn-text);
+  background: var(--ui-striped);
 }
 
 /* When the compact logo docks left, it already marks the root,

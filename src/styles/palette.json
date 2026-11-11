@@ -103,7 +103,7 @@
           "name": "Bright green",
           "var": "--ui-green-bright",
           "hex": "#9ADD6D",
-          "use": "Home mark (®), current-page button hover, email bubble hover, prompt text"
+          "use": "Home mark hover, current-page button hover, email bubble hover, prompt text"
         },
         {
           "name": "Cyan",
