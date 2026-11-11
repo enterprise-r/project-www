@@ -16,12 +16,13 @@ body {
 main { flex: 1 0 auto; width: 100%; }
 
 .sc-nav-bar {
+  --bar-pad-x: clamp(0.75rem, 2vw, 1.5rem);
   display: grid;
   grid-template-columns: 1fr minmax(max-content, auto) 1fr;
   align-items: center;
   column-gap: 1.2rem;
   row-gap: var(--r-gap);
-  padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
+  padding: var(--bar-pad) var(--bar-pad-x);
   background-color: var(--ui-border);
   overflow: visible;
   container-type: inline-size;
@@ -95,7 +96,13 @@ main { flex: 1 0 auto; width: 100%; }
    Row gap stays --r-gap, so the wrap is still a slim two-row stripe. */
 @container (max-width: 40rem) {
   .sc-nav-bar { grid-template-columns: minmax(max-content, auto) 1fr; }
-  .sc-nav-logo { grid-column: 1; justify-self: start; }
+  .sc-nav-logo {
+    grid-column: 1;
+    justify-self: start;
+    /* Half pill: straight on the docked left edge, rounded on the right. */
+    margin-inline-start: calc(-1 * var(--bar-pad-x));
+    border-radius: 0 999px 999px 0;
+  }
   .sc-nav-logo img.sc-nav-logo-wide { display: none; }
   .sc-nav-logo img.sc-nav-logo-compact { display: block; }
   .sc-nav-bar > .r-group,

@@ -71,12 +71,16 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
         <ol>
           {crumbs.map((c) => (
             <li>
-              <a
-                class:list={["r-btn", c.root && "r-crumb-root"]}
-                href={c.href}
-                aria-label={c.root ? c.name : undefined}
-                aria-current={here === c.href ? "page" : undefined}
-              >{c.label}</a>
+              {c.root && isHome ? (
+                <span class="r-btn r-crumb-root" aria-label={c.name} aria-current="page">{c.label}</span>
+              ) : (
+                <a
+                  class:list={["r-btn", c.root && "r-crumb-root"]}
+                  href={c.href}
+                  aria-label={c.root ? c.name : undefined}
+                  aria-current={here === c.href ? "page" : undefined}
+                >{c.label}</a>
+              )}
             </li>
           ))}
         </ol>
@@ -95,8 +99,9 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   </script>
   {header && (
     <script is:inline>
-      // Root crumb and logo: scrolled down on Home, back to the top; otherwise, the home page.
-      document.querySelectorAll(".r-crumb-root[aria-current='page'], html.is-home .sc-nav-logo a").forEach((el) => {
+      // Logo: scrolled down on Home, back to the top; otherwise, the home page.
+      // The root crumb on Home is inert (already here).
+      document.querySelectorAll("html.is-home .sc-nav-logo a").forEach((el) => {
         el.addEventListener("click", (e) => {
           if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
         });

@@ -26,6 +26,14 @@ html.is-home footer a {
   color: var(--ui-fg);
 }
 
+/* Home only: the root R is already here, so it takes the logo-pill colour and does not act. */
+html.is-home .r-crumb-root[aria-current="page"],
+html.is-home .r-crumb-root[aria-current="page"]:hover,
+html.is-home .r-crumb-root[aria-current="page"]:active {
+  background-color: var(--ui-border);
+  cursor: default;
+}
+
 main.home {
   display: flex;
   align-items: center;
@@ -34,15 +42,16 @@ main.home {
   padding: 2rem 1rem;
 }
 
-/* A landscape golden-ratio rectangle (φ ≈ 1.618). The icon and carousel sit in the
-   exact vertical middle; the prompt is taken out of flow and parked near the bottom. */
+/* A landscape golden-ratio rectangle (φ ≈ 1.618), only as wide as the prompt line
+   (or the icon plus the longest carousel word, if that is wider) plus padding.
+   The icon and carousel sit in the exact vertical middle; the prompt is in the
+   bottom third, aligned to the end, so the two 1fr rows stay equal. */
 .home-wait {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  justify-items: center;
   position: relative;
-  width: min(92vw, 40rem);
+  width: max-content;
   max-width: 100%;
   aspect-ratio: 1.618 / 1;
   padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1.75rem, 6vw, 4.5rem);
@@ -54,6 +63,7 @@ main.home {
   justify-content: center;
   gap: clamp(0.45rem, 1vw, 0.75rem);
   position: relative;
+  grid-row: 2;
   min-width: 0;
 }
 
@@ -121,16 +131,14 @@ main.home {
 }
 
 /* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase. No pulse.
-   Parked near the bottom of the panel, with a margin so it is not flush to the edge. */
+   Sits in the bottom row, near the edge, with the panel padding as the margin. */
 .home-status {
   display: block;
-  position: absolute;
-  left: 50%;
-  bottom: clamp(0.85rem, 5%, 1.6rem);
+  grid-row: 3;
+  align-self: end;
   margin: 0;
-  transform: translateX(-50%);
   width: max-content;
-  max-width: calc(100% - 2rem);
+  max-width: 100%;
   text-align: center;
   font-size: clamp(0.95rem, 1.4vw, 1rem);
   animation: none;
