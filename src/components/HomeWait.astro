@@ -34,42 +34,15 @@ const mark = (p: Part) =>
     <div class="home-line">
       <img src={waitIcon} width="32" height="32" alt="">
       <p class="home-sentence">
-        {sentence ? (
-          phrase
-        ) : (
-          parts.map((p, i) => {
-            const m = mark(p);
-            return (
-              <>
-                {i > 0 && " "}
-                {m.tone ? (
-                  <>
-                    <span class={`home-w home-w-${m.tone}`}>{m.letter}</span>
-                    {m.rest}
-                  </>
-                ) : (
-                  m.letter
-                )}
-              </>
-            );
-          })
-        )}
+        {sentence ? phrase : parts.map((p, i) => {
+          const m = mark(p);
+          return <>{i > 0 && " "}{m.tone ? <><span class={`home-w home-w-${m.tone}`}>{m.letter}</span>{m.rest}</> : m.letter}</>;
+        })}
       </p>
       <span class={countClass} aria-hidden="true">
         {parts.map((p) => {
           const m = mark(p);
-          return (
-            <span>
-              {m.tone ? (
-                <>
-                  <span class={`home-w home-w-${m.tone}`}>{m.letter}</span>
-                  {m.rest}
-                </>
-              ) : (
-                m.letter
-              )}
-            </span>
-          );
+          return <span>{m.tone ? <><span class={`home-w home-w-${m.tone}`}>{m.letter}</span>{m.rest}</> : m.letter}</span>;
         })}
       </span>
     </div>
