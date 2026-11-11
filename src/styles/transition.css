@@ -1,0 +1,112 @@
+/* Homepage view transition. Home always leaves to the left and arrives from
+   the right, in either direction: a push, never a reverse.
+   Snappy (220ms) and accelerated on the compositor. Distance is t², so the
+   speed ramps in a straight line. The page that leaves may blur as it
+   speeds up; set --vt-blur to 0px to keep it sharp.
+   Other routes opt out in the head script. Reduced motion opts out here.
+   When both pages wear the site chrome (type chrome), the title bar and the
+   footer stay where they are and the page slides underneath. Their snapshots
+   are only the bars: the wallpaper stays in the root snapshot, so it keeps
+   moving through the open stripes. A hop to the showcase has no second bar,
+   so the whole page, bar included, slides as one. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+:root {
+  --vt-ms: 220ms;
+  /* Ease-in stand-in, until linear() can spell the t² ramp exactly. */
+  --vt-accel: cubic-bezier(0.4, 0, 1, 1);
+  --vt-blur: 4px;
+}
+
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    --vt-accel: linear(
+      0,
+      0.01 10%,
+      0.04 20%,
+      0.09 30%,
+      0.16 40%,
+      0.25 50%,
+      0.36 60%,
+      0.49 70%,
+      0.64 80%,
+      0.81 90%,
+      1
+    );
+  }
+}
+
+@keyframes vt-home-exit {
+  to { translate: -100% 0; }
+}
+
+@keyframes vt-home-enter {
+  from { translate: 100% 0; }
+}
+
+@keyframes vt-home-blur {
+  to { filter: blur(var(--vt-blur)); }
+}
+
+html:active-view-transition-type(home)::view-transition-group(root) {
+  animation-duration: var(--vt-ms);
+  background-color: var(--ui-bg);
+  overflow: hidden;
+}
+
+html:active-view-transition-type(home)::view-transition-old(root) {
+  animation:
+    var(--vt-ms) var(--vt-accel) both vt-home-exit,
+    var(--vt-ms) linear both vt-home-blur;
+  mix-blend-mode: normal;
+}
+
+html:active-view-transition-type(home)::view-transition-new(root) {
+  animation: var(--vt-ms) var(--vt-accel) both vt-home-enter;
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  html:active-view-transition-type(home)::view-transition-old(root) {
+    animation: var(--vt-ms) var(--vt-accel) both vt-home-exit;
+  }
+}
+
+/* The names have to be on during the capture, which is why they live on the
+   type rather than on the elements all the time. Duration 0 keeps a one-pixel
+   size difference from drifting the bar while the page is moving. The new bar
+   shows at once: the old and new stripes differ only by which crumb is current. */
+html:active-view-transition-type(chrome) header {
+  view-transition-name: site-header;
+}
+
+html:active-view-transition-type(chrome) footer {
+  view-transition-name: site-footer;
+}
+
+html:active-view-transition-type(chrome)::view-transition-group(site-header),
+html:active-view-transition-type(chrome)::view-transition-group(site-footer) {
+  animation-duration: 0s;
+  z-index: 1;
+}
+
+html:active-view-transition-type(chrome)::view-transition-image-pair(site-header),
+html:active-view-transition-type(chrome)::view-transition-image-pair(site-footer) {
+  isolation: auto;
+}
+
+html:active-view-transition-type(chrome)::view-transition-old(site-header),
+html:active-view-transition-type(chrome)::view-transition-old(site-footer) {
+  display: none;
+}
+
+html:active-view-transition-type(chrome)::view-transition-new(site-header),
+html:active-view-transition-type(chrome)::view-transition-new(site-footer) {
+  animation: none;
+  mix-blend-mode: normal;
+}

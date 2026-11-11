@@ -5,6 +5,7 @@ import "../styles/theme/base.css";
 import "../styles/theme/components.css";
 import "../styles/bar.css";
 import "../styles/footer.css";
+import "../styles/transition.css";
 import Footer from "../components/Footer.astro";
 import enterprsr from "../styles/fonts/woff2/Enterprsr-Regular.woff2?url";
 
@@ -64,6 +65,41 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+  <script is:inline>
+    // Home is the hinge. Leaving / or arriving at / slides; every other
+    // same-origin hop skips the view transition and loads as usual.
+    // Type chrome: both pages have the title bar and footer, so those stay
+    // put and the page slides underneath. The showcase has neither.
+    (function () {
+      function path(url) {
+        try { return new URL(url).pathname.replace(/\/?$/, "/"); }
+        catch (err) { return ""; }
+      }
+      function isHome(url) { return path(url) === "/"; }
+      function isShowcase(url) { return path(url) === "/showcase/"; }
+      function tag(vt, fromURL, toURL) {
+        if (!vt) return;
+        if (isHome(fromURL) || isHome(toURL)) {
+          if (vt.types) {
+            vt.types.add("home");
+            if (!isShowcase(fromURL) && !isShowcase(toURL)) vt.types.add("chrome");
+          }
+          return;
+        }
+        vt.skipTransition();
+      }
+      window.addEventListener("pageswap", function (e) {
+        var act = e.activation;
+        if (!act) return;
+        tag(e.viewTransition, act.from && act.from.url, act.entry && act.entry.url);
+      });
+      window.addEventListener("pagereveal", function (e) {
+        var act = window.navigation && window.navigation.activation;
+        if (!act) return;
+        tag(e.viewTransition, act.from && act.from.url, act.entry && act.entry.url);
+      });
+    })();
+  </script>
 </head>
 <body>
   {header && (
