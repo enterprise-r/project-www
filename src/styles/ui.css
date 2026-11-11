@@ -108,7 +108,6 @@ main.showcase + footer p {
   box-shadow: 0 0 0 var(--r-hl-ring-w) var(--r-hl-ring);
 }
 
-/* separators */
 .sc-sep { height: 2px; margin: 1.2rem 0 0.5rem; border: 0; background: var(--ui-separator); }
 .sc-striped { height: 3.4rem; border-radius: 0.8rem; background: var(--ui-striped); }
 .sc-striped-thin { height: 4px; margin: 1.2rem 0 0.5rem; border-radius: 2px; background: var(--ui-striped); }
@@ -139,7 +138,7 @@ main.showcase + footer p {
 /* Form actions sit on their own row, at the right edge of the form. */
 .sc-actions { grid-column: 1 / -1; display: grid; gap: 0.35rem; justify-items: end; }
 
-/* The list is a theme component; the form grid still needs it to span both columns. */
+/* .r-rows is a theme component. In this form grid it has to span the row. */
 .sc-form .r-rows { grid-column: 1 / -1; min-width: 0; }
 
 .showcase pre .k { color: var(--ui-magenta); }

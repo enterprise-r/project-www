@@ -1,15 +1,16 @@
-/* Home fills the viewport with warpchi (cover, so it stretches on a small screen).
-   The picture is fixed to the window and weighted toward the top (30%). A centred
-   cover on a short wide window crops the ship and the hand under the header; 30%
-   keeps that subject in the open page. A tall window crops the sides only, and
-   30% lands where the middle would. --wall-shift is how far that sits below a
-   centred cover, and the 404 uses it to keep the panel on the diamond.
+/* Home fills the viewport with warpchi (cover). The picture is fixed to the
+   window and weighted toward the top (30%). A centred cover on a short wide
+   window crops the ship and the hand under the header; 30% keeps that subject
+   in the open page. A tall window crops the sides only, and 30% lands where
+   the middle would. --wall-shift is how far that sits below a centred cover,
+   and the 404 uses it to keep the panel on the diamond.
    The 404 keeps this chrome and swaps in hyper-j.
    Header and footer stripes are open so the wallpaper shows through.
-   A large terminal sits in the middle, with the waiting icon, a pulsing word carousel,
-   and a prompt underneath. The prompt is its own carousel, each line held three times
-   as long as one Please Wait word, tearing in like a broken screen. Home runs five
-   lines. The 404 runs the current line, then the company address. */
+   A large terminal sits in the middle, with the waiting icon, a pulsing word
+   carousel, and a prompt underneath. The prompt is its own carousel, each line
+   held three times as long as one Please Wait word, tearing in like a broken
+   screen. Home runs five lines on a 21s loop. The 404 runs three lines on that
+   same loop, so the last two beats are empty. */
 html.is-home {
   --wall-w: 3840;
   --wall-h: 2160;
@@ -246,8 +247,7 @@ html.not-found .home-words {
 }
 
 /* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase.
-   Sits in the bottom row, near the edge, with the panel padding as the margin.
-   Home stacks five lines in that slot. The 404 stacks two, then leaves one turn empty. */
+   Sits in the bottom row, near the edge, with the panel padding as the margin. */
 .home-status {
   display: block;
   grid-row: 3;

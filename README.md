@@ -2,30 +2,31 @@
 
 The Enterprise-R website. Public repo (needed for GitHub Pages on the Free tier). Built with [Astro](https://astro.build), plain HTML/CSS, no frameworks.
 
-Part of [enterprise-r/project-foundation](https://github.com/enterprise-r/project-foundation). The logos, palette and fonts are built by [enterprise-r/project-branding](https://github.com/enterprise-r/project-branding) and shipped to Google Drive `assets/`. This repo copies them in.
+Part of [enterprise-r/project-foundation](https://github.com/enterprise-r/project-foundation). Logos, palette, fonts and Dark-® come from [enterprise-r/project-branding](https://github.com/enterprise-r/project-branding), shipped to Google Drive `assets/`. This repo copies them in.
 
-Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and the unlisted `/showcase/`.
+Pages: Home (`/`), About (`/about/`), 404 (`/404.html`) and `/showcase/`. The showcase is in the bar as "UI of the future". It is `noindex` and not in the sitemap.
 
 ## Where things are
 
 | To change… | Edit |
 |---|---|
 | Page text (title, heading, contact email) | the `page` block at the top of the page in `src/pages/` |
-| Logo and favicons | `public/assets/`. The title bar in `src/layouts/Base.astro` shows `logo-wide.svg` |
-| Styles | `src/styles/palette.css` (colours), `src/styles/theme/` (Dark-®), `src/styles/bar.css`, `src/styles/footer.css`, `src/styles/about.css`, `src/styles/ui.css` (style guide) |
-| Shared head, title bar, navigation and footer (social links: `social`) | `src/layouts/Base.astro` |
+| Logo and favicons | `public/assets/`. The bar shows `logo-wide.svg`, then `logo-compact.svg` at 52rem and below |
+| Styles | `src/styles/`: `palette.css` (colours), `theme/` (Dark-®), `bar.css` (title bar), `footer.css`, `home.css`, `about.css`, `transition.css`, `ui.css` (style guide) |
+| Shared head, title bar and navigation | `src/layouts/Base.astro` |
+| Social links | the `social` list in `src/components/Footer.astro` |
+| Home and 404 terminal | `src/components/HomeWait.astro` and `src/styles/home.css` |
 | Page not found | `src/pages/404.astro` |
-| Search engines | `public/robots.txt`, and the indexed pages listed in `src/pages/sitemap.xml.ts` |
-| Enterprsr, Audiowide and Rajdhani | `src/styles/fonts/woff2/`. Dark-® loads these from Drive `assets/fonts/woff2/` |
-| Link preview picture (`og:image`) | `src/pages/og-image.png.ts`, built from `public/assets/logo-wide.svg` on the title bar colour |
-| Style guide's sample picture | the `banner` hotlink at the top of `src/pages/showcase.astro` |
-| Custom domain | repo Settings → Pages → Custom domain (the Pages source is GitHub Actions, so no `CNAME` file is used) |
+| Search engines | `public/robots.txt`, and the indexed pages in `src/pages/sitemap.xml.ts` |
+| Fonts | `src/styles/fonts/woff2/`. The theme loads them from `../fonts/woff2/` |
+| Link preview (`og:image`) | `src/pages/og-image.png.ts` |
+| Custom domain | repo Settings → Pages → Custom domain (Pages source is GitHub Actions, so there is no `CNAME` file) |
 
-A new page = a new file in `src/pages/` using the `Base` layout. About imports `src/styles/about.css`.
+A new page is a file in `src/pages/` that uses the `Base` layout. About imports `src/styles/about.css`.
 
 ## Deploy
 
-Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages in about a minute. You can edit files right on github.com. (Settings → Pages → Source must be **GitHub Actions**.)
+Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages in about a minute. Files can be edited on github.com. Settings → Pages → Source must be **GitHub Actions**.
 
 ## Local (optional, Node 24)
 
@@ -37,41 +38,33 @@ npm run build    # output in dist/
 
 ## Brand assets
 
-Every brand file comes from the project-branding build (`build.sh`), shipped to Google Drive `assets/`. To refresh one, copy it in again from there.
+Brand files come from the project-branding build (`build.sh`), shipped to Drive `assets/`. To refresh one, copy it in again. Do not edit a copied file here.
 
 | In this repo | From |
 |---|---|
-| `public/assets/logo-wide.svg`, `favicon.svg` | Drive `assets/logos/svg/` |
+| `public/assets/logo-wide.svg`, `logo-compact.svg`, `favicon.svg` | Drive `assets/logos/svg/` |
 | `public/assets/favicon.ico`, `favicon-32.png` | Drive `assets/logos/favicon/` |
 | `public/assets/apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | Drive `assets/logos/favicon/` `favicon-180.png`, `favicon-192.png`, `favicon-512.png`, renamed |
-| `src/styles/theme/base.css`, `components.css` | Drive `assets/theme/`, copied as-is |
-| `src/styles/fonts/woff2/*.woff2` | Drive `assets/fonts/woff2/` (the files `theme/base.css` loads) |
-| `public/fonts/OFL-Enterprsr.txt`, `OFL-Audiowide.txt`, `OFL-Rajdhani.txt` | Drive `assets/fonts/licenses/` |
-| `src/styles/palette.css` | Drive `assets/palette/palette.css` |
-| `src/styles/palette.json` | project-branding `palette/palette.json` |
+| `public/assets/warpchi.*`, `hyper-j.*` | Home (warpchi) and About / 404 (hyper-j). Sources are project-branding `wallpapers/`, saved here as jpg, avif and webp |
+| `src/styles/theme/` | Drive `assets/theme/`, the whole directory, copied as-is |
+| `src/styles/fonts/woff2/*.woff2` | Drive `assets/fonts/woff2/` |
+| `public/fonts/OFL-*.txt` | Drive `assets/fonts/licenses/` |
+| `src/styles/palette.css`, `palette.json` | Drive `assets/palette/palette.css` and project-branding `palette/palette.json` |
 
-The link preview (`og:image`, `/og-image.png`, 1200x400) is not a file in this repo: `src/pages/og-image.png.ts` renders `public/assets/logo-wide.svg` 1000 px wide on the title bar colour (`--ui-border`) at build time, with sharp (which Astro already installs).
+`/og-image.png` (1200x400) is not a file in the repo. `src/pages/og-image.png.ts` draws `logo-wide.svg` 1000 px wide on the title-bar colour (`--ui-border`) at build time, with sharp (Astro already installs it).
 
-The `/showcase/` sample picture is the 3x1 banner, hotlinked from Drive `assets/banners/banner-3x1.png` as `https://lh3.googleusercontent.com/d/<id>=w1600` (the `banner` line in `src/pages/showcase.astro`). The file must be viewable by anyone with the link.
+`palette.css` is generated from `palette.json`. Change a colour in project-branding, then copy both files again. A colour's `use` line says where this site uses it.
 
-`palette.css` is project-branding's `palette/palette.css` (generated from `palette/palette.json` there), copied as-is, with `palette.json` next to it for the style guide's swatches. To change a colour, change it in project-branding, then copy both files again. Do not edit the colours in this repo.
-
-Dark-® (`src/styles/theme/base.css` and `components.css`) is Drive `assets/theme/`, copied as-is. Do not edit it here. It loads its fonts from `../fonts/woff2/`, so those files live at `src/styles/fonts/woff2/`. The palette this site imports stays `src/styles/palette.css`. The `palette.css` inside `assets/theme/` is for a project that links the theme on its own.
+Dark-® is `src/styles/theme/`. What it does is in `theme/README.md`. It loads fonts from `../fonts/woff2/`. This site imports `src/styles/palette.css`. The `palette.css` inside `assets/theme/` is for a project that links the theme on its own.
 
 A lockup is the wordmark and the mark together (wide and compact). The plate is the inactive-border shape behind the mark. Geometry is in project-branding [`logo/README.md`](https://github.com/enterprise-r/project-branding/blob/main/logo/README.md).
 
-## Design
+## Pages
 
-The pages are a plain document on the Enterprise-R palette (`src/styles/palette.css`). Where a colour is used is the `use` line in `src/styles/palette.json`. Dark-® is the theme: `theme/base.css` (type and plain elements) and `theme/components.css` (buttons, menus, breadcrumbs, separators). It uses only `--ui-*` variables and adds `--r-*` roles. What the theme does not cover stays in its own file: `bar.css` (title bar and Home button), `footer.css`, `about.css` (About) and `ui.css` (style guide).
+The bar (`bar.css`) is one stripe: breadcrumbs on the left, the logo in the middle, one button on the right. Breakpoints follow the bar's width, not the window's. At 52rem and below the lockup becomes compact. At 40rem and below the compact logo docks to the left edge and the breadcrumbs wrap onto a second row. On Home the logo is the page heading (`h1`). Scrolled down on Home, that logo returns to the top. Otherwise it links home.
 
-The title bar is one full-width stripe with the logo in the middle: the wide lockup on every screen; at 640 px and below the title has its own row on the page background and the buttons go below it. On Home the logo is the page heading (`h1`).
+The ® crumb is Home. On Home it is the current page and does not navigate. When the logo docks, that crumb is hidden, because the docked logo already marks the root.
 
-The Home button reads ® (its accessible name is Home). It floats fixed at the bottom left of the bar and does not change on hover. Scrolled down, it goes back to the top; at the top, it goes to the home page. Every other page sits at the bottom right of the bar, an `.r-btn` in an `.r-group`. Keyboard focus is a 2 px outline, 3 px off.
+Home and the 404 share open stripes and one terminal (`home.css`). Home uses warpchi. The 404 uses hyper-j and turns the terminal 45 degrees. About uses hyper-j as well. Its plates are in `about.css`.
 
-Breadcrumbs (`.r-crumbs`) are the same buttons joined in one row on a diagonal (a `clip-path` slant), one per level, with only the last rounded on the right, and the root as the lone R (®) in Enterprsr (`.r-crumb-root`), filled with the inactive border (dark purple). Its letter is Green (sage), the dark button text on hover, Bright green while pressed. Parents are Magenta (`--r-crumb`, they are links), the page you are on Green (sage). A button or a crumb can carry a menu (`details.r-menu`): a caret on the left of the button, which takes its hover colour while open, and a stack of the same squared buttons on the title bar colour underneath. Both live in `theme/components.css` and are shown in `/showcase/`.
-
-Form buttons are the same button with a role: generic (no class) Orange, `.r-primary` Green (sage), `.r-clear` (and any reset button) Bright blue, the mirrored R of the logo, `.r-cancel` Red, each brighter on hover (`--r-*` in `theme/components.css`).
-
-The footer is a slim stripe with the LinkedIn and GitHub icons in the middle. The icons are inline paths from Simple Icons (CC0). On short pages it sits at the bottom of the window.
-
-On About, hyper-j fills the viewport (cover), and the header and footer stripes are open, as on Home. The heading sits in one terminal and the paragraphs plus the email bubble in another. On a wide screen the heading plate and the paragraph plate share one width and one right edge, shifted left under the green arm and clear of the green circle. The heading sits a fixed lead above the paragraph plate, in the sky above the arm, so the two move together. Below 60rem they sit together in the middle. The page is at least 768px tall, so a shorter window scrolls that layout. The email stays centred in its bubble.
+The footer is a slim stripe: LinkedIn, X and GitHub, inline paths from Simple Icons (CC0). On a short page it sits at the bottom of the window. On Home, the 404 and About the stripe is open and the icons switch to Foreground, so they stay legible on the wallpaper.

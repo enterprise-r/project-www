@@ -1,5 +1,5 @@
 ---
-// UI showcase and style guide. Not in the nav, not indexed: open /showcase/ directly.
+// Style guide. Linked from the bar as "UI of the future". Not indexed, not in the sitemap.
 import Base from "../layouts/Base.astro";
 import "../styles/theme/doc.css";
 import "../styles/ui.css";
@@ -12,7 +12,7 @@ const colours = palette.groups.flatMap((g) => g.colours);
 const hex = (v) => colours.find((c) => c.var === v).hex;
 const accent = colours.filter((c) => c.var === "--ui-accent");
 
-// WCAG contrast from palette hex values (same math as the audit).
+// WCAG contrast from the palette hex values.
 const _lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
 const _lum = (h) => {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map(_lin);

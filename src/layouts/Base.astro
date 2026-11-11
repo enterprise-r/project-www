@@ -1,5 +1,5 @@
 ---
-// Shared page shell: head, favicons and the title bar with the navigation.
+// Shared page shell: head, favicons, title bar, navigation and footer.
 import "../styles/palette.css";
 import "../styles/theme/base.css";
 import "../styles/theme/components.css";
@@ -12,10 +12,11 @@ import enterprsr from "../styles/fonts/woff2/Enterprsr-Regular.woff2?url";
 interface Props {
   title: string;
   description: string;
-  // The style guide is not indexed and draws no navigation bar.
+  // Leave the page out of search engines. The style guide sets this.
   noindex?: boolean;
+  // Title bar and footer. The style guide turns these off.
   header?: boolean;
-  // Wallpaper, open chrome, and the same crumbs as Home. Used by the 404.
+  // Wallpaper, open stripes, and the same crumbs as Home. The 404 sets this.
   hero?: boolean;
 }
 const { title, description, noindex = false, header = true, hero = false } = Astro.props;
@@ -143,7 +144,6 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   {header && (
     <script is:inline>
       // Logo: scrolled down on Home, back to the top; otherwise, the home page.
-      // The root crumb on Home is inert (already here).
       document.querySelectorAll("html.is-home .sc-nav-logo a").forEach((el) => {
         el.addEventListener("click", (e) => {
           if (location.pathname.replace(/\/?$/, "/") !== "/") return;
