@@ -95,7 +95,6 @@ main { flex: 1 0 auto; width: 100%; }
    DOM order is logo, crumbs, then the right group.
    Row gap stays --r-gap, so the wrap is still a slim two-row stripe. */
 @container (max-width: 40rem) {
-  .sc-nav-bar { grid-template-columns: minmax(max-content, auto) 1fr; }
   .sc-nav-logo {
     grid-column: 1;
     justify-self: start;
@@ -105,7 +104,10 @@ main { flex: 1 0 auto; width: 100%; }
   }
   .sc-nav-logo img.sc-nav-logo-wide { display: none; }
   .sc-nav-logo img.sc-nav-logo-compact { display: block; }
+  /* The bar is its own query container, so it cannot change its own
+     columns here. The three-column grid stays; dock the right group to
+     the last column so the empty middle column collapses. */
   .sc-nav-bar > .r-group,
-  .sc-nav-bar .sc-nav-end { grid-column: 2; }
+  .sc-nav-bar .sc-nav-end { grid-column: -2 / -1; }
   .sc-nav-bar .r-crumbs { grid-column: 1 / -1; grid-row: 2; }
 }

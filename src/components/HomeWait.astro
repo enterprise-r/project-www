@@ -1,0 +1,51 @@
+---
+// Shared home and 404 terminal: the waiting icon, a pulsing carousel, and a prompt.
+import Stars from "./Stars.astro";
+import "../styles/home.css";
+import waitIcon from "../styles/theme/icons/wait.svg?url";
+
+interface Part {
+  text: string;
+  tone?: string | null;
+}
+
+interface Props {
+  parts: Part[];
+  prompt: string;
+  // Screen-reader sentence, also shown when motion is reduced. Defaults to the words joined up.
+  sentence?: string;
+}
+
+const { parts, prompt, sentence } = Astro.props;
+const phrase = sentence ?? parts.map((p) => p.text).join(" ");
+const countClass = parts.length === 3 ? "home-words home-words-3" : "home-words";
+
+// W-words colour only the first W; every other tinted item is coloured in full.
+const mark = (p: Part) =>
+  p.tone
+    ? p.text.startsWith("W") && p.text.length > 1
+      ? { tone: p.tone, letter: "W", rest: p.text.slice(1) }
+      : { tone: p.tone, letter: p.text, rest: "" }
+    : { tone: null, letter: p.text, rest: "" };
+---
+<Stars />
+<main class="home">
+  <div class="r-term home-wait">
+    <div class="home-line">
+      <img src={waitIcon} width="32" height="32" alt="">
+      <p class="home-sentence">
+        {sentence ? phrase : parts.map((p, i) => {
+          const m = mark(p);
+          return <>{i > 0 && " "}{m.tone ? <><span class={`home-w home-w-${m.tone}`}>{m.letter}</span>{m.rest}</> : m.letter}</>;
+        })}
+      </p>
+      <span class={countClass} aria-hidden="true">
+        {parts.map((p) => {
+          const m = mark(p);
+          return <span>{m.tone ? <><span class={`home-w home-w-${m.tone}`}>{m.letter}</span>{m.rest}</> : m.letter}</span>;
+        })}
+      </span>
+    </div>
+    <p class="r-prompt home-status">{prompt}</p>
+  </div>
+</main>

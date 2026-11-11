@@ -157,6 +157,11 @@ main.showcase + footer p {
 /* Home wallpaper, fitted to the width, shown as a horizontal stripe through the middle of the frame. */
 .sc-term-sample .photo {
   background-image: url("/assets/warpchi.jpg");
+  background-image: image-set(
+    url("/assets/warpchi.avif") type("image/avif"),
+    url("/assets/warpchi.webp") type("image/webp"),
+    url("/assets/warpchi.jpg") type("image/jpeg")
+  );
   background-size: 100% auto;
   background-position: center center;
   background-repeat: no-repeat;

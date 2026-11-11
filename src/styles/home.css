@@ -1,10 +1,15 @@
-/* Home: the official wallpaper fills the viewport (cover, so it stretches on a small screen).
+/* Home and 404: the official wallpaper fills the viewport (cover, so it stretches on a small screen).
    Header and footer stripes are open so the wallpaper shows through.
    A large terminal sits in the middle, with the waiting icon, a pulsing word carousel,
    and a fixed prompt line underneath. */
 html.is-home {
   background-color: var(--ui-bg);
   background-image: url("/assets/warpchi.jpg");
+  background-image: image-set(
+    url("/assets/warpchi.avif") type("image/avif"),
+    url("/assets/warpchi.webp") type("image/webp"),
+    url("/assets/warpchi.jpg") type("image/jpeg")
+  );
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -14,7 +19,7 @@ html.is-home body {
   background: transparent;
 }
 
-/* Homepage only: drop the header and footer stripe fills. Buttons stay filled.
+/* Home and 404: drop the header and footer stripe fills. Buttons stay filled.
    Footer icons switch from Background (meant for the stripe) to Foreground, so they stay
    legible on the wallpaper. No added shadow or blur. */
 html.is-home header,
@@ -32,6 +37,22 @@ html.is-home .r-crumb-root[aria-current="page"]:hover,
 html.is-home .r-crumb-root[aria-current="page"]:active {
   background-color: var(--ui-border);
   cursor: default;
+}
+
+/* When the compact logo docks left, it already marks the root,
+   so the ® crumb and the slant that follows it can go. */
+@container (max-width: 40rem) {
+  html.is-home .sc-nav-bar .r-crumbs li:first-child {
+    display: none;
+  }
+  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) {
+    margin-left: 0;
+  }
+  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) > .r-btn,
+  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) > .r-menu > summary {
+    --r-l: 0px;
+    --r-kl: 0;
+  }
 }
 
 main.home {
@@ -69,8 +90,8 @@ main.home {
 
 .home-wait img {
   display: block;
-  width: clamp(2rem, 5vw, 4rem);
-  height: clamp(2rem, 5vw, 4rem);
+  width: clamp(4rem, 10vw, 8rem);
+  height: clamp(4rem, 10vw, 8rem);
   flex-shrink: 0;
 }
 
@@ -86,7 +107,7 @@ main.home {
   white-space: nowrap;
   border: 0;
   font-family: var(--r-font-text);
-  font-size: clamp(1.125rem, 3vw, 2.25rem);
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
   font-weight: 600;
   line-height: 1.3;
 }
@@ -99,7 +120,7 @@ main.home {
   width: max-content;
   text-align: center;
   font-family: var(--r-font-text);
-  font-size: clamp(1.125rem, 3vw, 2.25rem);
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
   font-weight: 600;
   line-height: 1.3;
 }
@@ -135,6 +156,21 @@ main.home {
   2.5% { transform: scale(1); }
   12.5% { opacity: 1; transform: scale(1); }
   14% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; }
+}
+
+/* Three items keep the same 1.4s slot and pulse, in a shorter loop, so the
+   sequence does not sit empty for five unused eight-word slots. */
+.home-words-3 > span {
+  animation-name: home-word-pulse-3;
+  animation-duration: 4.2s;
+}
+@keyframes home-word-pulse-3 {
+  0% { opacity: 0; transform: scale(0.86); }
+  3.2% { opacity: 1; transform: scale(1.08); }
+  6.6667% { transform: scale(1); }
+  33.3333% { opacity: 1; transform: scale(1); }
+  37.3333% { opacity: 0; transform: scale(1); }
   100% { opacity: 0; }
 }
 
