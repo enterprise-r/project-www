@@ -71,7 +71,7 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 .r-btn:disabled {
   color: var(--r-disabled-text);
   background-color: var(--r-disabled);
-  cursor: not-allowed;
+  cursor: var(--r-icon-wait-cursor) 16 16, progress;
 }
 
 /* Group: buttons side by side, joined into one pill. <span class="r-group">r-btn…</span> */
@@ -426,20 +426,20 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 /* Dynamic list: a fieldset of rows with a quiet add/remove control in a
    left column the size of a radio (--r-choice-size, 1.5rem). The × and + are
    Audiowide, in Clear silver; hover turns × red (and the row's fields) and +
-   sage (and shows a reserved ghost row in --r-clear). Tooltips use data-tip.
+   sage (and shows a reserved ghost row in --r-clear).
    Keyboard and live-region announcements come from theme/rows.js.
    <fieldset class="r-rows">
      <legend>Team members</legend>
      <div class="r-rows-head" aria-hidden="true"><span></span><span>Name</span><span>Role</span></div>
      <div class="r-rows-list">
        <div class="r-row">
-         <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 1" data-tip="Remove row 1"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+         <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 1"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
          <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[0][name]" placeholder="Name" autocomplete="off">
          <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[0][role]" placeholder="Role" autocomplete="off">
        </div>
      </div>
      <div class="r-rows-foot">
-       <span class="r-row-bubble"><button type="button" class="r-row-add" aria-label="Add row" data-tip="Add row"><span class="r-row-glyph" aria-hidden="true">+</span></button></span>
+       <span class="r-row-bubble"><button type="button" class="r-row-add" aria-label="Add row"><span class="r-row-glyph" aria-hidden="true">+</span></button></span>
        <div class="r-row-ghost" aria-hidden="true">
          <input placeholder="Name" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
          <input placeholder="Role" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
@@ -524,8 +524,8 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   box-shadow: 0 0 0 var(--r-hl-ring-w) var(--r-hl-ring);
 }
 .r-row-remove:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* Delete preview: the row's fields turn dark red. No ring around the row. */
@@ -570,39 +570,6 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   }
 }
 
-/* CSS tooltips (no native title). Grow inward so they stay on a 360px screen. */
-.r-rows [data-tip] { position: relative; }
-.r-rows [data-tip]::after {
-  content: attr(data-tip);
-  position: absolute;
-  z-index: 30;
-  padding: 0.2rem 0.45rem;
-  color: var(--ui-fg);
-  background: var(--ui-bg-lighter);
-  border: 1px solid var(--ui-border-active);
-  border-radius: 0.3rem;
-  font-family: var(--r-font-text);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.12s ease 0.35s;
-}
-.r-rows [data-tip]:hover::after,
-.r-rows [data-tip]:focus-visible::after { opacity: 1; }
-.r-row-remove[data-tip]::after,
-.r-row-add[data-tip]::after {
-  top: calc(100% + 0.3rem);
-  left: 0;
-  right: auto;
-}
-.r-row-remove:disabled::after { content: none; }
-@media (prefers-reduced-motion: reduce) {
-  .r-rows [data-tip]::after { transition: none; }
-}
 @keyframes r-row-in {
   from { opacity: 0; transform: translateY(-0.25rem); }
   to { opacity: 1; transform: none; }
@@ -646,9 +613,13 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
   .r-row-ghost input {
     border-color: Highlight;
   }
-  .r-rows [data-tip]::after {
-    color: CanvasText;
-    background: Canvas;
-    border-color: CanvasText;
-  }
 }
+
+/* Disabled controls use the waiting cursor, never the system not-allowed pointer.
+   Repeated here so it wins over cursor: pointer on .r-btn and .r-row-remove. */
+:disabled,
+[aria-disabled="true"] { cursor: var(--r-icon-wait-cursor) 16 16, progress; }
+
+/* Click guard: the W cursor only when a click is discarded, until the button is clickable again (or briefly if it needs movement first). See theme/guard.js. */
+button.r-guard-wait,
+input.r-guard-wait { cursor: var(--r-icon-wait-cursor) 16 16, progress; }

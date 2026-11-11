@@ -51,7 +51,6 @@
         if (rm) {
           var label = fill(removeTpl, i, n);
           rm.setAttribute("aria-label", label);
-          rm.setAttribute("data-tip", label);
           rm.disabled = all.length === 1;
         }
       });

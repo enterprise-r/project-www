@@ -8,7 +8,7 @@
   font-family: "Enterprsr";
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url(../fonts/woff2/Enterprsr-Regular.woff2) format("woff2");
 }
 @font-face {
@@ -77,6 +77,15 @@
   --r-font-minor: var(--r-font-text);
   --r-font-text: Rajdhani, "Segoe UI", sans-serif;
   --r-font-mono: "Monaspace Neon", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* Waiting icons in theme/icons/. The animated file is --r-icon-wait; the full W is --r-icon-wait-static;
+     --r-icon-wait-cursor is the same W at 32 CSS px, for the pointer. */
+  --r-icon-wait: url(icons/wait.svg);
+  --r-icon-wait-static: url(icons/wait-static.svg);
+  --r-icon-wait-cursor: url(icons/wait-cursor.svg);
+  /* Click guard timings, read by theme/guard.js. */
+  --r-guard-gap1: 300ms;
+  --r-guard-gap2: 10s;
+  --r-guard-cool: 400ms;
 }
 
 :where(*, *::before, *::after) { box-sizing: border-box; }
@@ -279,7 +288,7 @@
   box-shadow: 0 0 0 var(--r-hl-ring-w) var(--r-hl-ring);
 }
 :where(input[type="checkbox"], input[type="radio"]):where(:disabled) {
-  cursor: not-allowed;
+  cursor: var(--r-icon-wait-cursor) 16 16, progress;
   opacity: 0.45;
   border-style: solid;
 }
@@ -328,6 +337,12 @@
 
 /* Media scale down to their container. */
 :where(img, video) { max-width: 100%; height: auto; }
+
+/* Waiting cursor: the full W at 32 CSS px, hotspot at the centre, with progress as the system fallback.
+   Disabled controls use it as well, so the system not-allowed pointer never shows. */
+.r-wait { cursor: var(--r-icon-wait-cursor) 16 16, progress; }
+:disabled,
+[aria-disabled="true"] { cursor: var(--r-icon-wait-cursor) 16 16, progress; }
 
 /* Windows high contrast / forced colours: keep field edges and focus visible with system colours. */
 @media (forced-colors: active) {
