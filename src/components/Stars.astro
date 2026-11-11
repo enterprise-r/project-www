@@ -1,6 +1,7 @@
 ---
 // Self-contained homepage star field. Stars spawn just off the right edge and
-// travel left. One new star about every second, with a little jitter.
+// travel left. About one new star every two seconds, with wider jitter.
+// Tilt fans outward: top-half stars rise, bottom-half stars descend.
 ---
 <div class="home-stars" aria-hidden="true"></div>
 
@@ -9,9 +10,9 @@
   const layer = document.querySelector(".home-stars");
   if (!reduced && layer) {
     const BASE_MS = 20000;
-    const SPEED_JITTER = 0.05;
-    const INTERVAL = 1000;
-    const INTERVAL_JITTER = 300;
+    const SPEED_JITTER = 0.15;
+    const INTERVAL_MIN = 1200;
+    const INTERVAL_MAX = 3000;
     const CAP = 32;
     const TRAVEL_START = "translate3d(100vw, 0, 0)";
     const TRAVEL_END = "translate3d(-2.75rem, 0, 0)";
@@ -20,15 +21,27 @@
     let timer = 0;
 
     function nextInterval() {
-      return INTERVAL + (Math.random() * 2 - 1) * INTERVAL_JITTER;
+      return INTERVAL_MIN + Math.random() * (INTERVAL_MAX - INTERVAL_MIN);
     }
 
     function spawn() {
       if (document.hidden || live.size >= CAP) return;
+      const y = 8 + Math.random() * 84;
+      const topHalf = y < 50;
+      const tilt = (topHalf ? 1 : -1) * Math.random() * 5;
+      const scale = 0.8 + Math.random() * 0.4;
+      const bright = 0.8 + Math.random() * 0.2;
+      const trailScale = 0.8 + Math.random() * 0.4;
+
       const el = document.createElement("span");
       el.className = "home-star";
-      el.style.top = 8 + Math.random() * 84 + "vh";
-      el.style.transform = "rotate(" + (Math.random() * 10 - 5) + "deg)";
+      el.dataset.half = topHalf ? "top" : "bottom";
+      el.style.top = y + "vh";
+      el.style.transform = "rotate(" + tilt + "deg)";
+      el.style.setProperty("--star-size", 1.5 * scale + "px");
+      el.style.setProperty("--star-trail", 2.3 * trailScale + "rem");
+      el.style.setProperty("--star-bright", String(bright));
+
       const body = document.createElement("span");
       body.className = "home-star-body";
       el.appendChild(body);
@@ -104,23 +117,24 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 1.5px;
-    height: 1.5px;
+    width: var(--star-size, 1.5px);
+    height: var(--star-size, 1.5px);
     border-radius: 50%;
     background: var(--ui-fg-bright);
-    box-shadow: 0 0 1.5px 0.4px var(--ui-fg-bright);
+    opacity: var(--star-bright, 1);
+    box-shadow: 0 0 var(--star-size, 1.5px) 0.4px var(--ui-fg-bright);
     will-change: transform;
     transform: translate3d(100vw, 0, 0);
   }
 
-  /* Trail is twice the previous length, on the right of the head (behind
-     leftward travel), fading to transparent at the tail. */
+  /* Trail sits on the right of the head (behind leftward travel), aligned
+     with the tilted path, fading to transparent at the tail. */
   .home-star-body::after {
     content: "";
     position: absolute;
-    left: 1.5px;
+    left: var(--star-size, 1.5px);
     top: 50%;
-    width: 2.3rem;
+    width: var(--star-trail, 2.3rem);
     height: 1px;
     background: var(--ui-striped);
     transform: translateY(-50%);
