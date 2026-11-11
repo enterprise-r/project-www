@@ -1,13 +1,12 @@
 /* Dark-® click guard.
-   Movement ends → start timer → --r-guard-gap1 → HOT (clicks accepted)
-   for --r-guard-gap2 → OFF until the pointer moves and stops again.
-   Each pointermove resets the gap-1 timer (movement end is the last move).
-   An accepted click turns clicks off for --r-guard-cool, then stays OFF
-   until the pointer moves and stops again.
+   Movement (or arriving on the control) → HOT immediately, including
+   during movement. The hot window --r-guard-gap2 (10s) restarts on each
+   movement. After 10s with no movement, OFF until the pointer moves again.
+   An accepted press turns clicks off for --r-guard-cool, then stays OFF
+   until the pointer moves again.
    Clicks are judged on button press (pointerdown), not on pointerup; a
    discarded press also suppresses the following click.
-   A discarded click flashes the waiting cursor until the button is HOT,
-   or briefly if it cannot become clickable without further movement.
+   A discarded press flashes the waiting cursor for 300ms.
    Touch and keyboard use the cooldown only.
    Applies to button and input type=button/submit/reset, not links.
    Opt out with .r-unguarded on the control or an ancestor.
@@ -15,9 +14,9 @@
 (function () {
   "use strict";
 
-  var GAP1_MS = 300;
   var GAP2_MS = 10000;
   var COOL_MS = 400;
+  var FLASH_MS = 300;
   var MOVE_PX = 3;
   var SELECTOR = "button, input[type=button], input[type=submit], input[type=reset]";
   var WAIT = "r-guard-wait";
@@ -41,7 +40,6 @@
   function timings() {
     if (timed) return;
     timed = true;
-    GAP1_MS = msVar("--r-guard-gap1", 300);
     GAP2_MS = msVar("--r-guard-gap2", 10000);
     COOL_MS = msVar("--r-guard-cool", 400);
   }
@@ -62,11 +60,9 @@
         fromKey: false,
         pointerType: "",
         coolUntil: 0,
-        gap1Timer: 0,
         gap2Timer: 0,
         coolTimer: 0,
         flashTimer: 0,
-        flashUntilHot: false,
         suppressClick: false,
         acceptedPress: false,
         lastX: null,
@@ -90,57 +86,38 @@
 
   function hideWait(el, s) {
     clearTimer(s, "flashTimer");
-    s.flashUntilHot = false;
     el.classList.remove(WAIT);
   }
 
   function showWait(el, s, ms) {
     el.classList.add(WAIT);
     clearTimer(s, "flashTimer");
-    s.flashUntilHot = false;
     s.flashTimer = setTimeout(function () {
       s.flashTimer = 0;
       el.classList.remove(WAIT);
     }, ms);
   }
 
-  function showWaitUntilHot(el, s) {
-    el.classList.add(WAIT);
-    clearTimer(s, "flashTimer");
-    s.flashUntilHot = true;
-  }
-
   function goOff(s) {
     s.hot = false;
-    clearTimer(s, "gap1Timer");
     clearTimer(s, "gap2Timer");
   }
 
   function becomeHot(el, s) {
     if (cooling(s) || !s.hover) return;
     s.hot = true;
-    clearTimer(s, "gap1Timer");
     clearTimer(s, "gap2Timer");
-    if (s.flashUntilHot) hideWait(el, s);
+    hideWait(el, s);
     s.gap2Timer = setTimeout(function () {
       s.gap2Timer = 0;
       s.hot = false;
     }, GAP2_MS);
   }
 
-  function startGap1(el, s) {
-    clearTimer(s, "gap1Timer");
-    s.gap1Timer = setTimeout(function () {
-      s.gap1Timer = 0;
-      becomeHot(el, s);
-    }, GAP1_MS);
-  }
-
   function onMove(el, s) {
     if (s.pointerType === "touch") return;
-    goOff(s);
     if (cooling(s)) return;
-    startGap1(el, s);
+    becomeHot(el, s);
   }
 
   function movedEnough(s, e) {
@@ -171,10 +148,7 @@
   function block(e, el, s) {
     e.preventDefault();
     e.stopImmediatePropagation();
-    var untilCool = cooling(s) && (s.pointerType === "touch" || e.type === "keydown" || s.fromKey);
-    if (untilCool) showWait(el, s, Math.max(1, s.coolUntil - Date.now()));
-    else if (s.gap1Timer && !cooling(s)) showWaitUntilHot(el, s);
-    else showWait(el, s, GAP1_MS);
+    showWait(el, s, FLASH_MS);
   }
 
   function sameButton(btn, related) {
@@ -202,6 +176,7 @@
     s.pointerType = e.pointerType;
     s.lastX = e.clientX;
     s.lastY = e.clientY;
+    onMove(btn, s);
   }, true);
 
   document.addEventListener("pointerout", function (e) {

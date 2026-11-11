@@ -620,6 +620,6 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 :disabled,
 [aria-disabled="true"] { cursor: var(--r-icon-wait-cursor) 16 16, progress; }
 
-/* Click guard: the W cursor only when a click is discarded, until the button is clickable again (or briefly if it needs movement first). See theme/guard.js. */
+/* Click guard: the W cursor flashes for 300ms when a press is discarded. See theme/guard.js. */
 button.r-guard-wait,
 input.r-guard-wait { cursor: var(--r-icon-wait-cursor) 16 16, progress; }

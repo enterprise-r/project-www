@@ -83,7 +83,6 @@
   --r-icon-wait-static: url(icons/wait-static.svg);
   --r-icon-wait-cursor: url(icons/wait-cursor.svg);
   /* Click guard timings, read by theme/guard.js. */
-  --r-guard-gap1: 300ms;
   --r-guard-gap2: 10s;
   --r-guard-cool: 400ms;
 }
