@@ -4,13 +4,37 @@ const page = {
   title: "Enterprise-R",
   description: "Enterprise-R is opening the way for companies to run on AI and people, working from the same book and, as never before, by the book.",
 };
+const words = ["Please", "Wait", "While", "We", "Work", "on", "Work", "Cards"];
+// First W of each W-word, in order: Amber, Orange, Magenta, sage, Bright green.
+const wTones = ["accent", "orange", "magenta", "green", "green-bright"];
+let wTone = 0;
+const parts = words.map((text) => (
+  text.startsWith("W") ? { text, tone: wTones[wTone++] } : { text, tone: null }
+));
 
-// The page heading is the title in the bar (layouts/Base.astro).
 import Base from "../layouts/Base.astro";
+import Stars from "../components/Stars.astro";
+import "../styles/home.css";
+import waitIcon from "../styles/theme/icons/wait.svg?url";
 ---
 <Base title={page.title} description={page.description}>
+  <Stars />
   <main class="home">
-    <!-- No Home content yet: send visitors to About. -->
-    <script is:inline>location.replace("/about/");</script>
+    <div class="r-term home-wait">
+      <div class="home-line">
+        <img src={waitIcon} width="32" height="32" alt="">
+        <p class="home-sentence">
+          {parts.map((p, i) => (
+            <>{i > 0 && " "}{p.tone ? <><span class={`home-w home-w-${p.tone}`}>W</span>{p.text.slice(1)}</> : p.text}</>
+          ))}
+        </p>
+        <span class="home-words" aria-hidden="true">
+          {parts.map((p) => (
+            <span>{p.tone ? <><span class={`home-w home-w-${p.tone}`}>W</span>{p.text.slice(1)}</> : p.text}</span>
+          ))}
+        </span>
+      </div>
+      <p class="r-prompt home-status">WE ARE WORKING HARD</p>
+    </div>
   </main>
 </Base>

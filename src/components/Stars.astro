@@ -1,0 +1,148 @@
+---
+// Self-contained homepage star field. Stars spawn just off the right edge and
+// travel left. About one new star every two seconds, with wider jitter.
+// Tilt fans outward: top-half stars rise, bottom-half stars descend.
+---
+<div class="home-stars" aria-hidden="true"></div>
+
+<script>
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const layer = document.querySelector(".home-stars");
+  if (!reduced && layer) {
+    const BASE_MS = 20000;
+    const SPEED_JITTER = 0.15;
+    const INTERVAL_MIN = 1200;
+    const INTERVAL_MAX = 3000;
+    const CAP = 32;
+    const TRAVEL_START = "translate3d(100vw, 0, 0)";
+    const TRAVEL_END = "translate3d(-2.75rem, 0, 0)";
+
+    const live = new Set();
+    let timer = 0;
+
+    function nextInterval() {
+      return INTERVAL_MIN + Math.random() * (INTERVAL_MAX - INTERVAL_MIN);
+    }
+
+    function spawn() {
+      if (document.hidden || live.size >= CAP) return;
+      const y = 8 + Math.random() * 84;
+      const topHalf = y < 50;
+      const tilt = (topHalf ? 1 : -1) * Math.random() * 5;
+      const scale = 0.8 + Math.random() * 0.4;
+      const bright = 0.8 + Math.random() * 0.2;
+      const trailScale = 0.8 + Math.random() * 0.4;
+
+      const el = document.createElement("span");
+      el.className = "home-star";
+      el.dataset.half = topHalf ? "top" : "bottom";
+      el.style.top = y + "vh";
+      el.style.transform = "rotate(" + tilt + "deg)";
+      el.style.setProperty("--star-size", 1.5 * scale + "px");
+      el.style.setProperty("--star-trail", 2.3 * trailScale + "rem");
+      el.style.setProperty("--star-bright", String(bright));
+
+      const body = document.createElement("span");
+      body.className = "home-star-body";
+      el.appendChild(body);
+      layer.appendChild(el);
+
+      const duration = BASE_MS * (1 + (Math.random() * 2 - 1) * SPEED_JITTER);
+      const anim = body.animate(
+        [{ transform: TRAVEL_START }, { transform: TRAVEL_END }],
+        { duration, easing: "linear", fill: "forwards" }
+      );
+      el._anim = anim;
+      live.add(el);
+      const drop = () => {
+        live.delete(el);
+        el.remove();
+      };
+      anim.finished.then(drop, drop);
+    }
+
+    function schedule() {
+      clearTimeout(timer);
+      if (document.hidden) return;
+      timer = setTimeout(() => {
+        spawn();
+        schedule();
+      }, nextInterval());
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        clearTimeout(timer);
+        live.forEach((el) => el._anim && el._anim.pause());
+      } else {
+        live.forEach((el) => el._anim && el._anim.play());
+        schedule();
+      }
+    });
+
+    spawn();
+    schedule();
+  }
+</script>
+
+<style is:global>
+  /* Above the wallpaper, behind the header, footer, and the terminal.
+     Do not raise main itself: it fills the viewport and would hide the stars. */
+  html.is-home header,
+  html.is-home footer,
+  html.is-home .home-wait {
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Wrapper holds the tilt and the vertical start; only the body is translated. */
+  .home-star {
+    position: absolute;
+    left: 0;
+    top: 50vh;
+    width: 0;
+    height: 0;
+    transform-origin: 0 0;
+  }
+
+  .home-star-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--star-size, 1.5px);
+    height: var(--star-size, 1.5px);
+    border-radius: 50%;
+    background: var(--ui-fg-bright);
+    opacity: var(--star-bright, 1);
+    box-shadow: 0 0 var(--star-size, 1.5px) 0.4px var(--ui-fg-bright);
+    will-change: transform;
+    transform: translate3d(100vw, 0, 0);
+  }
+
+  /* Trail sits on the right of the head (behind leftward travel), aligned
+     with the tilted path, fading to transparent at the tail. */
+  .home-star-body::after {
+    content: "";
+    position: absolute;
+    left: var(--star-size, 1.5px);
+    top: 50%;
+    width: var(--star-trail, 2.3rem);
+    height: 1px;
+    background: var(--ui-striped);
+    transform: translateY(-50%);
+    -webkit-mask-image: linear-gradient(to right, #000, transparent);
+    mask-image: linear-gradient(to right, #000, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-stars { display: none; }
+  }
+</style>

@@ -6,9 +6,6 @@ import "../styles/ui.css";
 import palette from "../styles/palette.json";
 import waitIcon from "../styles/theme/icons/wait.svg?url";
 
-// Sample picture: the 3x1 banner (Drive assets/banners/banner-3x1.png) at 1600 px.
-const banner = "https://lh3.googleusercontent.com/d/1EG6RdL2cQLBFWo_OEUmsheCx0SJd2ft9=w1600";
-
 // Swatches come from the palette source, copied from project-branding.
 const groups = palette.groups.map((g) => ({ ...g, colours: g.colours.filter((c) => c.var !== "--ui-accent") }));
 const colours = palette.groups.flatMap((g) => g.colours);
@@ -105,16 +102,10 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
               <a class="r-btn" href="#">Reference</a>
             </div>
           </details>
-          <details class="r-menu">
-            <summary class="r-btn">More</summary>
-            <div class="r-menu-list">
-              <a class="r-btn" href="#">Notes</a>
-              <a class="r-btn" href="#">Log</a>
-            </div>
-          </details>
+          <a class="r-btn" href="/">Home</a>
         </span>
       </div>
-      <p class="sc-note">The company logo sits in the middle of the bar: the wide lockup on a desktop, the compact lockup as the bar shrinks, still centred while everything fits on one row. When the bar wraps, the compact logo sits on the left of the top row, above the breadcrumbs, and the menus stay on the top right, with the breadcrumbs on the row below, slotted left. The logo is a link to Home. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. The two menus are joined in a group.</p>
+      <p class="sc-note">The company logo sits in the middle of the bar: the wide lockup on a desktop, the compact lockup as the bar shrinks, still centred while everything fits on one row. When the bar wraps, the compact logo sits on the left of the top row, above the breadcrumbs, and the menus stay on the top right, with the breadcrumbs on the row below, slotted left. The logo, the root R, and the Home button are links to the site home. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. A Docs menu and a Home button are joined in a group.</p>
     </section>
 
     <hr>
@@ -153,10 +144,6 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
             <h2>A quiet view from orbit</h2>
             <h3>Engineering log</h3>
             <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
-            <p><code>--r-text</code></p>
-            <pre><code>:root {"{"}
-  --r-text: var(--ui-fg);
-{"}"}</code></pre>
           </div>
         </div>
         <div>
@@ -166,10 +153,6 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
             <h2>A quiet view from orbit</h2>
             <h3>Engineering log</h3>
             <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
-            <p><code>--r-text</code></p>
-            <pre><code>:root {"{"}
-  --r-text: var(--ui-fg);
-{"}"}</code></pre>
           </div>
         </div>
       </div>
@@ -289,7 +272,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <img src={waitIcon} width="32" height="32" alt="">
         <span>Working</span>
       </div>
-      <p class="sc-note">Wait while we work. Every disabled control uses the W cursor. A button accepts a click after the pointer stops, for ten seconds, and goes off briefly after a click; a discarded click flashes the W until it can be clicked.</p>
+      <p class="sc-note">Wait while we work. Every disabled control uses the W cursor. The click guard accepts a press for ten seconds after the pointer moves, and goes off briefly after a click; a discarded press flashes the W.</p>
     </section>
 
     <hr>
@@ -348,7 +331,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <section class="sc-section" id="terminal">
       <h2 class="sc-label">Terminal</h2>
       <figure class="sc-term-sample">
-        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
+        <div class="sc-bd"><div class="photo"></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
         <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
       </figure>
     </section>
@@ -357,11 +340,11 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <section class="sc-section" id="code">
       <h2 class="sc-label">Code</h2>
       <pre><code><span class="k">:root</span> {"{"}
-  <span class="k">--r-primary</span>: <span class="v">var(--ui-green)</span>;         <span class="c">/* Green (sage) {hex("--ui-green")} */</span>
+  <span class="k">--r-primary</span>: <span class="v">var(--ui-green)</span>;              <span class="c">/* Green (sage) {hex("--ui-green")} */</span>
   <span class="k">--r-primary-hover</span>: <span class="v">var(--ui-green-bright)</span>; <span class="c">/* Bright green {hex("--ui-green-bright")} */</span>
-  <span class="k">--r-btn</span>: <span class="v">var(--ui-orange)</span>;              <span class="c">/* Orange {hex("--ui-orange")} */</span>
-  <span class="k">--r-btn-hover</span>: <span class="v">var(--ui-accent)</span>;        <span class="c">/* Amber (Accent) {hex("--ui-accent")} */</span>
-  <span class="k">--r-text</span>: <span class="v">var(--ui-fg)</span>;                <span class="c">/* {hex("--ui-fg")} */</span>
+  <span class="k">--r-btn</span>: <span class="v">var(--ui-orange)</span>;                 <span class="c">/* Orange {hex("--ui-orange")} */</span>
+  <span class="k">--r-btn-hover</span>: <span class="v">var(--ui-accent)</span>;           <span class="c">/* Amber (Accent) {hex("--ui-accent")} */</span>
+  <span class="k">--r-text</span>: <span class="v">var(--ui-fg)</span>;                    <span class="c">/* {hex("--ui-fg")} */</span>
 {"}"}</code></pre>
     </section>
 
@@ -428,7 +411,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       <p class="sc-note">Ratios are computed from the palette hex values. <code>.r-num</code> right-aligns the ratio column.</p>
     </section>
 
-    <p class="sc-closer" aria-hidden="true"><span class="sc-closer-fill"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span></span></p>
+    <p class="sc-closer"><a class="sc-closer-fill" href="/" aria-label="Enterprise-R home"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span></a></p>
 
   </main>
   <footer><p class="sc-brand">Enterprise-R</p></footer>

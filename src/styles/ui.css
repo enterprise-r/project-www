@@ -50,7 +50,7 @@ main.showcase + footer p {
 .sc-dialog-actions { display: flex; justify-content: flex-end; gap: var(--r-gap); margin: 0; }
 .sc-dialog-open { display: flex; justify-content: center; margin-top: 1rem; }
 #accessibility table { margin-inline: auto; }
-.sc-glow-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.sc-glow-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.2rem; }
 
 .sc-states { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; align-items: flex-end; }
 .sc-states figure { margin: 0; display: grid; gap: 0.45rem; justify-items: start; }
@@ -71,68 +71,7 @@ main.showcase + footer p {
 .sc-row > * { min-width: min(100%, 16rem); max-width: 100%; }
 .sc-row > :first-child { flex: 0 1 auto; }
 .sc-row > :last-child { flex: 1 1 20rem; }
-/* One nav bar: breadcrumbs on the left, joined menus on the right. Wraps on a narrow screen. */
-/* The bar is a container so the logo swap and the wrap follow its width, not the viewport. */
-.sc-section:has(.sc-nav-bar) { container-type: inline-size; }
-
-.sc-nav-bar {
-  display: grid;
-  grid-template-columns: 1fr minmax(max-content, auto) 1fr;
-  align-items: center;
-  column-gap: 1.2rem;
-  row-gap: var(--r-gap);
-  padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
-  background-color: var(--ui-border);
-  overflow: visible;
-}
-.sc-nav-logo {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: center;
-  min-width: max-content;
-  flex-shrink: 0;
-  line-height: 0;
-  color: inherit;
-  text-decoration: none;
-}
-.sc-nav-logo img {
-  display: block;
-  height: var(--r-btn-h);
-  width: auto;
-  max-width: none;
-  flex-shrink: 0;
-}
-.sc-nav-logo img.sc-nav-logo-wide { min-width: calc(var(--r-btn-h) * 320 / 61); }
-.sc-nav-logo img.sc-nav-logo-compact { display: none; min-width: calc(var(--r-btn-h) * 320 / 128); }
-.sc-nav-bar .r-crumbs {
-  grid-column: 1;
-  grid-row: 1;
-  justify-self: start;
-  min-width: 0;
-}
-.sc-nav-bar .r-group {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: end;
-  min-width: 0;
-}
-/* Compact logo, still centred, while the single row still fits. */
-@container (max-width: 52rem) {
-  .sc-nav-logo img.sc-nav-logo-wide { display: none; }
-  .sc-nav-logo img.sc-nav-logo-compact { display: block; }
-}
-/* Wrapped: compact logo left on the top row, menus top right, breadcrumbs below left.
-   DOM order is logo, crumbs, menus (Home, then the trail, then the menus).
-   Row gap stays --r-gap, so the wrap is still a slim two-row stripe.
-   Dropdowns overlay what is below; they do not reserve height. */
-@container (max-width: 40rem) {
-  .sc-nav-bar { grid-template-columns: minmax(max-content, auto) 1fr; }
-  .sc-nav-logo { grid-column: 1; justify-self: start; }
-  .sc-nav-logo img.sc-nav-logo-wide { display: none; }
-  .sc-nav-logo img.sc-nav-logo-compact { display: block; }
-  .sc-nav-bar .r-group { grid-column: 2; }
-  .sc-nav-bar .r-crumbs { grid-column: 1 / -1; grid-row: 2; }
-}
+/* Nav bar layout (.sc-nav-bar, logo, wrap) lives in bar.css, shared with the site header. */
 
 /* Split row: the first block on the left, the last pushed to the right edge. */
 .sc-split { justify-content: space-between; }
@@ -215,6 +154,13 @@ main.showcase + footer p {
 .sc-bd { position: relative; height: 13rem; border-radius: 1rem; overflow: hidden; border: 1px solid var(--ui-border); background: var(--ui-bg); }
 .sc-bd .photo { position: absolute; inset: 0; background-color: var(--ui-bg); background-size: cover; background-repeat: no-repeat; }
 .sc-term-sample { margin: 1.25rem 0 0; }
+/* Home wallpaper, fitted to the width, shown as a horizontal stripe through the middle of the frame. */
+.sc-term-sample .photo {
+  background-image: url("/assets/warpchi.jpg");
+  background-size: 100% auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
 .sc-term-stack { position: absolute; left: 1.4rem; right: 1.4rem; top: 50%; transform: translateY(-50%); z-index: 2; }
 .sc-term-stack .r-term { max-width: 34rem; }
 .sc-term-stack .about-heading { margin: 0; font-family: var(--r-font-heading); font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
@@ -235,6 +181,10 @@ main.showcase + footer p {
   background: var(--ui-striped);
   -webkit-background-clip: text;
   background-clip: text;
+  text-decoration: none;
+}
+a.sc-closer-fill:hover {
+  color: transparent;
 }
 @media (forced-colors: active) {
   .sc-closer-fill,
@@ -253,6 +203,7 @@ main.showcase + footer p {
   gap: 0.6rem;
   width: max-content;
   max-width: 100%;
+  margin-inline: auto;
 }
 .sc-working img { display: block; width: 32px; height: 32px; }
 
