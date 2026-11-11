@@ -114,7 +114,7 @@ main.home {
 /* Initial W of each W-word, in carousel order. */
 .home-w { font: inherit; }
 .home-w-accent { color: var(--ui-accent); }
-.home-w-orange { color: var(--ui-orange); }
+.home-w-fg-bright { color: var(--ui-fg-bright); }
 .home-w-magenta { color: var(--ui-magenta); }
 .home-w-green { color: var(--ui-green); }
 .home-w-green-bright { color: var(--ui-green-bright); }
