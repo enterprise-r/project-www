@@ -5,6 +5,11 @@
 html.is-home {
   background-color: var(--ui-bg);
   background-image: url("/assets/warpchi.jpg");
+  background-image: image-set(
+    url("/assets/warpchi.avif") type("image/avif"),
+    url("/assets/warpchi.webp") type("image/webp"),
+    url("/assets/warpchi.jpg") type("image/jpeg")
+  );
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
