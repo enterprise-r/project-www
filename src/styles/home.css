@@ -1,5 +1,7 @@
 /* Home: the official wallpaper fills the viewport (cover, so it stretches on a small screen).
-   A terminal sits in the middle, with the waiting icon and a pulsing word carousel. */
+   Header and footer stripes are open so the wallpaper shows through.
+   A large terminal sits in the middle, with the waiting icon, a pulsing word carousel,
+   and a fixed prompt line underneath. */
 html.is-home {
   background-color: var(--ui-bg);
   background-image: url("/assets/warpchi.jpg");
@@ -12,6 +14,18 @@ html.is-home body {
   background: transparent;
 }
 
+/* Homepage only: drop the header and footer stripe fills. Buttons stay filled.
+   Footer icons switch from Background (meant for the stripe) to Foreground, so they stay
+   legible on the wallpaper. No added shadow or blur. */
+html.is-home header,
+html.is-home footer {
+  background-color: transparent;
+}
+
+html.is-home footer a {
+  color: var(--ui-fg);
+}
+
 main.home {
   display: flex;
   align-items: center;
@@ -20,21 +34,34 @@ main.home {
   padding: 2rem 1rem;
 }
 
+/* Way bigger than the theme's compact .r-term: a wide, padded panel, content scaled with it. */
 .home-wait {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  width: min(92vw, 64rem);
+  max-width: 100%;
+  padding: clamp(1.5rem, 4vw, 3.25rem) clamp(1.75rem, 5vw, 4rem);
+}
+
+.home-line {
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: clamp(0.85rem, 2vw, 1.5rem);
   position: relative;
+  min-width: 0;
+  width: 100%;
 }
 
 .home-wait img {
   display: block;
-  width: 32px;
-  height: 32px;
+  width: clamp(4rem, 10vw, 8rem);
+  height: clamp(4rem, 10vw, 8rem);
   flex-shrink: 0;
 }
 
-/* The full sentence is for screen readers; it becomes visible when motion is reduced. */
+/* The carousel sentence is for screen readers; it becomes visible when motion is reduced. */
 .home-sentence {
   position: absolute;
   width: 1px;
@@ -45,20 +72,28 @@ main.home {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+  font-family: var(--r-font-text);
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.3;
 }
 
+/* Words stack in one slot as wide as the longest word, each centred on the others. */
 .home-words {
   display: grid;
+  justify-items: center;
   align-items: center;
-  min-width: 8ch;
+  width: max-content;
+  text-align: center;
   font-family: var(--r-font-text);
-  font-size: 1.2rem;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
   font-weight: 600;
   line-height: 1.3;
 }
 
 .home-words span {
   grid-area: 1 / 1;
+  text-align: center;
   opacity: 0;
   animation: home-word-pulse 11.2s linear infinite;
 }
@@ -80,6 +115,14 @@ main.home {
   12.5% { opacity: 1; transform: scale(1); }
   14% { opacity: 0; transform: scale(1); }
   100% { opacity: 0; }
+}
+
+/* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase. No pulse. */
+.home-status {
+  display: block;
+  margin: 0;
+  font-size: clamp(1.15rem, 2.8vw, 2rem);
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
