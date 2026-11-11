@@ -11,10 +11,22 @@ let wTone = 0;
 const parts = words.map((text) => (
   text.startsWith("W") ? { text, tone: wTones[wTone++] } : { text, tone: null }
 ));
+// Prompt carousel. Enterprise-R is Enterprsr (that face only draws this word).
+const prompts = [
+  [{ text: "WE ARE WORKING HARD" }],
+  [{ text: "WE WANT IT : WE WORD IT" }],
+  [{ text: "WORK CARDS WORK IT" }],
+  [{ text: "..." }],
+  [
+    { text: "www." },
+    { text: "Enterprise-R", brand: true },
+    { text: ".com" },
+  ],
+];
 
 import Base from "../layouts/Base.astro";
 import HomeWait from "../components/HomeWait.astro";
 ---
 <Base title={page.title} description={page.description}>
-  <HomeWait parts={parts} prompt="WE ARE WORKING HARD" />
+  <HomeWait parts={parts} prompts={prompts} />
 </Base>

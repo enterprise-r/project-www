@@ -9,10 +9,20 @@ const parts = [
   { text: "0", tone: "magenta" },
   { text: "4", tone: "green" },
 ];
+// Same prompt carousel as Home: the current line, then the address.
+// Enterprise-R is Enterprsr (that face only draws this word).
+const prompts = [
+  [{ text: "PAGE NOT FOUND" }],
+  [
+    { text: "www." },
+    { text: "Enterprise-R", brand: true },
+    { text: ".com" },
+  ],
+];
 
 import Base from "../layouts/Base.astro";
 import HomeWait from "../components/HomeWait.astro";
 ---
 <Base title={page.title} description={page.description} noindex hero>
-  <HomeWait parts={parts} prompt="PAGE NOT FOUND" sentence="404" />
+  <HomeWait parts={parts} prompts={prompts} sentence="404" />
 </Base>

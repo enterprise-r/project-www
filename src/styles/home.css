@@ -1,7 +1,10 @@
-/* Home and 404: the official wallpaper fills the viewport (cover, so it stretches on a small screen).
+/* Home fills the viewport with warpchi (cover, so it stretches on a small screen).
+   The 404 keeps this chrome and swaps in hyper-j.
    Header and footer stripes are open so the wallpaper shows through.
    A large terminal sits in the middle, with the waiting icon, a pulsing word carousel,
-   and a fixed prompt line underneath. */
+   and a prompt underneath. The prompt is its own carousel, each line held three times
+   as long as one Please Wait word, tearing in like a broken screen. Home runs five
+   lines. The 404 runs the current line, then the company address. */
 html.is-home {
   background-color: var(--ui-bg);
   background-image: url("/assets/warpchi.jpg");
@@ -13,6 +16,16 @@ html.is-home {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* 404: same open chrome as Home, hyper-j instead of warpchi. */
+html.not-found {
+  background-image: url("/assets/hyper-j.jpg");
+  background-image: image-set(
+    url("/assets/hyper-j.avif") type("image/avif"),
+    url("/assets/hyper-j.webp") type("image/webp"),
+    url("/assets/hyper-j.jpg") type("image/jpeg")
+  );
 }
 
 html.is-home body {
@@ -174,8 +187,9 @@ main.home {
   100% { opacity: 0; }
 }
 
-/* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase. No pulse.
-   Sits in the bottom row, near the edge, with the panel padding as the margin. */
+/* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase.
+   Sits in the bottom row, near the edge, with the panel padding as the margin.
+   Home stacks five lines in that slot. The 404 stacks two, then leaves one turn empty. */
 .home-status {
   display: block;
   grid-row: 3;
@@ -186,6 +200,260 @@ main.home {
   text-align: center;
   font-size: clamp(0.95rem, 1.4vw, 1rem);
   animation: none;
+}
+
+/* The prompt lines, for screen readers. Shown as the first line when motion is reduced. */
+.home-prompt-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Lines stack in one slot, as wide as the longest. Each holds for 4.2s, three times
+   the 1.4s Please Wait word. Five lines loop in 21s. Two lines (.home-prompts-3)
+   use three beats of that same hold: the two lines, then one empty turn, so the
+   loop is 12.6s. The tear is the five-line tear scaled onto the beat. The change
+   is a broken screen: the line slices, jumps, and splits into magenta and cyan,
+   then locks. */
+.home-prompts {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.home-prompt {
+  grid-area: 1 / 1;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.home-slice {
+  grid-area: 1 / 1;
+  position: relative;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.home-slice,
+.home-slice[data-slice="0"]::before,
+.home-slice[data-slice="0"]::after {
+  animation-duration: 21s;
+  animation-timing-function: steps(1, end);
+  animation-iteration-count: infinite;
+}
+
+.home-slice[data-slice="0"] { animation-name: home-prompt-main; }
+.home-slice[data-slice="1"] {
+  animation-name: home-prompt-tear-a;
+  color: var(--ui-magenta-bright);
+}
+.home-slice[data-slice="2"] {
+  animation-name: home-prompt-tear-b;
+  color: var(--ui-cyan);
+}
+
+/* A bright tear line and scanlines, only while the picture is breaking. */
+.home-slice[data-slice="0"]::before,
+.home-slice[data-slice="0"]::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+.home-slice[data-slice="0"]::before {
+  animation-name: home-prompt-bar;
+  left: -3%;
+  right: -3%;
+  height: 2px;
+  background: var(--ui-fg-bright);
+  box-shadow: 0 0 6px var(--ui-magenta-bright);
+}
+.home-slice[data-slice="0"]::after {
+  animation-name: home-prompt-scan;
+  inset: -0.08em 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 1px,
+    rgb(from var(--ui-bg) r g b / 0.55) 1px 2px
+  );
+}
+
+.home-prompts > .home-prompt:nth-child(1) :is(.home-slice, .home-slice::before, .home-slice::after) { animation-delay: 0s; }
+.home-prompts > .home-prompt:nth-child(2) :is(.home-slice, .home-slice::before, .home-slice::after) { animation-delay: 4.2s; }
+.home-prompts > .home-prompt:nth-child(3) :is(.home-slice, .home-slice::before, .home-slice::after) { animation-delay: 8.4s; }
+.home-prompts > .home-prompt:nth-child(4) :is(.home-slice, .home-slice::before, .home-slice::after) { animation-delay: 12.6s; }
+.home-prompts > .home-prompt:nth-child(5) :is(.home-slice, .home-slice::before, .home-slice::after) { animation-delay: 16.8s; }
+
+/* The address keeps the written case. Enterprise-R is the brand face. */
+.home-prompt-url { letter-spacing: 0.08em; text-transform: none; }
+.home-brand {
+  font-family: var(--r-font-brand);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+@keyframes home-prompt-main {
+  0% { opacity: 1; transform: translate(-11px, 1px) skewX(-7deg); clip-path: inset(0 0 58% 0); }
+  0.6% { opacity: 0.3; transform: translate(15px, -1px) skewX(8deg); clip-path: inset(46% 0 4% 0); }
+  1.2% { opacity: 1; transform: translate(-7px, 0) skewX(-3deg); clip-path: inset(10% 0 44% 0); }
+  1.8% { opacity: 1; transform: translate(4px, 1px); clip-path: inset(0); }
+  2.4% { opacity: 1; transform: none; clip-path: inset(0); }
+  7.8% { opacity: 0.65; transform: translate(9px, 0); clip-path: inset(32% 0 30% 0); }
+  8.4% { opacity: 1; transform: none; clip-path: inset(0); }
+  13.8% { opacity: 1; transform: translate(-6px, 1px) skewX(5deg); clip-path: inset(60% 0 0 0); }
+  14.4% { opacity: 1; transform: none; clip-path: inset(0); }
+  18.2% { opacity: 1; transform: translate(13px, -1px) skewX(-9deg); clip-path: inset(0 0 48% 0); }
+  18.8% { opacity: 0.35; transform: translate(-16px, 1px) skewX(7deg); clip-path: inset(52% 0 2% 0); }
+  19.4% { opacity: 1; transform: translate(6px, 0); clip-path: inset(16% 0 24% 0); }
+  20%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 100% 0); }
+}
+
+@keyframes home-prompt-tear-a {
+  0% { opacity: 0.95; transform: translate(14px, 0); clip-path: inset(46% 0 0 0); }
+  0.6% { opacity: 0.9; transform: translate(-18px, 1px); clip-path: inset(0 0 60% 0); }
+  1.2% { opacity: 0.85; transform: translate(10px, -1px); clip-path: inset(54% 0 6% 0); }
+  1.8% { opacity: 0.45; transform: translate(-5px, 0); clip-path: inset(0 0 70% 0); }
+  2.4% { opacity: 0; transform: none; clip-path: inset(0); }
+  7.8% { opacity: 0.9; transform: translate(-15px, 0); clip-path: inset(0 0 52% 0); }
+  8.4% { opacity: 0; transform: none; }
+  13.8% { opacity: 0.85; transform: translate(12px, 0); clip-path: inset(0 0 46% 0); }
+  14.4% { opacity: 0; transform: none; }
+  18.2% { opacity: 0.95; transform: translate(-20px, 1px); clip-path: inset(42% 0 0 0); }
+  18.8% { opacity: 0.8; transform: translate(16px, 0); clip-path: inset(0 0 42% 0); }
+  19.4% { opacity: 0.55; transform: translate(-8px, -1px); clip-path: inset(26% 0 28% 0); }
+  20%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+}
+
+@keyframes home-prompt-tear-b {
+  0% { opacity: 0.8; transform: translate(-16px, 1px); clip-path: inset(6% 0 58% 0); }
+  0.6% { opacity: 0.85; transform: translate(11px, 0); clip-path: inset(62% 0 0 0); }
+  1.2% { opacity: 0.75; transform: translate(-13px, 0); clip-path: inset(0 0 38% 0); }
+  1.8%, 7.2% { opacity: 0; transform: none; }
+  7.8% { opacity: 0.8; transform: translate(17px, 1px); clip-path: inset(56% 0 0 0); }
+  8.4%, 13.2% { opacity: 0; transform: none; }
+  13.8% { opacity: 0.7; transform: translate(-10px, 0); clip-path: inset(50% 0 4% 0); }
+  14.4%, 17.6% { opacity: 0; transform: none; }
+  18.2% { opacity: 0.9; transform: translate(18px, 0); clip-path: inset(4% 0 50% 0); }
+  18.8% { opacity: 0.75; transform: translate(-12px, 1px); clip-path: inset(44% 0 6% 0); }
+  19.4%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes home-prompt-bar {
+  0% { opacity: 0.9; top: 15%; }
+  0.6% { opacity: 0.85; top: 72%; }
+  1.2% { opacity: 0.45; top: 38%; }
+  1.8%, 7.2% { opacity: 0; }
+  7.8% { opacity: 0.8; top: 58%; }
+  8.4%, 13.2% { opacity: 0; }
+  13.8% { opacity: 0.7; top: 22%; }
+  14.4%, 17.6% { opacity: 0; }
+  18.2% { opacity: 0.95; top: 80%; }
+  18.8% { opacity: 0.55; top: 12%; }
+  19.4%, 100% { opacity: 0; }
+}
+
+@keyframes home-prompt-scan {
+  0%, 1.8% { opacity: 0.7; }
+  2.4%, 7.2% { opacity: 0; }
+  7.8% { opacity: 0.55; }
+  8.4%, 13.2% { opacity: 0; }
+  13.8% { opacity: 0.5; }
+  14.4%, 17.6% { opacity: 0; }
+  18.2%, 19.4% { opacity: 0.7; }
+  20%, 100% { opacity: 0; }
+}
+
+/* Two lines plus one empty turn. Same 4.2s hold and the same tear, on a 12.6s loop.
+   Stops are the five-line stops times 5/3, so each hit lands at the same moment in the beat.
+   Nothing is drawn for the third beat. */
+.home-prompts-3 .home-slice,
+.home-prompts-3 .home-slice[data-slice="0"]::before,
+.home-prompts-3 .home-slice[data-slice="0"]::after {
+  animation-duration: 12.6s;
+}
+.home-prompts-3 .home-slice[data-slice="0"] { animation-name: home-prompt-main-3; }
+.home-prompts-3 .home-slice[data-slice="1"] { animation-name: home-prompt-tear-a-3; }
+.home-prompts-3 .home-slice[data-slice="2"] { animation-name: home-prompt-tear-b-3; }
+.home-prompts-3 .home-slice[data-slice="0"]::before { animation-name: home-prompt-bar-3; }
+.home-prompts-3 .home-slice[data-slice="0"]::after { animation-name: home-prompt-scan-3; }
+
+@keyframes home-prompt-main-3 {
+  0% { opacity: 1; transform: translate(-11px, 1px) skewX(-7deg); clip-path: inset(0 0 58% 0); }
+  1% { opacity: 0.3; transform: translate(15px, -1px) skewX(8deg); clip-path: inset(46% 0 4% 0); }
+  2% { opacity: 1; transform: translate(-7px, 0) skewX(-3deg); clip-path: inset(10% 0 44% 0); }
+  3% { opacity: 1; transform: translate(4px, 1px); clip-path: inset(0); }
+  4% { opacity: 1; transform: none; clip-path: inset(0); }
+  13% { opacity: 0.65; transform: translate(9px, 0); clip-path: inset(32% 0 30% 0); }
+  14% { opacity: 1; transform: none; clip-path: inset(0); }
+  23% { opacity: 1; transform: translate(-6px, 1px) skewX(5deg); clip-path: inset(60% 0 0 0); }
+  24% { opacity: 1; transform: none; clip-path: inset(0); }
+  30.333% { opacity: 1; transform: translate(13px, -1px) skewX(-9deg); clip-path: inset(0 0 48% 0); }
+  31.333% { opacity: 0.35; transform: translate(-16px, 1px) skewX(7deg); clip-path: inset(52% 0 2% 0); }
+  32.333% { opacity: 1; transform: translate(6px, 0); clip-path: inset(16% 0 24% 0); }
+  33.333%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 100% 0); }
+}
+
+@keyframes home-prompt-tear-a-3 {
+  0% { opacity: 0.95; transform: translate(14px, 0); clip-path: inset(46% 0 0 0); }
+  1% { opacity: 0.9; transform: translate(-18px, 1px); clip-path: inset(0 0 60% 0); }
+  2% { opacity: 0.85; transform: translate(10px, -1px); clip-path: inset(54% 0 6% 0); }
+  3% { opacity: 0.45; transform: translate(-5px, 0); clip-path: inset(0 0 70% 0); }
+  4% { opacity: 0; transform: none; clip-path: inset(0); }
+  13% { opacity: 0.9; transform: translate(-15px, 0); clip-path: inset(0 0 52% 0); }
+  14% { opacity: 0; transform: none; }
+  23% { opacity: 0.85; transform: translate(12px, 0); clip-path: inset(0 0 46% 0); }
+  24% { opacity: 0; transform: none; }
+  30.333% { opacity: 0.95; transform: translate(-20px, 1px); clip-path: inset(42% 0 0 0); }
+  31.333% { opacity: 0.8; transform: translate(16px, 0); clip-path: inset(0 0 42% 0); }
+  32.333% { opacity: 0.55; transform: translate(-8px, -1px); clip-path: inset(26% 0 28% 0); }
+  33.333%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+}
+
+@keyframes home-prompt-tear-b-3 {
+  0% { opacity: 0.8; transform: translate(-16px, 1px); clip-path: inset(6% 0 58% 0); }
+  1% { opacity: 0.85; transform: translate(11px, 0); clip-path: inset(62% 0 0 0); }
+  2% { opacity: 0.75; transform: translate(-13px, 0); clip-path: inset(0 0 38% 0); }
+  3%, 12% { opacity: 0; transform: none; }
+  13% { opacity: 0.8; transform: translate(17px, 1px); clip-path: inset(56% 0 0 0); }
+  14%, 22% { opacity: 0; transform: none; }
+  23% { opacity: 0.7; transform: translate(-10px, 0); clip-path: inset(50% 0 4% 0); }
+  24%, 29.333% { opacity: 0; transform: none; }
+  30.333% { opacity: 0.9; transform: translate(18px, 0); clip-path: inset(4% 0 50% 0); }
+  31.333% { opacity: 0.75; transform: translate(-12px, 1px); clip-path: inset(44% 0 6% 0); }
+  32.333%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes home-prompt-bar-3 {
+  0% { opacity: 0.9; top: 15%; }
+  1% { opacity: 0.85; top: 72%; }
+  2% { opacity: 0.45; top: 38%; }
+  3%, 12% { opacity: 0; }
+  13% { opacity: 0.8; top: 58%; }
+  14%, 22% { opacity: 0; }
+  23% { opacity: 0.7; top: 22%; }
+  24%, 29.333% { opacity: 0; }
+  30.333% { opacity: 0.95; top: 80%; }
+  31.333% { opacity: 0.55; top: 12%; }
+  32.333%, 100% { opacity: 0; }
+}
+
+@keyframes home-prompt-scan-3 {
+  0%, 3% { opacity: 0.7; }
+  4%, 12% { opacity: 0; }
+  13% { opacity: 0.55; }
+  14%, 22% { opacity: 0; }
+  23% { opacity: 0.5; }
+  24%, 29.333% { opacity: 0; }
+  30.333%, 32.333% { opacity: 0.7; }
+  33.333%, 100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -199,4 +467,23 @@ main.home {
     white-space: normal;
   }
   .home-words { display: none; }
+  .home-prompts { display: none; }
+  .home-prompt-live {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: nowrap;
+  }
+  .home-prompt-more {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }

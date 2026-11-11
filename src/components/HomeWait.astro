@@ -1,5 +1,6 @@
 ---
 // Shared home and 404 terminal: the waiting icon, a pulsing carousel, and a prompt.
+// Home passes prompts (a glitching carousel). 404 passes one prompt string.
 import Stars from "./Stars.astro";
 import "../styles/home.css";
 import waitIcon from "../styles/theme/icons/wait.svg?url";
@@ -9,16 +10,25 @@ interface Part {
   tone?: string | null;
 }
 
+interface PromptPiece {
+  text: string;
+  brand?: boolean;
+}
+
 interface Props {
   parts: Part[];
-  prompt: string;
+  prompt?: string;
+  prompts?: PromptPiece[][];
   // Screen-reader sentence, also shown when motion is reduced. Defaults to the words joined up.
   sentence?: string;
 }
 
-const { parts, prompt, sentence } = Astro.props;
+const { parts, prompt, prompts, sentence } = Astro.props;
 const phrase = sentence ?? parts.map((p) => p.text).join(" ");
 const countClass = parts.length === 3 ? "home-words home-words-3" : "home-words";
+const promptLines = prompts ?? [];
+const promptMore = promptLines.slice(1).map((line) => line.map((piece) => piece.text).join("")).join(". ");
+const slices = ["0", "1", "2"];
 
 // W-words colour only the first W; every other tinted item is coloured in full.
 const mark = (p: Part) =>
@@ -46,6 +56,28 @@ const mark = (p: Part) =>
         })}
       </span>
     </div>
-    <p class="r-prompt home-status">{prompt}</p>
+    <p class="r-prompt home-status">
+      {promptLines.length > 0 ? (
+        <>
+          <span class="home-prompt-live">
+            <span class="home-prompt-primary">
+              {promptLines[0].map((piece) => piece.brand ? <span class="home-brand">{piece.text}</span> : piece.text)}
+            </span>
+            {promptMore && <span class="home-prompt-more">. {promptMore}</span>}
+          </span>
+          <span class:list={["home-prompts", promptLines.length === 2 && "home-prompts-3"]} aria-hidden="true">
+            {promptLines.map((line) => (
+              <span class:list={["home-prompt", line.some((piece) => piece.brand) && "home-prompt-url"]}>
+                {slices.map((slice) => (
+                  <span class="home-slice" data-slice={slice}>
+                    {line.map((piece) => piece.brand ? <span class="home-brand">{piece.text}</span> : piece.text)}
+                  </span>
+                ))}
+              </span>
+            ))}
+          </span>
+        </>
+      ) : prompt}
+    </p>
   </div>
 </main>
