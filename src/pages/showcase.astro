@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 import "../styles/theme/doc.css";
 import "../styles/ui.css";
 import palette from "../styles/palette.json";
+import waitIcon from "../styles/theme/icons/wait.svg?url";
 
 // Sample picture: the 3x1 banner (Drive assets/banners/banner-3x1.png) at 1600 px.
 const banner = "https://lh3.googleusercontent.com/d/1EG6RdL2cQLBFWo_OEUmsheCx0SJd2ft9=w1600";
@@ -76,7 +77,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <hr>
     <section class="sc-section" id="navigation">
       <h2 class="sc-label">Navigation</h2>
-      <div class="sc-nav-bar">
+      <div class="sc-nav-bar r-unguarded">
         <a class="sc-nav-logo" href="/" aria-label="Enterprise-R home">
           <img class="sc-nav-logo-wide" src="/assets/logo-wide.svg" width="320" height="61" alt="">
           <img class="sc-nav-logo-compact" src="/assets/logo-compact.svg" width="320" height="128" alt="">
@@ -191,8 +192,8 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <figure><button class="r-btn" type="reset">Reset</button><figcaption class="sc-cap">Reset</figcaption></figure>
         <figure><button class="r-btn r-cancel" type="button">Cancel</button><figcaption class="sc-cap">Cancel</figcaption></figure>
         <figure><button class="r-btn r-cancel is-hover" type="button">Cancel</button><figcaption class="sc-cap">Cancel, hover</figcaption></figure>
-        <figure><a class="r-btn" aria-disabled="true">Off</a><figcaption class="sc-cap">Disabled</figcaption></figure>
-        <figure><button class="r-btn" type="button" disabled>Off</button><figcaption class="sc-cap">Disabled button</figcaption></figure>
+        <figure><a class="r-btn r-wait" aria-disabled="true">Off</a><figcaption class="sc-cap">Disabled</figcaption></figure>
+        <figure><button class="r-btn r-wait" type="button" disabled>Off</button><figcaption class="sc-cap">Disabled button</figcaption></figure>
       </div>
       <p class="sc-note">No role class is Generic: Orange, Amber (Accent) on hover. The current page and <code>.r-primary</code> are Green (sage), Bright green on hover. <code>.r-clear</code>, and any reset button, is Bright blue. <code>.r-cancel</code> is Red. Keyboard focus is a 2px Bright foreground outline (<code>--r-focus</code>, 3px off).</p>
       <p class="sc-note" id="contrast">Label contrast: …</p>
@@ -246,7 +247,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <div class="sc-form">
           <div class="sc-field"><label for="f-name">Name</label><input id="f-name" placeholder="Jean-Luc"></div>
           <div class="sc-field"><label for="f-mail">E-mail (focus)</label><input class="is-focus" id="f-mail" type="email" value="crew@enterprise-r.com"></div>
-          <div class="sc-field"><label for="f-dis">Ship ID (disabled)</label><input id="f-dis" value="NCC-1701-R" disabled></div>
+          <div class="sc-field"><label for="f-dis">Ship ID (disabled)</label><input id="f-dis" class="r-wait" value="NCC-1701-R" disabled></div>
           <div class="sc-field"><label for="f-sel">Department</label><select id="f-sel"><option>Engineering</option><option>Science</option><option>Command</option></select></div>
           <div class="sc-field sc-span-2"><label for="f-msg">Message</label><textarea id="f-msg" placeholder="Your message"></textarea></div>
           <div class="sc-field"><span class="sc-cap">Options</span><div class="sc-checks"><label><input type="checkbox" checked> Updates</label><label><input type="checkbox"> Newsletter</label></div></div>
@@ -256,18 +257,18 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
             <div class="r-rows-head" aria-hidden="true"><span></span><span>Name</span><span>Role</span></div>
             <div class="r-rows-list">
               <div class="r-row">
-                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 1" data-tip="Remove row 1"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 1"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
                 <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[0][name]" value="Beverly Crusher" placeholder="Name" autocomplete="off">
                 <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[0][role]" value="Chief medical officer" placeholder="Role" autocomplete="off">
               </div>
               <div class="r-row">
-                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 2" data-tip="Remove row 2"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
+                <span class="r-row-bubble"><button type="button" class="r-row-remove" aria-label="Remove row 2"><span class="r-row-glyph" aria-hidden="true">×</span></button></span>
                 <input data-name="team[{i}][name]" data-label="Name, row {n}" name="team[1][name]" value="Geordi La Forge" placeholder="Name" autocomplete="off">
                 <input data-name="team[{i}][role]" data-label="Role, row {n}" name="team[1][role]" value="Chief engineer" placeholder="Role" autocomplete="off">
               </div>
             </div>
             <div class="r-rows-foot">
-              <span class="r-row-bubble"><button type="button" class="r-row-add" aria-label="Add row" data-tip="Add row"><span class="r-row-glyph" aria-hidden="true">+</span></button></span>
+              <span class="r-row-bubble"><button type="button" class="r-row-add" aria-label="Add row"><span class="r-row-glyph" aria-hidden="true">+</span></button></span>
               <div class="r-row-ghost" aria-hidden="true">
                 <input placeholder="Name" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
                 <input placeholder="Role" disabled tabindex="-1" aria-hidden="true" autocomplete="off">
@@ -279,6 +280,16 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         </div>
       </form>
       <p class="sc-note">A dynamic list in the form: add or remove rows of name and role. The control is quiet until you need it. <code>.r-rows</code> in the theme, with <code>theme/rows.js</code>.</p>
+    </section>
+
+    <hr>
+    <section class="sc-section" id="working">
+      <h2 class="sc-label">Working</h2>
+      <div class="r-card sc-working" role="status">
+        <img src={waitIcon} width="32" height="32" alt="">
+        <span>Working</span>
+      </div>
+      <p class="sc-note">Wait while we work. Every disabled control uses the W cursor. A button accepts a click after the pointer stops, for ten seconds, and goes off briefly after a click; a discarded click flashes the W until it can be clicked.</p>
     </section>
 
     <hr>

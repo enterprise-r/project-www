@@ -246,6 +246,16 @@ main.showcase + footer p {
   }
 }
 
+/* Working row: a compact card with the animated waiting icon. */
+.sc-working {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: max-content;
+  max-width: 100%;
+}
+.sc-working img { display: block; width: 32px; height: 32px; }
+
 @media (max-width: 900px) {
   main.showcase { padding: 2rem 1rem 4rem; }
   .sc-grid.cols-2, .sc-grid.cols-3, .sc-form { grid-template-columns: 1fr; }
