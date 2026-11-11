@@ -5,8 +5,8 @@ const page = {
   description: "Enterprise-R is opening the way for companies to run on AI and people, working from the same book and, as never before, by the book.",
 };
 const words = ["Please", "Wait", "While", "We", "Work", "on", "Work", "Cards"];
-// First W of each W-word, in order: Amber, Bright foreground, Magenta, sage, Bright green.
-const wTones = ["accent", "fg-bright", "magenta", "green", "green-bright"];
+// First W of each W-word, in order: Amber, Orange, Magenta, sage, Bright green.
+const wTones = ["accent", "orange", "magenta", "green", "green-bright"];
 let wTone = 0;
 const parts = words.map((text) => (
   text.startsWith("W") ? { text, tone: wTones[wTone++] } : { text, tone: null }
