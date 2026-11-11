@@ -99,9 +99,9 @@ main { flex: 1 0 auto; width: 100%; }
   .sc-nav-logo {
     grid-column: 1;
     justify-self: start;
-    /* Half pill: straight on the docked left edge, rounded on the right. */
-    margin-inline-start: calc(-1 * var(--bar-pad-x));
-    border-radius: 0 999px 999px 0;
+    /* Same left inset as the breadcrumb. Straight left edge with the same
+       soft 0.25rem corner as a crumb, pill-round on the right. */
+    border-radius: 0.25rem 999px 999px 0.25rem;
   }
   .sc-nav-logo img.sc-nav-logo-wide { display: none; }
   .sc-nav-logo img.sc-nav-logo-compact { display: block; }
