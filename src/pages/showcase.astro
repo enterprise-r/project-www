@@ -6,9 +6,6 @@ import "../styles/ui.css";
 import palette from "../styles/palette.json";
 import waitIcon from "../styles/theme/icons/wait.svg?url";
 
-// Sample picture: the 3x1 banner (Drive assets/banners/banner-3x1.png) at 1600 px.
-const banner = "https://lh3.googleusercontent.com/d/1EG6RdL2cQLBFWo_OEUmsheCx0SJd2ft9=w1600";
-
 // Swatches come from the palette source, copied from project-branding.
 const groups = palette.groups.map((g) => ({ ...g, colours: g.colours.filter((c) => c.var !== "--ui-accent") }));
 const colours = palette.groups.flatMap((g) => g.colours);
@@ -334,7 +331,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <section class="sc-section" id="terminal">
       <h2 class="sc-label">Terminal</h2>
       <figure class="sc-term-sample">
-        <div class="sc-bd"><div class="photo" style={`background-image: url(${banner})`}></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
+        <div class="sc-bd"><div class="photo"></div><div class="sc-term-stack"><div class="r-term term-head"><div class="about-heading">Heading</div></div><div class="r-term"><p style="margin:0">Terminal panel: a small dark backing ({hex("--ui-bg")} at 72%) that hugs a block of text on a picture, with a thin inactive border and a soft blur.</p></div></div></div>
         <figcaption class="sc-cap">Terminal panel, for text over a picture</figcaption>
       </figure>
     </section>
@@ -343,11 +340,11 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <section class="sc-section" id="code">
       <h2 class="sc-label">Code</h2>
       <pre><code><span class="k">:root</span> {"{"}
-  <span class="k">--r-primary</span>: <span class="v">var(--ui-green)</span>;         <span class="c">/* Green (sage) {hex("--ui-green")} */</span>
+  <span class="k">--r-primary</span>: <span class="v">var(--ui-green)</span>;              <span class="c">/* Green (sage) {hex("--ui-green")} */</span>
   <span class="k">--r-primary-hover</span>: <span class="v">var(--ui-green-bright)</span>; <span class="c">/* Bright green {hex("--ui-green-bright")} */</span>
-  <span class="k">--r-btn</span>: <span class="v">var(--ui-orange)</span>;              <span class="c">/* Orange {hex("--ui-orange")} */</span>
-  <span class="k">--r-btn-hover</span>: <span class="v">var(--ui-accent)</span>;        <span class="c">/* Amber (Accent) {hex("--ui-accent")} */</span>
-  <span class="k">--r-text</span>: <span class="v">var(--ui-fg)</span>;                <span class="c">/* {hex("--ui-fg")} */</span>
+  <span class="k">--r-btn</span>: <span class="v">var(--ui-orange)</span>;                 <span class="c">/* Orange {hex("--ui-orange")} */</span>
+  <span class="k">--r-btn-hover</span>: <span class="v">var(--ui-accent)</span>;           <span class="c">/* Amber (Accent) {hex("--ui-accent")} */</span>
+  <span class="k">--r-text</span>: <span class="v">var(--ui-fg)</span>;                    <span class="c">/* {hex("--ui-fg")} */</span>
 {"}"}</code></pre>
     </section>
 

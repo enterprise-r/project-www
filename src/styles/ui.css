@@ -50,7 +50,7 @@ main.showcase + footer p {
 .sc-dialog-actions { display: flex; justify-content: flex-end; gap: var(--r-gap); margin: 0; }
 .sc-dialog-open { display: flex; justify-content: center; margin-top: 1rem; }
 #accessibility table { margin-inline: auto; }
-.sc-glow-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.sc-glow-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.2rem; }
 
 .sc-states { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; align-items: flex-end; }
 .sc-states figure { margin: 0; display: grid; gap: 0.45rem; justify-items: start; }
@@ -154,6 +154,13 @@ main.showcase + footer p {
 .sc-bd { position: relative; height: 13rem; border-radius: 1rem; overflow: hidden; border: 1px solid var(--ui-border); background: var(--ui-bg); }
 .sc-bd .photo { position: absolute; inset: 0; background-color: var(--ui-bg); background-size: cover; background-repeat: no-repeat; }
 .sc-term-sample { margin: 1.25rem 0 0; }
+/* Home wallpaper, fitted to the width, shown as a horizontal stripe through the middle of the frame. */
+.sc-term-sample .photo {
+  background-image: url("/assets/warpchi.jpg");
+  background-size: 100% auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
 .sc-term-stack { position: absolute; left: 1.4rem; right: 1.4rem; top: 50%; transform: translateY(-50%); z-index: 2; }
 .sc-term-stack .r-term { max-width: 34rem; }
 .sc-term-stack .about-heading { margin: 0; font-family: var(--r-font-heading); font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
@@ -196,6 +203,7 @@ a.sc-closer-fill:hover {
   gap: 0.6rem;
   width: max-content;
   max-width: 100%;
+  margin-inline: auto;
 }
 .sc-working img { display: block; width: 32px; height: 32px; }
 
