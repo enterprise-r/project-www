@@ -141,17 +141,6 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   <script>
     import "../styles/theme/guard.js";
   </script>
-  {header && (
-    <script is:inline>
-      // Logo: scrolled down on Home, back to the top; otherwise, the home page.
-      document.querySelectorAll("html.is-home .sc-nav-logo a").forEach((el) => {
-        el.addEventListener("click", (e) => {
-          if (location.pathname.replace(/\/?$/, "/") !== "/") return;
-          if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
-        });
-      });
-    </script>
-  )}
   <slot name="scripts" />
 </body>
 </html>

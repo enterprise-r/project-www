@@ -35,7 +35,6 @@
 
       const el = document.createElement("span");
       el.className = "home-star";
-      el.dataset.half = topHalf ? "top" : "bottom";
       el.style.top = y + "vh";
       el.style.transform = "rotate(" + tilt + "deg)";
       el.style.setProperty("--star-size", 1.5 * scale + "px");
@@ -86,15 +85,6 @@
 </script>
 
 <style is:global>
-  /* Above the wallpaper, behind the header, footer, and the terminal.
-     Do not raise main itself: it fills the viewport and would hide the stars. */
-  html.is-home header,
-  html.is-home footer,
-  html.is-home .home-wait {
-    position: relative;
-    z-index: 1;
-  }
-
   .home-stars {
     position: fixed;
     inset: 0;

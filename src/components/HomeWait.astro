@@ -1,6 +1,5 @@
 ---
 // Home and 404 terminal: waiting icon, word carousel, prompt carousel.
-// `prompts` is the glitching lines. `prompt` is one static line when there is no carousel.
 import Stars from "./Stars.astro";
 import "../styles/home.css";
 import waitIcon from "../styles/theme/icons/wait.svg?url";
@@ -17,17 +16,15 @@ interface PromptPiece {
 
 interface Props {
   parts: Part[];
-  prompt?: string;
-  prompts?: PromptPiece[][];
+  prompts: PromptPiece[][];
   // Screen-reader sentence, also shown when motion is reduced. Defaults to the words joined up.
   sentence?: string;
 }
 
-const { parts, prompt, prompts, sentence } = Astro.props;
+const { parts, prompts, sentence } = Astro.props;
 const phrase = sentence ?? parts.map((p) => p.text).join(" ");
 const countClass = parts.length === 3 ? "home-words home-words-3" : "home-words";
-const promptLines = prompts ?? [];
-const promptMore = promptLines.slice(1).map((line) => line.map((piece) => piece.text).join("")).join(". ");
+const promptMore = prompts.slice(1).map((line) => line.map((piece) => piece.text).join("")).join(". ");
 const slices = ["0", "1", "2"];
 
 // W-words colour only the first W; every other tinted item is coloured in full.
@@ -57,27 +54,23 @@ const mark = (p: Part) =>
       </span>
     </div>
     <p class="r-prompt home-status">
-      {promptLines.length > 0 ? (
-        <>
-          <span class="home-prompt-live">
-            <span class="home-prompt-primary">
-              {promptLines[0].map((piece) => piece.brand ? <span class="home-brand">{piece.text}</span> : piece.text)}
-            </span>
-            {promptMore && <span class="home-prompt-more">. {promptMore}</span>}
-          </span>
-          <span class:list={["home-prompts", promptLines.length === 2 && "home-prompts-3"]} aria-hidden="true">
-            {promptLines.map((line) => (
-              <span class:list={["home-prompt", line.some((piece) => piece.brand) && "home-prompt-url"]}>
-                {slices.map((slice) => (
-                  <span class="home-slice" data-slice={slice}>
-                    {line.map((piece) => piece.brand ? <span class="home-brand">{piece.text}</span> : piece.text)}
-                  </span>
-                ))}
+      <span class="home-prompt-live">
+        <span class="home-prompt-primary">
+          {prompts[0].map((piece) => piece.brand ? <span class="home-brand">{piece.text}</span> : piece.text)}
+        </span>
+        {promptMore && <span class="home-prompt-more">. {promptMore}</span>}
+      </span>
+      <span class="home-prompts" aria-hidden="true">
+        {prompts.map((line) => (
+          <span class:list={["home-prompt", line.some((piece) => piece.brand) && "home-prompt-url"]}>
+            {slices.map((slice) => (
+              <span class="home-slice" data-slice={slice}>
+                {line.map((piece) => piece.brand ? <span class="home-brand">{piece.text}</span> : piece.text)}
               </span>
             ))}
           </span>
-        </>
-      ) : prompt}
+        ))}
+      </span>
     </p>
   </div>
 </main>

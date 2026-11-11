@@ -9,8 +9,7 @@
    A large terminal sits in the middle, with the waiting icon, a pulsing word
    carousel, and a prompt underneath. The prompt is its own carousel, each line
    held three times as long as one Please Wait word, tearing in like a broken
-   screen. Home runs five lines on a 21s loop. The 404 runs three lines on that
-   same loop, so the last two beats are empty. */
+   screen. Home runs five prompt lines. The 404 runs three, on the same loop. */
 html.is-home {
   --wall-w: 3840;
   --wall-h: 2160;
@@ -51,11 +50,20 @@ html.not-found body::before {
 }
 
 /* A stacking context so the wallpaper (z-index -1) paints above the page
-   colour and below the header, the footer, and the terminal. */
+   colour and below the header, the footer, and the terminal.
+   The star layer is fixed at z-index 0, so that chrome sits above it.
+   Do not raise main itself: it fills the viewport and would hide the stars. */
 html.is-home body {
   position: relative;
   z-index: 0;
   background: transparent;
+}
+
+html.is-home header,
+html.is-home footer,
+html.is-home .home-wait {
+  position: relative;
+  z-index: 1;
 }
 
 /* Home and 404: drop the header and footer stripe fills. Buttons stay filled.
@@ -274,11 +282,8 @@ html.not-found .home-words {
 }
 
 /* Lines stack in one slot, as wide as the longest. Each holds for 4.2s, three times
-   the 1.4s Please Wait word. Five lines loop in 21s. Two lines (.home-prompts-3)
-   use three beats of that same hold: the two lines, then one empty turn, so the
-   loop is 12.6s. The tear is the five-line tear scaled onto the beat. The change
-   is a broken screen: the line slices, jumps, and splits into magenta and cyan,
-   then locks. */
+   the 1.4s Please Wait word. Five lines loop in 21s. The change is a broken
+   screen: the line slices, jumps, and splits into magenta and cyan, then locks. */
 .home-prompts {
   display: grid;
   justify-items: center;
@@ -427,91 +432,6 @@ html.not-found .home-words {
   14.4%, 17.6% { opacity: 0; }
   18.2%, 19.4% { opacity: 0.7; }
   20%, 100% { opacity: 0; }
-}
-
-/* Two lines plus one empty turn. Same 4.2s hold and the same tear, on a 12.6s loop.
-   Stops are the five-line stops times 5/3, so each hit lands at the same moment in the beat.
-   Nothing is drawn for the third beat. */
-.home-prompts-3 .home-slice,
-.home-prompts-3 .home-slice[data-slice="0"]::before,
-.home-prompts-3 .home-slice[data-slice="0"]::after {
-  animation-duration: 12.6s;
-}
-.home-prompts-3 .home-slice[data-slice="0"] { animation-name: home-prompt-main-3; }
-.home-prompts-3 .home-slice[data-slice="1"] { animation-name: home-prompt-tear-a-3; }
-.home-prompts-3 .home-slice[data-slice="2"] { animation-name: home-prompt-tear-b-3; }
-.home-prompts-3 .home-slice[data-slice="0"]::before { animation-name: home-prompt-bar-3; }
-.home-prompts-3 .home-slice[data-slice="0"]::after { animation-name: home-prompt-scan-3; }
-
-@keyframes home-prompt-main-3 {
-  0% { opacity: 1; transform: translate(-11px, 1px) skewX(-7deg); clip-path: inset(0 0 58% 0); }
-  1% { opacity: 0.3; transform: translate(15px, -1px) skewX(8deg); clip-path: inset(46% 0 4% 0); }
-  2% { opacity: 1; transform: translate(-7px, 0) skewX(-3deg); clip-path: inset(10% 0 44% 0); }
-  3% { opacity: 1; transform: translate(4px, 1px); clip-path: inset(0); }
-  4% { opacity: 1; transform: none; clip-path: inset(0); }
-  13% { opacity: 0.65; transform: translate(9px, 0); clip-path: inset(32% 0 30% 0); }
-  14% { opacity: 1; transform: none; clip-path: inset(0); }
-  23% { opacity: 1; transform: translate(-6px, 1px) skewX(5deg); clip-path: inset(60% 0 0 0); }
-  24% { opacity: 1; transform: none; clip-path: inset(0); }
-  30.333% { opacity: 1; transform: translate(13px, -1px) skewX(-9deg); clip-path: inset(0 0 48% 0); }
-  31.333% { opacity: 0.35; transform: translate(-16px, 1px) skewX(7deg); clip-path: inset(52% 0 2% 0); }
-  32.333% { opacity: 1; transform: translate(6px, 0); clip-path: inset(16% 0 24% 0); }
-  33.333%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 100% 0); }
-}
-
-@keyframes home-prompt-tear-a-3 {
-  0% { opacity: 0.95; transform: translate(14px, 0); clip-path: inset(46% 0 0 0); }
-  1% { opacity: 0.9; transform: translate(-18px, 1px); clip-path: inset(0 0 60% 0); }
-  2% { opacity: 0.85; transform: translate(10px, -1px); clip-path: inset(54% 0 6% 0); }
-  3% { opacity: 0.45; transform: translate(-5px, 0); clip-path: inset(0 0 70% 0); }
-  4% { opacity: 0; transform: none; clip-path: inset(0); }
-  13% { opacity: 0.9; transform: translate(-15px, 0); clip-path: inset(0 0 52% 0); }
-  14% { opacity: 0; transform: none; }
-  23% { opacity: 0.85; transform: translate(12px, 0); clip-path: inset(0 0 46% 0); }
-  24% { opacity: 0; transform: none; }
-  30.333% { opacity: 0.95; transform: translate(-20px, 1px); clip-path: inset(42% 0 0 0); }
-  31.333% { opacity: 0.8; transform: translate(16px, 0); clip-path: inset(0 0 42% 0); }
-  32.333% { opacity: 0.55; transform: translate(-8px, -1px); clip-path: inset(26% 0 28% 0); }
-  33.333%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
-}
-
-@keyframes home-prompt-tear-b-3 {
-  0% { opacity: 0.8; transform: translate(-16px, 1px); clip-path: inset(6% 0 58% 0); }
-  1% { opacity: 0.85; transform: translate(11px, 0); clip-path: inset(62% 0 0 0); }
-  2% { opacity: 0.75; transform: translate(-13px, 0); clip-path: inset(0 0 38% 0); }
-  3%, 12% { opacity: 0; transform: none; }
-  13% { opacity: 0.8; transform: translate(17px, 1px); clip-path: inset(56% 0 0 0); }
-  14%, 22% { opacity: 0; transform: none; }
-  23% { opacity: 0.7; transform: translate(-10px, 0); clip-path: inset(50% 0 4% 0); }
-  24%, 29.333% { opacity: 0; transform: none; }
-  30.333% { opacity: 0.9; transform: translate(18px, 0); clip-path: inset(4% 0 50% 0); }
-  31.333% { opacity: 0.75; transform: translate(-12px, 1px); clip-path: inset(44% 0 6% 0); }
-  32.333%, 100% { opacity: 0; transform: none; }
-}
-
-@keyframes home-prompt-bar-3 {
-  0% { opacity: 0.9; top: 15%; }
-  1% { opacity: 0.85; top: 72%; }
-  2% { opacity: 0.45; top: 38%; }
-  3%, 12% { opacity: 0; }
-  13% { opacity: 0.8; top: 58%; }
-  14%, 22% { opacity: 0; }
-  23% { opacity: 0.7; top: 22%; }
-  24%, 29.333% { opacity: 0; }
-  30.333% { opacity: 0.95; top: 80%; }
-  31.333% { opacity: 0.55; top: 12%; }
-  32.333%, 100% { opacity: 0; }
-}
-
-@keyframes home-prompt-scan-3 {
-  0%, 3% { opacity: 0.7; }
-  4%, 12% { opacity: 0; }
-  13% { opacity: 0.55; }
-  14%, 22% { opacity: 0; }
-  23% { opacity: 0.5; }
-  24%, 29.333% { opacity: 0; }
-  30.333%, 32.333% { opacity: 0.7; }
-  33.333%, 100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

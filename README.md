@@ -61,7 +61,7 @@ A lockup is the wordmark and the mark together (wide and compact). The plate is 
 
 ## Pages
 
-The bar (`bar.css`) is one stripe: breadcrumbs on the left, the logo in the middle, one button on the right. Breakpoints follow the bar's width, not the window's. At 52rem and below the lockup becomes compact. At 40rem and below the compact logo docks to the left edge and the breadcrumbs wrap onto a second row. On Home the logo is the page heading (`h1`). Scrolled down on Home, that logo returns to the top. Otherwise it links home.
+The bar (`bar.css`) is one stripe: breadcrumbs on the left, the logo in the middle, one button on the right. Breakpoints follow the bar's width, not the window's. At 52rem and below the lockup becomes compact. At 40rem and below the compact logo docks to the left edge and the breadcrumbs wrap onto a second row. On Home the logo is the page heading (`h1`). It links home.
 
 The ® crumb is Home. On Home it is the current page and does not navigate. When the logo docks, that crumb is hidden, because the docked logo already marks the root.
 
