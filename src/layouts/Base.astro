@@ -60,7 +60,7 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
 </head>
 <body>
   {header && (
-    <header>
+    <header class="r-unguarded">
       <Brand class="brand">
         <img class="brand-logo" src={logoWide} width="320" height="61" alt="Enterprise-R">
       </Brand>
@@ -80,6 +80,9 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   {header && (
     <Footer />
   )}
+  <script>
+    import "../styles/theme/guard.js";
+  </script>
   {header && (
     <script is:inline>
       // Home button: scrolled down, back to the top; at the top, the home page.
