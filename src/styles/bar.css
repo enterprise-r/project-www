@@ -1,6 +1,6 @@
 /* Title bar and the page column. Buttons are the theme's .r-btn.
-   Home is not one of them: Bright green, half a pill, and it does not change on hover.
-   The ® is the lone R. */
+   Breadcrumbs (.r-crumbs) sit on the left, with the ® root.
+   The title sits in the middle. "UI of the future" is a pill (.r-group) on the right. */
 :root {
   --bar-pad: 0.65rem;
   --bar-h: 7rem;
@@ -16,14 +16,18 @@ body {
 
 main { flex: 1 0 auto; width: 100%; }
 
-/* One full-width stripe. The title sits in the middle, the other pages at the bottom right.
-   Home floats on its own (.home-btn) at the bottom left. Narrow screens put the title on its own row. */
+/* One full-width stripe. The title sits in the middle. Narrow screens put the title on its own row. */
 header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: end;
   min-height: var(--bar-h);
   background-color: var(--ui-border);
+}
+
+header .r-crumbs {
+  grid-column: 1;
+  padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .brand {
@@ -40,49 +44,30 @@ header {
   height: auto;
 }
 
-header nav {
+header nav[aria-label="Main"] {
   grid-column: 3;
   display: flex;
   justify-content: flex-end;
   padding: var(--bar-pad) clamp(0.75rem, 2vw, 1.5rem);
 }
 
-.home-btn {
-  position: fixed;
-  top: calc(var(--bar-h) - var(--bar-pad) - var(--r-btn-h));
-  left: 0.35rem;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--r-btn-h);
-  min-width: 0;
-  padding: 0 0.95rem 0 0.65rem;
-  color: var(--ui-green-bright);
-  background-color: var(--ui-border);
-  border-radius: 0 calc(var(--r-btn-h) / 2) calc(var(--r-btn-h) / 2) 0;
-  font-family: var(--r-font-brand);
-  font-size: 0.95rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1;
-  text-transform: none;
-  text-decoration: none;
-}
-
-.home-btn:hover { color: var(--ui-green-bright); }
-
 @media (max-width: 640px) {
   /* Title row (wide logo, 6rem tall), then the nav row. Taller tap targets stay on
      the bar only — do not retune --r-btn-h on :root, or every theme button grows. */
   :root { --bar-h: calc(6rem + 2.75rem + 2 * var(--bar-pad)); }
-  header nav .r-btn,
-  .home-btn { --r-btn-h: 2.75rem; height: var(--r-btn-h); }
+  header .r-crumbs .r-btn,
+  header nav[aria-label="Main"] .r-btn { --r-btn-h: 2.75rem; height: var(--r-btn-h); }
   /* Two rows: the title row takes the page background, the nav row keeps the stripe. */
-  header { grid-template-columns: 1fr; background-color: var(--ui-bg); }
-  .brand { grid-column: 1; justify-self: center; display: flex; align-items: center; height: 6rem; }
+  header { grid-template-columns: 1fr auto; background-color: var(--ui-bg); }
+  .brand { grid-column: 1 / -1; justify-self: center; display: flex; align-items: center; height: 6rem; }
   .brand-logo { width: min(24.68rem, calc(100vw - 2rem)); }
-  header nav { grid-column: 1; background-color: var(--ui-border); }
-  header nav .r-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
-  .home-btn { padding: 0 1rem 0 0.7rem; }
+  header .r-crumbs {
+    grid-column: 1;
+    background-color: var(--ui-border);
+  }
+  header nav[aria-label="Main"] {
+    grid-column: 2;
+    background-color: var(--ui-border);
+  }
+  header nav[aria-label="Main"] .r-btn { min-width: 5.5rem; padding-bottom: 0.3rem; }
 }

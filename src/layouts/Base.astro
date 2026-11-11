@@ -17,23 +17,23 @@ interface Props {
 }
 const { title, description, noindex = false, header = true } = Astro.props;
 
-// First link sits on the left. Every other page sits on the right.
-const links = [
-  { href: "/", label: "®", name: "Home" },
-  { href: "/about/", label: "About" },
-];
-const homeLink = links[0];
-const restLinks = links.slice(1);
 const here = Astro.url.pathname.replace(/\/?$/, "/");
+const isHome = here === "/";
+const crumbs = [
+  { href: "/", label: "®", name: "Home", root: true },
+];
+if (here === "/about/") {
+  crumbs.push({ href: "/about/", label: "About", name: "About" });
+}
 // The title in the bar is the page heading on Home only.
-const Brand = here === homeLink.href ? "h1" : "div";
+const Brand = isHome ? "h1" : "div";
 const logoWide = "/assets/logo-wide.svg";
 const url = new URL(Astro.url.pathname, Astro.site).href;
 // Link preview: built by pages/og-image.png.ts from the wide logo.
 const ogImage = new URL("/og-image.png", Astro.site).href;
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class={isHome ? "is-home" : undefined}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,18 +61,27 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
 <body>
   {header && (
     <header class="r-unguarded">
+      <nav class="r-crumbs" aria-label="Breadcrumb">
+        <ol>
+          {crumbs.map((c) => (
+            <li>
+              <a
+                class:list={["r-btn", c.root && "r-crumb-root"]}
+                href={c.href}
+                aria-label={c.root ? c.name : undefined}
+                aria-current={here === c.href ? "page" : undefined}
+              >{c.label}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
       <Brand class="brand">
         <img class="brand-logo" src={logoWide} width="320" height="61" alt="Enterprise-R">
       </Brand>
-      <a class="home-btn" href={homeLink.href} aria-label={homeLink.name} aria-current={here === homeLink.href ? "page" : undefined}>{homeLink.label}</a>
       <nav aria-label="Main">
-        {restLinks.length > 0 && (
-          <span class="r-group">
-            {restLinks.map((l) => (
-              <a class="r-btn" href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>
-            ))}
-          </span>
-        )}
+        <span class="r-group">
+          <a class="r-btn" href="/showcase/">UI of the future</a>
+        </span>
       </nav>
     </header>
   )}
@@ -85,8 +94,8 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   </script>
   {header && (
     <script is:inline>
-      // Home button: scrolled down, back to the top; at the top, the home page.
-      document.querySelector(".home-btn").addEventListener("click", (e) => {
+      // Root crumb: scrolled down on Home, back to the top; otherwise, the home page.
+      document.querySelector(".r-crumb-root[aria-current='page']")?.addEventListener("click", (e) => {
         if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
       });
     </script>
