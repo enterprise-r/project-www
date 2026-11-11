@@ -13,28 +13,8 @@ const parts = words.map((text) => (
 ));
 
 import Base from "../layouts/Base.astro";
-import Stars from "../components/Stars.astro";
-import "../styles/home.css";
-import waitIcon from "../styles/theme/icons/wait.svg?url";
+import HomeWait from "../components/HomeWait.astro";
 ---
 <Base title={page.title} description={page.description}>
-  <Stars />
-  <main class="home">
-    <div class="r-term home-wait">
-      <div class="home-line">
-        <img src={waitIcon} width="32" height="32" alt="">
-        <p class="home-sentence">
-          {parts.map((p, i) => (
-            <>{i > 0 && " "}{p.tone ? <><span class={`home-w home-w-${p.tone}`}>W</span>{p.text.slice(1)}</> : p.text}</>
-          ))}
-        </p>
-        <span class="home-words" aria-hidden="true">
-          {parts.map((p) => (
-            <span>{p.tone ? <><span class={`home-w home-w-${p.tone}`}>W</span>{p.text.slice(1)}</> : p.text}</span>
-          ))}
-        </span>
-      </div>
-      <p class="r-prompt home-status">WE ARE WORKING HARD</p>
-    </div>
-  </main>
+  <HomeWait parts={parts} prompt="WE ARE WORKING HARD" />
 </Base>

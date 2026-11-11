@@ -3,15 +3,16 @@
 const page = {
   title: "Page not found · Enterprise-R",
   description: "This page does not exist.",
-  heading: "Page not found",
 };
+const parts = [
+  { text: "4", tone: "orange" },
+  { text: "0", tone: "magenta" },
+  { text: "4", tone: "green" },
+];
 
 import Base from "../layouts/Base.astro";
-import "../styles/about.css";
+import HomeWait from "../components/HomeWait.astro";
 ---
-<Base title={page.title} description={page.description} noindex>
-  <main>
-    <h1>{page.heading}</h1>
-    <p>This page does not exist. Go back to the <a href="/">home page</a>.</p>
-  </main>
+<Base title={page.title} description={page.description} noindex hero>
+  <HomeWait parts={parts} prompt="PAGE NOT FOUND" sentence="404" />
 </Base>

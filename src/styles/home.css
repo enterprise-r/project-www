@@ -1,4 +1,4 @@
-/* Home: the official wallpaper fills the viewport (cover, so it stretches on a small screen).
+/* Home and 404: the official wallpaper fills the viewport (cover, so it stretches on a small screen).
    Header and footer stripes are open so the wallpaper shows through.
    A large terminal sits in the middle, with the waiting icon, a pulsing word carousel,
    and a fixed prompt line underneath. */
@@ -19,7 +19,7 @@ html.is-home body {
   background: transparent;
 }
 
-/* Homepage only: drop the header and footer stripe fills. Buttons stay filled.
+/* Home and 404: drop the header and footer stripe fills. Buttons stay filled.
    Footer icons switch from Background (meant for the stripe) to Foreground, so they stay
    legible on the wallpaper. No added shadow or blur. */
 html.is-home header,
@@ -39,7 +39,7 @@ html.is-home .r-crumb-root[aria-current="page"]:active {
   cursor: default;
 }
 
-/* Home only: when the compact logo docks left, it already marks the root,
+/* When the compact logo docks left, it already marks the root,
    so the ® crumb and the slant that follows it can go. */
 @container (max-width: 40rem) {
   html.is-home .sc-nav-bar .r-crumbs li:first-child {
@@ -156,6 +156,21 @@ main.home {
   2.5% { transform: scale(1); }
   12.5% { opacity: 1; transform: scale(1); }
   14% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; }
+}
+
+/* Three items keep the same 1.4s slot and pulse, in a shorter loop, so the
+   sequence does not sit empty for five unused eight-word slots. */
+.home-words-3 > span {
+  animation-name: home-word-pulse-3;
+  animation-duration: 4.2s;
+}
+@keyframes home-word-pulse-3 {
+  0% { opacity: 0; transform: scale(0.86); }
+  3.2% { opacity: 1; transform: scale(1.08); }
+  6.6667% { transform: scale(1); }
+  33.3333% { opacity: 1; transform: scale(1); }
+  37.3333% { opacity: 0; transform: scale(1); }
   100% { opacity: 0; }
 }
 

@@ -14,16 +14,19 @@ interface Props {
   // The style guide is not indexed and draws no navigation bar.
   noindex?: boolean;
   header?: boolean;
+  // Wallpaper, open chrome, and the same crumbs as Home. Used by the 404.
+  hero?: boolean;
 }
-const { title, description, noindex = false, header = true } = Astro.props;
+const { title, description, noindex = false, header = true, hero = false } = Astro.props;
 
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 const isHome = here === "/";
+const isHero = hero || isHome;
 const crumbs = [
   { href: "/", label: "®", name: "Home", root: true },
 ];
-// Home and About both show the About crumb (current only on /about/).
-if (isHome || here === "/about/") {
+// Home, 404 and About all show the About crumb (current only on /about/).
+if (isHero || here === "/about/") {
   crumbs.push({ href: "/about/", label: "About", name: "About" });
 }
 // The title in the bar is the page heading on Home only.
@@ -33,7 +36,7 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL("/og-image.png", Astro.site).href;
 ---
 <!DOCTYPE html>
-<html lang="en" class={isHome ? "is-home" : undefined}>
+<html lang="en" class={isHero ? "is-home" : undefined}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -103,6 +106,7 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
       // The root crumb on Home is inert (already here).
       document.querySelectorAll("html.is-home .sc-nav-logo a").forEach((el) => {
         el.addEventListener("click", (e) => {
+          if (location.pathname.replace(/\/?$/, "/") !== "/") return;
           if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
         });
       });
