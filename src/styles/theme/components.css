@@ -219,7 +219,7 @@ button.r-btn[type="reset"]:hover { background-color: var(--r-clear-hover); }
 .r-crumbs .r-btn:not([aria-current="page"]):hover,
 .r-crumbs .r-menu[open] > summary:not([aria-current="page"]) { background-color: var(--r-crumb-hover); }
 /* Current crumb: Green at rest. Hover, and an open menu, take Clear's hover (Bright cyan, dark label).
-   The root keeps its own fill; on Home it does not hover. */
+   The root keeps its own fill. */
 .r-crumbs .r-btn[aria-current="page"]:not(.r-crumb-root):hover,
 .r-crumbs .r-menu[open] > summary[aria-current="page"]:not(.r-crumb-root) {
   color: var(--r-btn-text);
