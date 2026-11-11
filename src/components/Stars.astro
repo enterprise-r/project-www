@@ -1,24 +1,33 @@
 ---
 // Self-contained homepage star field: a few very small stars with a short
-// striped-gradient trail, drifting right to left, spawning at the right edge.
+// striped-gradient trail. We overtake them: they enter from off the left
+// edge and drift slowly to the right, slightly tilted.
 const COUNT = 6;
 ---
 <div class="home-stars" aria-hidden="true">
-  {Array.from({ length: COUNT }, () => <span class="home-star"></span>)}
+  {Array.from({ length: COUNT }, () => (
+    <span class="home-star"><span class="home-star-body"></span></span>
+  ))}
 </div>
 
 <script>
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const stars = document.querySelectorAll(".home-stars .home-star");
   if (!reduced) {
-    function place(el, first) {
-      el.style.top = 8 + Math.random() * 84 + "vh";
-      el.style.animationDuration = 9 + Math.random() * 8 + "s";
-      el.style.animationDelay = first ? -Math.random() * 14 + "s" : "0s";
+    function place(el, first, i) {
+      // Only update pose while the body is at the start (off-screen left).
+      el.style.setProperty("--star-y", 8 + Math.random() * 84 + "vh");
+      el.style.setProperty("--star-tilt", Math.random() * 10 - 5 + "deg");
+      if (first) {
+        el.style.setProperty("--star-dur", 22 + Math.random() * 14 + "s");
+        el.style.setProperty("--star-delay", i * 4 + "s");
+      }
     }
-    stars.forEach((el) => {
-      place(el, true);
-      el.addEventListener("animationiteration", () => place(el, false));
+    stars.forEach((el, i) => {
+      place(el, true, i);
+      el.querySelector(".home-star-body").addEventListener("animationiteration", () => {
+        place(el, false, i);
+      });
     });
   }
 </script>
@@ -40,20 +49,32 @@ const COUNT = 6;
     overflow: hidden;
   }
 
+  /* Wrapper holds the tilt and height; only the body is translated. */
   .home-star {
     position: absolute;
-    top: 50%;
-    left: 100%;
+    left: 0;
+    top: var(--star-y, 50vh);
+    width: 0;
+    height: 0;
+    transform: rotate(var(--star-tilt, 0deg));
+    transform-origin: 0 0;
+  }
+
+  .home-star-body {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 2px;
     height: 2px;
     border-radius: 50%;
     background: var(--ui-fg-bright);
     box-shadow: 0 0 2px 0.5px var(--ui-fg-bright);
-    animation: home-star-drift 12s linear infinite;
+    will-change: transform;
+    animation: home-star-drift var(--star-dur, 28s) linear var(--star-delay, 0s) infinite;
   }
 
-  /* Short trailing stripe, behind the star as it travels right to left. */
-  .home-star::after {
+  /* Stripe stays on the right of the head, same sense as before. */
+  .home-star-body::after {
     content: "";
     position: absolute;
     left: 2px;
@@ -65,8 +86,8 @@ const COUNT = 6;
   }
 
   @keyframes home-star-drift {
-    from { transform: translateX(0); }
-    to { transform: translateX(calc(-100vw - 2rem)); }
+    from { transform: translate3d(-2rem, 0, 0); }
+    to { transform: translate3d(calc(100vw + 2rem), 0, 0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
