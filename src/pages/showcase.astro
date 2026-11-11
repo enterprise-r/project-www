@@ -97,24 +97,29 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
             <li><a class="r-btn" href="#" aria-current="page">Guide</a></li>
           </ol>
         </nav>
-        <span class="r-group">
-          <details class="r-menu">
-            <summary class="r-btn">Docs</summary>
-            <div class="r-menu-list">
-              <a class="r-btn" href="#">Guide</a>
-              <a class="r-btn" href="#">Reference</a>
-            </div>
-          </details>
-          <details class="r-menu">
-            <summary class="r-btn">More</summary>
-            <div class="r-menu-list">
-              <a class="r-btn" href="#">Notes</a>
-              <a class="r-btn" href="#">Log</a>
-            </div>
-          </details>
-        </span>
+        <div class="sc-nav-end">
+          <span class="r-group">
+            <a class="r-btn" href="/">Home</a>
+          </span>
+          <span class="r-group">
+            <details class="r-menu">
+              <summary class="r-btn">Docs</summary>
+              <div class="r-menu-list">
+                <a class="r-btn" href="#">Guide</a>
+                <a class="r-btn" href="#">Reference</a>
+              </div>
+            </details>
+            <details class="r-menu">
+              <summary class="r-btn">More</summary>
+              <div class="r-menu-list">
+                <a class="r-btn" href="#">Notes</a>
+                <a class="r-btn" href="#">Log</a>
+              </div>
+            </details>
+          </span>
+        </div>
       </div>
-      <p class="sc-note">The company logo sits in the middle of the bar: the wide lockup on a desktop, the compact lockup as the bar shrinks, still centred while everything fits on one row. When the bar wraps, the compact logo sits on the left of the top row, above the breadcrumbs, and the menus stay on the top right, with the breadcrumbs on the row below, slotted left. The logo is a link to Home. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. The two menus are joined in a group.</p>
+      <p class="sc-note">The company logo sits in the middle of the bar: the wide lockup on a desktop, the compact lockup as the bar shrinks, still centred while everything fits on one row. When the bar wraps, the compact logo sits on the left of the top row, above the breadcrumbs, and the menus stay on the top right, with the breadcrumbs on the row below, slotted left. The logo, the root R, and the Home button are links to the site home. Parents are Magenta. The page you are on is Green (sage). The root is the lone R. A crumb can be a menu of its siblings. Focus on a crumb is a dual inner ring (dark then bright), because the slant would clip an outline. The two menus are joined in a group.</p>
     </section>
 
     <hr>

@@ -22,12 +22,12 @@ const isHome = here === "/";
 const crumbs = [
   { href: "/", label: "®", name: "Home", root: true },
 ];
-if (here === "/about/") {
+// Home and About both show the About crumb (current only on /about/).
+if (isHome || here === "/about/") {
   crumbs.push({ href: "/about/", label: "About", name: "About" });
 }
 // The title in the bar is the page heading on Home only.
 const Brand = isHome ? "h1" : "div";
-const logoWide = "/assets/logo-wide.svg";
 const url = new URL(Astro.url.pathname, Astro.site).href;
 // Link preview: built by pages/og-image.png.ts from the wide logo.
 const ogImage = new URL("/og-image.png", Astro.site).href;
@@ -60,7 +60,13 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
 </head>
 <body>
   {header && (
-    <header class="r-unguarded">
+    <header class="sc-nav-bar r-unguarded">
+      <Brand class="sc-nav-logo">
+        <a href="/" aria-label="Enterprise-R home">
+          <img class="sc-nav-logo-wide" src="/assets/logo-wide.svg" width="320" height="61" alt="">
+          <img class="sc-nav-logo-compact" src="/assets/logo-compact.svg" width="320" height="128" alt="">
+        </a>
+      </Brand>
       <nav class="r-crumbs" aria-label="Breadcrumb">
         <ol>
           {crumbs.map((c) => (
@@ -75,13 +81,8 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
           ))}
         </ol>
       </nav>
-      <Brand class="brand">
-        <img class="brand-logo" src={logoWide} width="320" height="61" alt="Enterprise-R">
-      </Brand>
-      <nav aria-label="Main">
-        <span class="r-group">
-          <a class="r-btn" href="/showcase/">UI of the future</a>
-        </span>
+      <nav class="r-group" aria-label="Main">
+        <a class="r-btn" href="/showcase/">UI of the future</a>
       </nav>
     </header>
   )}
@@ -94,9 +95,11 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   </script>
   {header && (
     <script is:inline>
-      // Root crumb: scrolled down on Home, back to the top; otherwise, the home page.
-      document.querySelector(".r-crumb-root[aria-current='page']")?.addEventListener("click", (e) => {
-        if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
+      // Root crumb and logo: scrolled down on Home, back to the top; otherwise, the home page.
+      document.querySelectorAll(".r-crumb-root[aria-current='page'], html.is-home .sc-nav-logo a").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          if (window.scrollY > 0) { e.preventDefault(); window.scrollTo({ top: 0 }); }
+        });
       });
     </script>
   )}
