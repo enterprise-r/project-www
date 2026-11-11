@@ -44,11 +44,13 @@ html.is-home footer a {
   color: var(--ui-fg);
 }
 
-/* Home only: the root R is already here, so it takes the logo-pill colour and does not act. */
+/* Home only: the root R is already here, so the button keeps the logo-pill colour
+   and the letter stays sage. It does not act. */
 html.is-home .r-crumb-root[aria-current="page"],
 html.is-home .r-crumb-root[aria-current="page"]:hover,
 html.is-home .r-crumb-root[aria-current="page"]:active {
   background-color: var(--ui-border);
+  color: var(--ui-green);
   cursor: default;
 }
 
