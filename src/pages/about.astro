@@ -18,11 +18,17 @@ import Base from "../layouts/Base.astro";
 import "../styles/about.css";
 ---
 <Base title={page.title} description={page.description}>
-  <main>
-    <h1>{page.heading}</h1>
-    {page.text.map((t) => <p>{t}</p>)}
-    <p class="email">
-      <a href={`mailto:${page.email}`}>{user}<span class="email-at">@</span>{domain}</a>
-    </p>
+  <main class="about">
+    <div class="about-stack">
+      <div class="r-term term-head">
+        <h1 class="about-heading">{page.heading}</h1>
+      </div>
+      <div class="r-term">
+        {page.text.map((t) => <p>{t}</p>)}
+        <p class="email">
+          <a href={`mailto:${page.email}`}>{user}<span class="email-at">@</span>{domain}</a>
+        </p>
+      </div>
+    </div>
   </main>
 </Base>

@@ -1,20 +1,141 @@
-/* Text pages: a column. Type, links and paragraphs come from the theme.
-   The email sits centred in a bubble with the Inactive border. The @ is Orange. */
+/* About: hyper-j fills the viewport (cover). Header and footer stripes are open
+   so the wallpaper shows through. Two terminals: the heading, then the paragraphs
+   and the email bubble. On a wide screen both plates share one box (same width,
+   same right edge), shifted left under the green arm and clear of the green
+   circle. The heading sits above the arm by a fixed lead off the paragraph
+   plate; the paragraphs sit lower. Below 60rem they sit together in the middle.
+   The page is at least 768px tall; a shorter window scrolls that layout. */
 
-main {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 2.5rem 1.25rem 4rem;
+html.is-about {
+  min-height: max(100%, 768px);
+  background-color: var(--ui-bg);
+  background-image: url("/assets/hyper-j.jpg");
+  background-image: image-set(
+    url("/assets/hyper-j.avif") type("image/avif"),
+    url("/assets/hyper-j.webp") type("image/webp"),
+    url("/assets/hyper-j.jpg") type("image/jpeg")
+  );
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.email { margin-top: 2rem; text-align: center; }
+html.is-about body {
+  min-height: max(100%, 768px);
+  background: transparent;
+}
+
+html.is-about header,
+html.is-about footer {
+  background-color: transparent;
+}
+
+/* Footer icons are Background, meant for the stripe. On the wallpaper they
+   switch to Foreground. No added shadow or blur. */
+html.is-about footer a {
+  color: var(--ui-fg);
+}
+
+/* Narrow and medium: one column in the middle. The terminal backing keeps
+   the text readable over the picture. */
+main.about {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 2.5rem 1.25rem 3rem;
+}
+
+.about-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  width: min(34rem, 100%);
+}
+
+.about-stack .r-term.term-head {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.45rem 1rem 0.55rem;
+}
+
+.about-stack .about-heading {
+  margin: 0;
+  font-family: var(--r-font-heading);
+  font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  color: transparent;
+  background: linear-gradient(var(--ui-green), var(--ui-green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgb(from var(--ui-green) r g b / 0.3));
+}
+
+.about-stack > .r-term:not(.term-head) {
+  width: 100%;
+}
+
+.about-stack .r-term > :last-child {
+  margin-bottom: 0;
+}
+
+.email {
+  margin-top: 1.15rem;
+  text-align: center;
+}
 
 .email a {
   display: inline-block;
   padding: 0.4rem 1.1rem;
-  border: 1px solid var(--ui-border);
+  border: 1px solid var(--ui-green);
   border-radius: 999px;
   text-decoration: none;
 }
 
+.email a:hover {
+  border-color: var(--ui-green-bright);
+}
+
 .email-at { color: var(--ui-orange); }
+
+/* Wide: the two terminals leave the column and share one box.
+   The paragraph plate is the anchor: its top, its right inset and its width.
+   The heading plate uses that same right inset and width, and its top is the
+   paragraph top minus a fixed lead, so a resize moves both by the same amount.
+   The vertical measure is the viewport, and never under 768px: a shorter
+   window scrolls the 768 layout instead of pulling the plates together.
+   These rules follow the shared widths above so they win on a wide screen. */
+@media (min-width: 60rem) {
+  main.about {
+    padding: 0;
+    --about-inset-r: clamp(3.5rem, calc(16vw - 1rem), 17rem);
+    /* 21.5rem keeps "1 readable source" on one line at the wide breakpoint. */
+    --about-plate-w: min(34rem, max(21.5rem, 34vw));
+    --about-h: max(100dvh, 768px);
+    --about-body-top: calc(clamp(4rem, calc(var(--about-h) * 0.54), calc(var(--about-h) - 22rem)) + 0.5rem);
+    --about-head-lead: 7.6rem;
+    --about-head-top: max(4.75rem, calc(var(--about-body-top) - var(--about-head-lead)));
+  }
+
+  .about-stack {
+    display: contents;
+  }
+
+  .about-stack .r-term.term-head,
+  .about-stack > .r-term:not(.term-head) {
+    position: absolute;
+    right: var(--about-inset-r);
+    width: var(--about-plate-w);
+    max-width: var(--about-plate-w);
+  }
+
+  .about-stack .r-term.term-head {
+    top: var(--about-head-top);
+  }
+
+  .about-stack > .r-term:not(.term-head) {
+    top: var(--about-body-top);
+  }
+}

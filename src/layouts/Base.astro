@@ -21,6 +21,7 @@ const { title, description, noindex = false, header = true, hero = false } = Ast
 
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 const isHome = here === "/";
+const isAbout = here === "/about/";
 const isHero = hero || isHome;
 const crumbs = [
   { href: "/", label: "®", name: "Home", root: true },
@@ -36,7 +37,7 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL("/og-image.png", Astro.site).href;
 ---
 <!DOCTYPE html>
-<html lang="en" class={isHero ? "is-home" : undefined}>
+<html lang="en" class:list={[isHero && "is-home", isAbout && "is-about"]}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
