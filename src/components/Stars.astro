@@ -1,0 +1,75 @@
+---
+// Self-contained homepage star field: a few very small stars with a short
+// striped-gradient trail, drifting right to left, spawning at the right edge.
+const COUNT = 6;
+---
+<div class="home-stars" aria-hidden="true">
+  {Array.from({ length: COUNT }, () => <span class="home-star"></span>)}
+</div>
+
+<script>
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const stars = document.querySelectorAll(".home-stars .home-star");
+  if (!reduced) {
+    function place(el, first) {
+      el.style.top = 8 + Math.random() * 84 + "vh";
+      el.style.animationDuration = 9 + Math.random() * 8 + "s";
+      el.style.animationDelay = first ? -Math.random() * 14 + "s" : "0s";
+    }
+    stars.forEach((el) => {
+      place(el, true);
+      el.addEventListener("animationiteration", () => place(el, false));
+    });
+  }
+</script>
+
+<style>
+  /* Above the wallpaper, behind the home chrome and the terminal. */
+  :global(html.is-home header),
+  :global(html.is-home footer),
+  :global(html.is-home main) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .home-star {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: var(--ui-fg-bright);
+    box-shadow: 0 0 2px 0.5px var(--ui-fg-bright);
+    animation: home-star-drift 12s linear infinite;
+  }
+
+  /* Short trailing stripe, behind the star as it travels right to left. */
+  .home-star::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    width: 1.15rem;
+    height: 1px;
+    background: var(--ui-striped);
+    transform: translateY(-50%);
+  }
+
+  @keyframes home-star-drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100vw - 2rem)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-stars { display: none; }
+  }
+</style>
