@@ -93,6 +93,10 @@ main.showcase + footer p {
 .showcase .r-btn.r-cancel.is-hover { background-color: var(--r-cancel-hover); }
 .showcase .r-btn.is-focus { outline: 2px solid var(--r-focus); outline-offset: 3px; }
 .showcase .r-crumbs .r-btn.is-hover:not([aria-current="page"]) { background-color: var(--r-crumb-hover); }
+.showcase .r-crumbs .r-btn[aria-current="page"].is-hover:not(.r-crumb-root) {
+  color: var(--r-btn-text);
+  background-color: var(--r-clear-hover);
+}
 .showcase .r-crumbs li > .r-btn.is-focus,
 .showcase .r-crumbs li > .r-menu > summary.is-focus {
   outline: none;

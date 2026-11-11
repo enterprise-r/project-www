@@ -28,16 +28,22 @@ main { flex: 1 0 auto; width: 100%; }
   container-type: inline-size;
 }
 
-/* The transparent lockups sit on a pill of the bar stripe (--ui-border), so they
-   stay legible when the bar itself is open. Same plate on every page, including the showcase. */
+/* The transparent lockups sit on a pill of the bar stripe (--ui-border), the same
+   height as a button (--r-btn-h), so they stay legible when the bar itself is open.
+   Same plate on every page, including the showcase. */
 .sc-nav-logo {
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  /* One pixel over the button box: at the painted edge the plate otherwise lands a pixel short. */
+  height: calc(var(--r-btn-h) + 1px);
   min-width: max-content;
   flex-shrink: 0;
   margin: 0;
-  padding: 0.35rem 0.9rem;
+  padding: 0 0.9rem;
   line-height: 0;
   color: inherit;
   text-decoration: none;
@@ -46,7 +52,9 @@ main { flex: 1 0 auto; width: 100%; }
 }
 
 .sc-nav-logo a {
-  display: block;
+  display: flex;
+  align-items: center;
+  height: 100%;
   line-height: 0;
   color: inherit;
   text-decoration: none;
@@ -54,7 +62,7 @@ main { flex: 1 0 auto; width: 100%; }
 
 .sc-nav-logo img {
   display: block;
-  height: var(--r-btn-h);
+  height: 100%;
   width: auto;
   max-width: none;
   flex-shrink: 0;
@@ -91,16 +99,18 @@ main { flex: 1 0 auto; width: 100%; }
   .sc-nav-logo img.sc-nav-logo-compact { display: block; }
 }
 
-/* Wrapped: compact logo left on the top row, the right group top right, breadcrumbs below left.
+/* Wrapped: compact logo on the top row, flush with the left of the screen,
+   the right group top right, breadcrumbs below left.
    DOM order is logo, crumbs, then the right group.
    Row gap stays --r-gap, so the wrap is still a slim two-row stripe. */
 @container (max-width: 40rem) {
   .sc-nav-logo {
     grid-column: 1;
     justify-self: start;
-    /* Same left inset as the breadcrumb. Straight left edge with the same
-       soft 0.25rem corner as a crumb, pill-round on the right. */
-    border-radius: 0.25rem 999px 999px 0.25rem;
+    /* Cancel the bar's side padding so the plate meets the screen.
+       Square on the left, pill-round on the right. */
+    margin-left: calc(-1 * var(--bar-pad-x));
+    border-radius: 0 999px 999px 0;
   }
   .sc-nav-logo img.sc-nav-logo-wide { display: none; }
   .sc-nav-logo img.sc-nav-logo-compact { display: block; }

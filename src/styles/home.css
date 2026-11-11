@@ -1,4 +1,9 @@
 /* Home fills the viewport with warpchi (cover, so it stretches on a small screen).
+   The picture is fixed to the window and weighted toward the top (30%). A centred
+   cover on a short wide window crops the ship and the hand under the header; 30%
+   keeps that subject in the open page. A tall window crops the sides only, and
+   30% lands where the middle would. --wall-shift is how far that sits below a
+   centred cover, and the 404 uses it to keep the panel on the diamond.
    The 404 keeps this chrome and swaps in hyper-j.
    Header and footer stripes are open so the wallpaper shows through.
    A large terminal sits in the middle, with the waiting icon, a pulsing word carousel,
@@ -6,6 +11,18 @@
    as long as one Please Wait word, tearing in like a broken screen. Home runs five
    lines. The 404 runs the current line, then the company address. */
 html.is-home {
+  --wall-w: 3840;
+  --wall-h: 2160;
+  --wall-shift: max(0px, calc((100vw * var(--wall-h) / var(--wall-w) - 100dvh) * 0.2));
+  background-color: var(--ui-bg);
+}
+
+html.is-home body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-color: var(--ui-bg);
   background-image: url("/assets/warpchi.jpg");
   background-image: image-set(
@@ -14,12 +31,16 @@ html.is-home {
     url("/assets/warpchi.jpg") type("image/jpeg")
   );
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
   background-repeat: no-repeat;
 }
 
 /* 404: same open chrome as Home, hyper-j instead of warpchi. */
 html.not-found {
+  --wall-h: 2578;
+}
+
+html.not-found body::before {
   background-image: url("/assets/hyper-j.jpg");
   background-image: image-set(
     url("/assets/hyper-j.avif") type("image/avif"),
@@ -28,7 +49,11 @@ html.not-found {
   );
 }
 
+/* A stacking context so the wallpaper (z-index -1) paints above the page
+   colour and below the header, the footer, and the terminal. */
 html.is-home body {
+  position: relative;
+  z-index: 0;
   background: transparent;
 }
 
@@ -44,12 +69,10 @@ html.is-home footer a {
   color: var(--ui-fg);
 }
 
-/* Home only: the root R is already here, so the button keeps the logo-pill colour
-   and the letter stays sage. It does not act. */
+/* Home only: the root R is already here, so the pointer and press do nothing.
+   Hover still lights the letter Bright green. */
 html.is-home .r-crumb-root[aria-current="page"],
-html.is-home .r-crumb-root[aria-current="page"]:hover,
 html.is-home .r-crumb-root[aria-current="page"]:active {
-  background-color: var(--ui-border);
   color: var(--ui-green);
   cursor: default;
 }
@@ -91,6 +114,39 @@ main.home {
   max-width: 100%;
   aspect-ratio: 1.618 / 1;
   padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1.75rem, 6vw, 4.5rem);
+}
+
+/* 404 only. Home keeps the upright panel.
+   The panel turns 45° counter-clockwise. The digit carousel turns back, so 4 0 4
+   reads level. The panel's centre is the junction diamond on hyper-j
+   (3840×2578, at 1685,1388), then 1rem right and 1rem up. The picture is cover,
+   weighted to 30%. Wide windows crop top and bottom, tall windows crop the
+   sides. On a wide window the diamond sits --wall-shift below where a centred
+   cover would put it. The centre stays on the diamond either way, with that
+   same nudge. */
+html.is-home.not-found .home-wait {
+  position: fixed;
+  z-index: 1;
+  margin: 0;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+@media (min-aspect-ratio: 3840 / 2578) {
+  html.is-home.not-found .home-wait {
+    left: calc(1685 / 3840 * 100% + 1rem);
+    top: calc(50% + (1388 - 2578 / 2) * 100vw / 3840 - 1rem + var(--wall-shift));
+  }
+}
+
+@media (max-aspect-ratio: 3840 / 2578) {
+  html.is-home.not-found .home-wait {
+    top: calc(1388 / 2578 * 100% - 1rem);
+    left: calc(50% + (1685 - 3840 / 2) * 100vh / 2578 + 1rem);
+  }
+}
+
+html.not-found .home-words {
+  transform: rotate(45deg);
 }
 
 .home-line {
