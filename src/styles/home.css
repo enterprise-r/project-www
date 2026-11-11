@@ -34,17 +34,18 @@ main.home {
   padding: 2rem 1rem;
 }
 
-/* The panel is roomy through padding; the icon, words and prompt are about half the
-   previous display size, all centred in the terminal. */
+/* A landscape golden-ratio rectangle (φ ≈ 1.618). The icon and carousel sit in the
+   exact vertical middle; the prompt is taken out of flow and parked near the bottom. */
 .home-wait {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.5rem, 1.25vw, 1rem);
-  width: fit-content;
+  position: relative;
+  width: min(92vw, 40rem);
   max-width: 100%;
-  padding: clamp(2.75rem, 8vw, 5.5rem) clamp(3.25rem, 10vw, 7rem);
+  aspect-ratio: 1.618 / 1;
+  padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1.75rem, 6vw, 4.5rem);
 }
 
 .home-line {
@@ -119,10 +120,18 @@ main.home {
   100% { opacity: 0; }
 }
 
-/* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase. No pulse. */
+/* Theme .r-prompt: Bright green, heading font, widely tracked, uppercase. No pulse.
+   Parked near the bottom of the panel, with a margin so it is not flush to the edge. */
 .home-status {
   display: block;
+  position: absolute;
+  left: 50%;
+  bottom: clamp(0.85rem, 5%, 1.6rem);
   margin: 0;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  text-align: center;
   font-size: clamp(0.95rem, 1.4vw, 1rem);
   animation: none;
 }
