@@ -4,8 +4,8 @@
    Each pointermove resets the gap-1 timer (movement end is the last move).
    An accepted click turns clicks off for --r-guard-cool, then stays OFF
    until the pointer moves and stops again.
-   Clicks are judged on button up (pointerup), not on pointerdown; a
-   discarded up also suppresses the following click.
+   Clicks are judged on button press (pointerdown), not on pointerup; a
+   discarded press also suppresses the following click.
    A discarded click flashes the waiting cursor until the button is HOT,
    or briefly if it cannot become clickable without further movement.
    Touch and keyboard use the cooldown only.
@@ -68,7 +68,7 @@
         flashTimer: 0,
         flashUntilHot: false,
         suppressClick: false,
-        acceptedUp: false,
+        acceptedPress: false,
         lastX: null,
         lastY: null
       };
@@ -215,7 +215,7 @@
     hideWait(btn, s);
   }, true);
 
-  document.addEventListener("pointerup", function (e) {
+  document.addEventListener("pointerdown", function (e) {
     if (e.button !== 0) return;
     var btn = target(e.target);
     if (!btn) return;
@@ -227,7 +227,7 @@
         block(e, btn, s);
         s.suppressClick = true;
       } else {
-        s.acceptedUp = true;
+        s.acceptedPress = true;
       }
       return;
     }
@@ -235,7 +235,7 @@
       block(e, btn, s);
       s.suppressClick = true;
     } else {
-      s.acceptedUp = true;
+      s.acceptedPress = true;
     }
   }, true);
 
@@ -250,8 +250,8 @@
       e.stopImmediatePropagation();
       return;
     }
-    if (s.acceptedUp) {
-      s.acceptedUp = false;
+    if (s.acceptedPress) {
+      s.acceptedPress = false;
       s.fromKey = false;
       startCool(btn, s);
       return;
