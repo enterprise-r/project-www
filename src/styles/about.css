@@ -134,7 +134,7 @@ main.about {
     --about-inset-r: clamp(3.5rem, calc(16vw - 1rem), 17rem);
     /* 21.5rem keeps "1 readable source" on one line at the wide breakpoint. */
     --about-plate-w: min(34rem, max(21.5rem, 34vw));
-    --about-body-top: calc(clamp(4rem, calc(var(--about-h) * 0.54), calc(var(--about-h) - 22rem)) + 0.5rem + var(--wall-shift));
+    --about-body-top: calc(clamp(4rem, calc(var(--about-h) * 0.53), calc(var(--about-h) - 22rem)) + 0.5rem + var(--wall-shift));
     --about-head-lead: 7.6rem;
     --about-head-top: max(4.75rem, calc(var(--about-body-top) - var(--about-head-lead)));
   }
