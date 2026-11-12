@@ -157,7 +157,7 @@ main.showcase + footer p {
 .sc-bd { position: relative; height: 13rem; border-radius: 1rem; overflow: hidden; border: 1px solid var(--ui-border); background: var(--ui-bg); }
 .sc-bd .photo { position: absolute; inset: 0; background-color: var(--ui-bg); background-size: cover; background-repeat: no-repeat; }
 .sc-term-sample { margin: 1.25rem 0 0; }
-/* Home wallpaper, fitted to the width, shown as a horizontal stripe through the middle of the frame. */
+/* Warpchi, fitted to the width, shown as a horizontal stripe through the middle of the frame. */
 .sc-term-sample .photo {
   background-image: url("/assets/warpchi.jpg");
   background-image: image-set(

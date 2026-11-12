@@ -1,81 +1,17 @@
-/* Home fills the viewport with warpchi (cover). The picture is fixed to the
-   window and weighted toward the top (30%). A centred cover on a short wide
-   window crops the ship and the hand under the header; 30% keeps that subject
-   in the open page. A tall window crops the sides only, and 30% lands where
-   the middle would. --wall-shift is how far that sits below a centred cover,
-   and the 404 uses it to keep the panel on the diamond.
-   The 404 keeps this chrome and swaps in hyper-j.
-   Header and footer stripes are open so the wallpaper shows through.
+/* Home and the 404 share this terminal and a mote field (Motes.astro).
+   The wallpaper is the site cover in bar.css. The 404 turns the terminal
+   45 degrees. The mote layer is fixed at z-index 0, so the bar, the footer
+   and the terminal sit above it. Do not raise main itself: it fills the
+   viewport and would hide the motes.
    A large terminal sits in the middle, with the waiting icon, a pulsing word
    carousel, and a prompt underneath. The prompt is its own carousel, each line
    held three times as long as one Please Wait word, tearing in like a broken
    screen. Home runs five prompt lines. The 404 runs three, on the same loop. */
-html.is-home {
-  --wall-w: 3840;
-  --wall-h: 2160;
-  --wall-shift: max(0px, calc((100vw * var(--wall-h) / var(--wall-w) - 100dvh) * 0.2));
-  background-color: var(--ui-bg);
-}
-
-html.is-home body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: var(--ui-bg);
-  background-image: url("/assets/warpchi.jpg");
-  background-image: image-set(
-    url("/assets/warpchi.avif") type("image/avif"),
-    url("/assets/warpchi.webp") type("image/webp"),
-    url("/assets/warpchi.jpg") type("image/jpeg")
-  );
-  background-size: cover;
-  background-position: center 30%;
-  background-repeat: no-repeat;
-}
-
-/* 404: same open chrome as Home, hyper-j instead of warpchi. */
-html.not-found {
-  --wall-h: 2578;
-}
-
-html.not-found body::before {
-  background-image: url("/assets/hyper-j.jpg");
-  background-image: image-set(
-    url("/assets/hyper-j.avif") type("image/avif"),
-    url("/assets/hyper-j.webp") type("image/webp"),
-    url("/assets/hyper-j.jpg") type("image/jpeg")
-  );
-}
-
-/* A stacking context so the wallpaper (z-index -1) paints above the page
-   colour and below the header, the footer, and the terminal.
-   The star layer is fixed at z-index 0, so that chrome sits above it.
-   Do not raise main itself: it fills the viewport and would hide the stars. */
-html.is-home body {
-  position: relative;
-  z-index: 0;
-  background: transparent;
-}
-
 html.is-home header,
 html.is-home footer,
 html.is-home .home-wait {
   position: relative;
   z-index: 1;
-}
-
-/* Home and 404: drop the header and footer stripe fills. Buttons stay filled.
-   Footer icons switch from Background (meant for the stripe) to Foreground, so they stay
-   legible on the wallpaper. No added shadow or blur. */
-html.is-home header,
-html.is-home footer {
-  background-color: transparent;
-}
-
-html.is-home footer a {
-  color: var(--ui-fg);
 }
 
 /* Home only: the root R is already here, so the pointer and press do nothing.
@@ -130,30 +66,22 @@ main.home {
 /* 404 only. Home keeps the upright panel.
    The panel turns 45° counter-clockwise. The digit carousel turns back, so 4 0 4
    reads level. The panel's centre is the junction diamond on hyper-j
-   (3840×2578, at 1685,1388), then 1rem right and 1rem up. The picture is cover,
-   weighted to 30%. Wide windows crop top and bottom, tall windows crop the
-   sides. On a wide window the diamond sits --wall-shift below where a centred
-   cover would put it. The centre stays on the diamond either way, with that
-   same nudge. */
+   (at 1685,1388), then 1rem right and 1rem up.
+   The picture covers the body (bar.css). That box is at least 768px tall, and a
+   shorter window scrolls the picture. The panel is absolute on the same box, so
+   it stays on the diamond and scrolls with it. A fixed panel would stay on the
+   window while the diamond moved.
+   --cover is the cover scale: the picture is as wide as the page, or as tall,
+   whichever fills it. On a wide page the diamond sits --wall-shift below where
+   a centred cover would put it. */
 html.is-home.not-found .home-wait {
-  position: fixed;
+  position: absolute;
   z-index: 1;
   margin: 0;
+  --cover: max(100vw / var(--wall-w), var(--about-h) / var(--wall-h));
+  left: calc(50% + (1685 - var(--wall-w) / 2) * var(--cover) + 1rem);
+  top: calc(50% + (1388 - var(--wall-h) / 2) * var(--cover) - 1rem + var(--wall-shift));
   transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-@media (min-aspect-ratio: 3840 / 2578) {
-  html.is-home.not-found .home-wait {
-    left: calc(1685 / 3840 * 100% + 1rem);
-    top: calc(50% + (1388 - 2578 / 2) * 100vw / 3840 - 1rem + var(--wall-shift));
-  }
-}
-
-@media (max-aspect-ratio: 3840 / 2578) {
-  html.is-home.not-found .home-wait {
-    top: calc(1388 / 2578 * 100% - 1rem);
-    left: calc(50% + (1685 - 3840 / 2) * 100vh / 2578 + 1rem);
-  }
 }
 
 html.not-found .home-words {

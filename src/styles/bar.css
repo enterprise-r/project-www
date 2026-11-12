@@ -7,10 +7,62 @@
 
 html { height: 100%; }
 
+/* One wallpaper for the site: hyper-j, cover, scrolling with the page.
+   The page is at least 768px tall; a shorter window scrolls that layout,
+   picture and all. A centred cover on a short wide window crops the peak
+   under the header. The picture is weighted so the peak clears the bar,
+   and that nudge is capped at 4.5rem. --wall-shift is that distance.
+   About's plates add it. The style guide keeps the flat page colour. */
+html:not(:has(.showcase)) {
+  --wall-w: 3840;
+  --wall-h: 2578;
+  --about-h: max(100dvh, 768px);
+  --wall-overflow: max(0px, calc(100vw * var(--wall-h) / var(--wall-w) - var(--about-h)));
+  --wall-shift: min(4.5rem, calc(var(--wall-overflow) * 0.2));
+  min-height: max(100%, 768px);
+  background-color: var(--ui-bg);
+}
+
+html:not(:has(.showcase)) body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--ui-bg);
+  background-image: url("/assets/hyper-j.jpg");
+  background-image: image-set(
+    url("/assets/hyper-j.avif") type("image/avif"),
+    url("/assets/hyper-j.webp") type("image/webp"),
+    url("/assets/hyper-j.jpg") type("image/jpeg")
+  );
+  background-size: cover;
+  background-position: center calc(50% + var(--wall-shift));
+  background-repeat: no-repeat;
+}
+
 body {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+}
+
+html:not(:has(.showcase)) body {
+  position: relative;
+  z-index: 0;
+  min-height: max(100%, 768px);
+  background: transparent;
+}
+
+/* Open stripes so the wallpaper shows through. Footer icons are Background,
+   meant for the stripe; on the picture they switch to Foreground. */
+html:not(:has(.showcase)) header,
+html:not(:has(.showcase)) footer {
+  background-color: transparent;
+}
+
+html:not(:has(.showcase)) footer a {
+  color: var(--ui-fg);
 }
 
 main { flex: 1 0 auto; width: 100%; }

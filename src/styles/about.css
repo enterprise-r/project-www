@@ -1,61 +1,10 @@
-/* About: hyper-j fills the page (cover) and scrolls with it. The page is at
-   least 768px tall; a shorter window scrolls that layout, picture and plates
-   together. A centred cover on a short wide window crops the peak under the
-   header. The picture is weighted to 30%, and that nudge is capped at 4.5rem,
-   so the peak clears the bar without dropping the arm into the footer.
-   --wall-shift is that distance. The wide plates add it, so they stay on the
-   arm. Header and footer stripes are open so the wallpaper shows through.
+/* About plates on the site wallpaper (bar.css). --wall-shift is how far that
+   cover sits below centre. The wide plates add it, so they stay on the arm.
    Two terminals: the heading, then the paragraphs and the email bubble. On a
    wide screen both plates share one box (same width, same right edge), shifted
    left under the green arm and clear of the green circle. The heading sits above
    the arm by a fixed lead off the paragraph plate; the paragraphs sit lower.
    Below 60rem they sit together in the middle. */
-
-html.is-about {
-  --wall-w: 3840;
-  --wall-h: 2578;
-  --about-h: max(100dvh, 768px);
-  --wall-overflow: max(0px, calc(100vw * var(--wall-h) / var(--wall-w) - var(--about-h)));
-  --wall-shift: min(4.5rem, calc(var(--wall-overflow) * 0.2));
-  min-height: max(100%, 768px);
-  background-color: var(--ui-bg);
-}
-
-html.is-about body::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: var(--ui-bg);
-  background-image: url("/assets/hyper-j.jpg");
-  background-image: image-set(
-    url("/assets/hyper-j.avif") type("image/avif"),
-    url("/assets/hyper-j.webp") type("image/webp"),
-    url("/assets/hyper-j.jpg") type("image/jpeg")
-  );
-  background-size: cover;
-  background-position: center calc(50% + var(--wall-shift));
-  background-repeat: no-repeat;
-}
-
-html.is-about body {
-  position: relative;
-  z-index: 0;
-  min-height: max(100%, 768px);
-  background: transparent;
-}
-
-html.is-about header,
-html.is-about footer {
-  background-color: transparent;
-}
-
-/* Footer icons are Background, meant for the stripe. On the wallpaper they
-   switch to Foreground. No added shadow or blur. */
-html.is-about footer a {
-  color: var(--ui-fg);
-}
 
 /* Narrow and medium: one column in the middle. The terminal backing keeps
    the text readable over the picture. */

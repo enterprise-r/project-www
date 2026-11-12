@@ -1,0 +1,198 @@
+---
+// Homepage field. Little bubbles in the stripe colours drift upward.
+// The pointer parts them and they brighten as they pass.
+// Colours are read from the palette variables, not copied.
+---
+<div class="home-motes" aria-hidden="true">
+  <canvas></canvas>
+</div>
+
+<script>
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canvas = document.querySelector(".home-motes canvas");
+  const ctx = canvas && canvas.getContext("2d");
+  if (ctx) {
+    const NAMES = [
+      "--ui-orange",
+      "--ui-magenta",
+      "--ui-green",
+      "--ui-magenta",
+      "--ui-green",
+      "--ui-orange",
+      "--ui-green-bright",
+      "--ui-accent",
+      "--ui-cyan",
+      "--ui-blue",
+    ];
+    const REACH = 180;
+
+    function rgbOf(name) {
+      let raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      if (raw.charAt(0) === "#") raw = raw.slice(1);
+      if (raw.length === 3) raw = raw.charAt(0) + raw.charAt(0) + raw.charAt(1) + raw.charAt(1) + raw.charAt(2) + raw.charAt(2);
+      return [parseInt(raw.slice(0, 2), 16), parseInt(raw.slice(2, 4), 16), parseInt(raw.slice(4, 6), 16)];
+    }
+
+    const COLORS = NAMES.map(rgbOf);
+    const pointer = { x: 0, y: 0, on: false };
+    let motes = [];
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+    let running = false;
+    let last = 0;
+
+    function make(soft) {
+      const c = COLORS[(Math.random() * COLORS.length) | 0];
+      const ang = -Math.PI / 2 + (Math.random() - 0.5) * (soft ? 0.7 : 1.3);
+      const sp = soft ? 6 + Math.random() * 7 : 11 + Math.random() * 16;
+      return {
+        x: Math.random() * (w || 1),
+        y: Math.random() * (h || 1),
+        hx: Math.cos(ang) * sp,
+        hy: Math.sin(ang) * sp,
+        r: soft ? 2.6 + Math.random() * 3.4 : 1.2 + Math.random() * 1.8,
+        a: soft ? 0.12 + Math.random() * 0.1 : 0.38 + Math.random() * 0.32,
+        c: c,
+        soft: soft,
+        ph: Math.random() * 6.2832,
+        glow: 0,
+        px: 0,
+        py: 0,
+      };
+    }
+
+    function layout() {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      const n = Math.min(160, Math.max(40, Math.round((w * h) / 12000)));
+      const wantSoft = Math.round(n * 0.22);
+      while (motes.length < n) {
+        let softCount = 0;
+        for (let i = 0; i < motes.length; i++) if (motes[i].soft) softCount++;
+        const m = make(softCount < wantSoft);
+        m.x = Math.random() * w;
+        m.y = Math.random() * h;
+        motes.push(m);
+      }
+      motes.length = n;
+    }
+
+    function nudge(m) {
+      m.glow = 0;
+      m.px = 0;
+      m.py = 0;
+      if (!pointer.on) return;
+      const dx = m.x - pointer.x;
+      const dy = m.y - pointer.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 >= REACH * REACH || d2 < 1) return;
+      const d = Math.sqrt(d2);
+      const k = 1 - d / REACH;
+      m.glow = k;
+      const push = k * k * 170;
+      m.px = (dx / d) * push;
+      m.py = (dy / d) * push;
+    }
+
+    function paint(now) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      for (let pass = 0; pass < 2; pass++) {
+        for (let i = 0; i < motes.length; i++) {
+          const m = motes[i];
+          if (m.soft !== (pass === 0)) continue;
+          const pulse = 1 + 0.07 * Math.sin(now * 0.0011 + m.ph);
+          const a = Math.min(0.9, m.a * pulse + m.glow * (m.soft ? 0.14 : 0.45));
+          const rad = m.r * pulse * (1 + m.glow * 0.35);
+          const cr = m.c[0];
+          const cg = m.c[1];
+          const cb = m.c[2];
+          if (m.soft) {
+            ctx.fillStyle = "rgba(" + cr + "," + cg + "," + cb + "," + (a * 0.55) + ")";
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, rad * 2.2, 0, 6.2832);
+            ctx.fill();
+          }
+          ctx.fillStyle = "rgba(" + cr + "," + cg + "," + cb + "," + a + ")";
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, rad, 0, 6.2832);
+          ctx.fill();
+        }
+      }
+    }
+
+    function frame(now) {
+      if (!running) return;
+      const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+      last = now;
+      const pad = 24;
+      for (let i = 0; i < motes.length; i++) {
+        const m = motes[i];
+        nudge(m);
+        m.x += (m.hx + m.px) * dt;
+        m.y += (m.hy + m.py) * dt;
+        if (m.x < -pad) m.x = w + pad;
+        else if (m.x > w + pad) m.x = -pad;
+        if (m.y < -pad) m.y = h + pad;
+        else if (m.y > h + pad) m.y = -pad;
+      }
+      paint(now);
+      requestAnimationFrame(frame);
+    }
+
+    function start() {
+      if (running || reduced) return;
+      running = true;
+      last = 0;
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener("pointermove", function (e) {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+      pointer.on = true;
+    });
+    window.addEventListener("pointerout", function (e) {
+      if (!e.relatedTarget) pointer.on = false;
+    });
+    window.addEventListener("resize", function () {
+      layout();
+      if (reduced) paint(0);
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) running = false;
+      else start();
+    });
+
+    layout();
+    if (reduced) paint(0);
+    else start();
+  }
+</script>
+
+<style>
+  .home-motes {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .home-motes canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Darkens the corners so the open stripes and the middle stay quiet. */
+  .home-motes::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 55%, rgb(from var(--ui-bg) r g b / 0.4) 100%);
+  }
+</style>

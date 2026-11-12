@@ -5,7 +5,6 @@ import "../styles/theme/base.css";
 import "../styles/theme/components.css";
 import "../styles/bar.css";
 import "../styles/footer.css";
-import "../styles/transition.css";
 import Footer from "../components/Footer.astro";
 import enterprsr from "../styles/fonts/woff2/Enterprsr-Regular.woff2?url";
 
@@ -25,7 +24,7 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
 const isHome = here === "/";
 const isAbout = here === "/about/";
 const isHero = hero || isHome;
-// 404 is the only hero that is not Home. It keeps the home chrome and uses hyper-j.
+// 404 is the only hero that is not Home. It keeps the home chrome.
 // Class is not-found: a class named is-404 is stripped by the dev CSS transform.
 const isMissing = hero && !isHome;
 const crumbs = [
@@ -38,8 +37,6 @@ if (isHero || here === "/about/") {
 // The title in the bar is the page heading on Home only.
 const Brand = isHome ? "h1" : "div";
 const url = new URL(Astro.url.pathname, Astro.site).href;
-// Link preview: built by pages/og-image.png.ts from the wide logo.
-const ogImage = new URL("/og-image.png", Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en" class:list={[isHero && "is-home", isMissing && "not-found", isAbout && "is-about"]}>
@@ -56,51 +53,12 @@ const ogImage = new URL("/og-image.png", Astro.site).href;
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
   <meta property="og:url" content={url}>
-  <meta property="og:image" content={ogImage}>
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="400">
-  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x32 48x48">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
-  <script is:inline>
-    // Home is the hinge. Leaving / or arriving at / slides; every other
-    // same-origin hop skips the view transition and loads as usual.
-    // Type chrome: both pages have the title bar and footer, so those stay
-    // put and the page slides underneath. The showcase has neither.
-    (function () {
-      function path(url) {
-        try { return new URL(url).pathname.replace(/\/?$/, "/"); }
-        catch (err) { return ""; }
-      }
-      function isHome(url) { return path(url) === "/"; }
-      function isShowcase(url) { return path(url) === "/showcase/"; }
-      function tag(vt, fromURL, toURL) {
-        if (!vt) return;
-        if (isHome(fromURL) || isHome(toURL)) {
-          if (vt.types) {
-            vt.types.add("home");
-            if (!isShowcase(fromURL) && !isShowcase(toURL)) vt.types.add("chrome");
-          }
-          return;
-        }
-        vt.skipTransition();
-      }
-      window.addEventListener("pageswap", function (e) {
-        var act = e.activation;
-        if (!act) return;
-        tag(e.viewTransition, act.from && act.from.url, act.entry && act.entry.url);
-      });
-      window.addEventListener("pagereveal", function (e) {
-        var act = window.navigation && window.navigation.activation;
-        if (!act) return;
-        tag(e.viewTransition, act.from && act.from.url, act.entry && act.entry.url);
-      });
-    })();
-  </script>
 </head>
 <body>
   {header && (

@@ -1,6 +1,6 @@
 ---
 // Home and 404 terminal: waiting icon, word carousel, prompt carousel.
-import Stars from "./Stars.astro";
+import Motes from "./Motes.astro";
 import "../styles/home.css";
 import waitIcon from "../styles/theme/icons/wait.svg?url";
 
@@ -35,7 +35,7 @@ const mark = (p: Part) =>
       : { tone: p.tone, letter: p.text, rest: "" }
     : { tone: null, letter: p.text, rest: "" };
 ---
-<Stars />
+<Motes />
 <main class="home">
   <div class="r-term home-wait">
     <div class="home-line">
