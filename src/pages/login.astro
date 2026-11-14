@@ -1,0 +1,26 @@
+---
+const page = {
+  title: "Login · Enterprise-R",
+  description: "This service is in preview. Only invited users who have the password can use it, and only for a set period.",
+  enter: "https://ra.ruaya.enterprise-r.com",
+  meantimeBefore: "In the meantime you can check out the ",
+  meantimeLink: "web UI",
+  meantimeAfter: ", we hope you will like it.",
+  ui: "/showcase/",
+};
+
+import Base from "../layouts/Base.astro";
+import "../styles/login.css";
+---
+<Base title={page.title} description={page.description}>
+  <main class="login">
+    <div class="login-stack">
+      <h1>Login</h1>
+      <p>{page.description}</p>
+      <p>{page.meantimeBefore}<a href={page.ui}>{page.meantimeLink}</a>{page.meantimeAfter}</p>
+      <span class="r-group">
+        <a class="r-btn r-primary" href={page.enter}>Enter</a>
+      </span>
+    </div>
+  </main>
+</Base>

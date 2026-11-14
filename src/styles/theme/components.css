@@ -1,4 +1,4 @@
-/* Dark-® components, on palette.css and base.css (link those first). Every class starts with r-.
+/* Dark-R components, on palette.css and base.css (link those first). Every class starts with r-.
    Buttons are flat fills with dark labels; only the fill changes on hover. */
 :root {
   /* Button height and the semicircle end of a pill. */

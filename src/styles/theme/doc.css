@@ -1,4 +1,4 @@
-/* Dark-® document scale, for long text. Link after base.css, on pages that hold documents.
+/* Dark-R document scale, for long text. Link after base.css, on pages that hold documents.
    Scoped to .r-doc: Audiowide for h1, Rajdhani for h2-h6, Saira for the body. Outside .r-doc the web scale of base.css applies.
    Fonts load from ../fonts/woff2/, like base.css. */
 @font-face {

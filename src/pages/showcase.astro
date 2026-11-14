@@ -1,6 +1,7 @@
 ---
-// Style guide. Linked from the bar as "UI of the future". Not indexed, not in the sitemap.
+// Style guide. Linked from the login page as the web UI. Not indexed, not in the sitemap.
 import Base from "../layouts/Base.astro";
+import DarkR from "../components/DarkR.astro";
 import "../styles/theme/doc.css";
 import "../styles/ui.css";
 import palette from "../styles/palette.json";
@@ -68,8 +69,8 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       <img src="/assets/logo-wide.svg" width="320" height="61" alt="Enterprise-R">
     </h1>
     <p class="sc-subtitle">UI showcase</p>
-    <p class="sc-lede"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span>, the <span class="sc-brand">Enterprise-R</span> theme. Plain elements and the r- components, on the palette.</p>
-    <p class="sc-lede"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
+    <p class="sc-lede"><DarkR />, the <span class="sc-brand">Enterprise-R</span> theme. Plain elements and the r- components, on the palette.</p>
+    <p class="sc-lede"><DarkR /> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <DarkR /> changes more than most themes when the night light comes on.</p>
 
     <hr>
     <section class="sc-section" id="navigation">
@@ -127,7 +128,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
         <span class="sc-cap"><b>Code</b></span><p><code>--r-text</code></p>
         <span class="sc-cap"><b>Quote</b></span><blockquote>Make it so, but make it small.</blockquote>
         <span class="sc-cap"><b>List</b></span><ul><li>Plain lists keep the body text.</li><li>Nested items indent.</li></ul>
-        <span class="sc-cap"><b>Definitions</b></span><dl><dt>Orbit</dt><dd>The path around a body.</dd><dt>Root</dt><dd>The lone R, <span class="sc-brand">®</span>.</dd></dl>
+        <span class="sc-cap"><b>Definitions</b></span><dl><dt>Orbit</dt><dd>The path around a body.</dd><dt>Root</dt><dd>The lone R<span aria-hidden="true">, <span class="r-name-r">®</span></span>.</dd></dl>
         <span class="sc-cap"><b>Details</b></span><details><summary>Show the checklist</summary>Fuel, comms, crew.</details>
       </div>
       <p class="sc-note">Headings use Audiowide down to h3, then Rajdhani label caps. One variable per tier switches the font: <code>--r-font-heading</code> (h1, and h2 to h3 unless set apart), <code>--r-font-sub</code> (h2 to h3) and <code>--r-font-minor</code> (h4 to h6). Set one to <code>var(--r-font-text)</code> to turn Audiowide off there, or <code>--r-font-minor</code> to <code>var(--r-font-heading)</code> for more Audiowide.</p>
@@ -143,7 +144,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
             <h1>Mission control</h1>
             <h2>A quiet view from orbit</h2>
             <h3>Engineering log</h3>
-            <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
+            <p><DarkR /> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <DarkR /> changes more than most themes when the night light comes on.</p>
           </div>
         </div>
         <div>
@@ -152,7 +153,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
             <h1>Mission control</h1>
             <h2>A quiet view from orbit</h2>
             <h3>Engineering log</h3>
-            <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> changes more than most themes when the night light comes on.</p>
+            <p><DarkR /> is futuristic with a hint of retro, on a fresh palette you don't often see in everyday interfaces. It is made for night mode and for night-light filters that warm the screen in the evening. Its purples and magentas carry a lot of blue, so <DarkR /> changes more than most themes when the night light comes on.</p>
           </div>
         </div>
       </div>
@@ -381,10 +382,10 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
     <hr>
     <section class="sc-section" id="accessibility">
       <h2 class="sc-label">Accessibility</h2>
-      <p><span class="sc-aw">Dark-</span><span class="sc-brand">®</span> meets WCAG 2.2 AA throughout and is effectively AAA most of the time. The few exceptions are intentional and only used when visibility is not the priority. <span class="sc-aw">Dark-</span><span class="sc-brand">®</span> is meant to be easy on the eyes and optimized for fast use.</p>
+      <p><DarkR /> meets WCAG 2.2 AA throughout and is effectively AAA most of the time. The few exceptions are intentional and only used when visibility is not the priority. <DarkR /> is meant to be easy on the eyes and optimized for fast use.</p>
       <p>Borders and focus rings clear 3:1. Links are underlined, targets are at least 24px, motion stops when you ask for less, and high-contrast mode keeps every edge visible.</p>
       <table>
-        <caption>Contrast scores for <span class="sc-aw">Dark-</span><span class="sc-brand">®</span></caption>
+        <caption>Contrast scores for <DarkR /></caption>
         <thead>
           <tr>
             <th>Pair</th>
@@ -411,7 +412,7 @@ const wcagRows = wcagPairs.map(([label, fg, bg, kind]) => {
       <p class="sc-note">Ratios are computed from the palette hex values. <code>.r-num</code> right-aligns the ratio column.</p>
     </section>
 
-    <p class="sc-closer"><a class="sc-closer-fill" href="/" aria-label="Enterprise-R home"><span class="sc-aw">Dark-</span><span class="sc-brand">®</span></a></p>
+    <p class="sc-closer"><a class="sc-closer-fill" href="/" aria-label="Enterprise-R home"><DarkR /></a></p>
 
   </main>
   <footer><p class="sc-brand">Enterprise-R</p></footer>

@@ -25,18 +25,10 @@ html.is-home .r-crumb-root[aria-current="page"]:active {
 }
 
 /* When the compact logo docks left, it already marks the root,
-   so the ® crumb and the slant that follows it can go. */
+   so the ® crumb can go. Home and the 404 have no further crumb. */
 @container (max-width: 40rem) {
-  html.is-home .sc-nav-bar .r-crumbs li:first-child {
+  html.is-home .sc-nav-bar .r-crumbs {
     display: none;
-  }
-  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) {
-    margin-left: 0;
-  }
-  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) > .r-btn,
-  html.is-home .sc-nav-bar .r-crumbs li:nth-child(2) > .r-menu > summary {
-    --r-l: 0px;
-    --r-kl: 0;
   }
 }
 

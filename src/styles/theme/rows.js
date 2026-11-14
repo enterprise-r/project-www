@@ -1,4 +1,4 @@
-/* Dark-® dynamic list. Enhances any .r-rows: add and remove rows, keyboard,
+/* Dark-R dynamic list. Enhances any .r-rows: add and remove rows, keyboard,
    live-region announcements, and data-name="…{i}…" templates. No dependencies.
    <script src="theme/rows.js"></script> */
 (function (global) {

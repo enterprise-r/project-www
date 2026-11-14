@@ -1,4 +1,4 @@
-/* Dark-® click guard.
+/* Dark-R click guard.
    Movement (or arriving on the control) → HOT immediately, including
    during movement. The hot window --r-guard-gap2 (10s) restarts on each
    movement. After 10s with no movement, OFF until the pointer moves again.

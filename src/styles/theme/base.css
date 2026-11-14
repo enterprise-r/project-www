@@ -1,6 +1,7 @@
-/* Dark-® base. Fonts and plain HTML elements, on the --ui-* variables of palette.css (link that first).
+/* Dark-R base. Fonts and plain HTML elements, on the --ui-* variables of palette.css (link that first).
    Element selectors sit inside :where(), so they weigh nothing and an app's own rules always win.
-   Enterprsr is the brand font (the ® root mark). Audiowide for the top headings (h1-h3), Rajdhani for text
+   Enterprsr is the brand font (the ® root mark). .r-name-r paints ® in that face: the picture of the R in the name Dark-R. The name that is read is the text Dark-R.
+   Audiowide for the top headings (h1-h3), Rajdhani for text
    and minor headings (h4-h6), Monaspace Neon for code. Three font variables pick the heading font per tier (see :root).
    This is the web scale; doc.css adds the document scale for long text.
    Fonts load from ../fonts/woff2/, the fonts/ folder that ships next to theme/ in the assets. */
@@ -85,6 +86,15 @@
   /* Click guard timings, read by theme/guard.js. */
   --r-guard-gap2: 10s;
   --r-guard-cool: 400ms;
+}
+
+/* The R in the name Dark-R. ® in Enterprsr is the lone R, the picture only.
+   Hide it (aria-hidden) and give readers the text Dark-R. */
+.r-name-r {
+  font-family: var(--r-font-brand);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 :where(*, *::before, *::after) { box-sizing: border-box; }

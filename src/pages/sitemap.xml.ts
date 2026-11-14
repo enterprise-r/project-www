@@ -1,7 +1,7 @@
 // Sitemap: the indexed pages only (not /showcase/ or the 404, which are noindex).
 import type { APIRoute } from "astro";
 
-const pages = ["/", "/about/"];
+const pages = ["/", "/about/", "/login/"];
 
 export const GET: APIRoute = ({ site }) => {
   const urls = pages.map((p) => `  <url><loc>${new URL(p, site).href}</loc></url>`).join("\n");

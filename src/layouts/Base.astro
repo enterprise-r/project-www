@@ -15,7 +15,7 @@ interface Props {
   noindex?: boolean;
   // Title bar and footer. The style guide turns these off.
   header?: boolean;
-  // Wallpaper, open stripes, and the same crumbs as Home. The 404 sets this.
+  // Wallpaper, open stripes, and the home bar class. The 404 sets this.
   hero?: boolean;
 }
 const { title, description, noindex = false, header = true, hero = false } = Astro.props;
@@ -27,13 +27,18 @@ const isHero = hero || isHome;
 // 404 is the only hero that is not Home. It keeps the home chrome.
 // Class is not-found: a class named is-404 is stripped by the dev CSS transform.
 const isMissing = hero && !isHome;
+// Right nav: links and submenus to the other pages.
+// The page you are on is not listed there. It is the last breadcrumb, a self-link.
+const pages = [
+  { href: "/about/", label: "About" },
+  { href: "/login/", label: "Login" },
+];
 const crumbs = [
   { href: "/", label: "®", name: "Home", root: true },
 ];
-// Home, 404 and About all show the About crumb (current only on /about/).
-if (isHero || here === "/about/") {
-  crumbs.push({ href: "/about/", label: "About", name: "About" });
-}
+const current = pages.find((p) => p.href === here);
+if (current) crumbs.push({ href: current.href, label: current.label, name: current.label });
+const nav = pages.filter((p) => p.href !== here);
 // The title in the bar is the page heading on Home only.
 const Brand = isHome ? "h1" : "div";
 const url = new URL(Astro.url.pathname, Astro.site).href;
@@ -87,9 +92,13 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
           ))}
         </ol>
       </nav>
-      <nav class="r-group" aria-label="Main">
-        <a class="r-btn" href="/showcase/">UI of the future</a>
-      </nav>
+      {nav.length > 0 && (
+        <nav class="r-group" aria-label="Main">
+          {nav.map((item) => (
+            <a class="r-btn" href={item.href}>{item.label}</a>
+          ))}
+        </nav>
+      )}
     </header>
   )}
   <slot />

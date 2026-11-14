@@ -1,4 +1,4 @@
-/* Style guide (/showcase/ only). Type, fields and components come from the Dark-® theme.
+/* Style guide (/showcase/ only). Type, fields and components come from the Dark-R theme.
    What remains is the guide's layout, and static samples of hover and focus. */
 
 html:has(.showcase) { height: auto; }
@@ -17,6 +17,8 @@ main.showcase {
 .sc-title img { display: block; width: min(24.68rem, 100%); height: auto; }
 .sc-aw { font-family: var(--r-font-heading); }
 .sc-brand { font-family: var(--r-font-brand); letter-spacing: 0; }
+/* Anchors the visually hidden name Dark-R next to its picture. */
+.sc-name { position: relative; }
 main.showcase + footer p {
   margin: 0;
   color: var(--ui-bg);
@@ -173,7 +175,7 @@ main.showcase + footer p {
 .sc-term-stack .r-term { max-width: 34rem; }
 .sc-term-stack .about-heading { margin: 0; font-family: var(--r-font-heading); font-size: 2.2rem; letter-spacing: 0.08em; color: transparent; line-height: 1.1; }
 
-/* Decorative closer: Dark-® at h2 size, filled with the striped logo gradient. */
+/* Decorative closer: Dark-R at h2 size, filled with the striped logo gradient. The ® is the picture. */
 .sc-closer {
   margin: 4rem 0 0;
   text-align: center;

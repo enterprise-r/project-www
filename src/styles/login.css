@@ -1,0 +1,38 @@
+/* Login. Flat page colour: the wallpaper opt-out for main.login is in bar.css.
+   One heading, the preview disclaimer, and Enter. */
+
+main.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 2.5rem 1.25rem 3rem;
+}
+
+.login-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+  width: min(34rem, 100%);
+  text-align: center;
+}
+
+.login-stack h1,
+.login-stack p {
+  margin: 0;
+}
+
+.login-stack p {
+  color: var(--ui-fg-light);
+  text-wrap: balance;
+}
+
+.login-stack p a {
+  color: var(--r-link);
+  white-space: nowrap;
+}
+
+.login-stack p a:hover {
+  color: var(--r-link-hover);
+}
